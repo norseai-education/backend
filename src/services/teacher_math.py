@@ -1,10 +1,7 @@
 from langchain.agents import create_react_agent, AgentExecutor
 from backend.src.services.state import State
-import re
-import asyncio
-import json
-import threading
 from backend.src.utils import logging
+from backend.src.utils import utils
 
 # Configure logging
 logger = logging.set_logger(__name__)
@@ -16,111 +13,6 @@ class MathTeacher:
         self.store=store
         self.store.connect("amc8_database")
         self.tools = list_of_tools
-
-    def store_input(self, student_id, input):
-        """Store student input in background without blocking the main flow"""
-        logging.log("Storing teacher response to math_related collection...", logger, 2)
-        def background_task():
-            try:
-                # Try to use existing event loop if available
-                loop = asyncio.get_running_loop()
-                asyncio.create_task(
-                    self.store.insert_document('math_related', {"student_id": str(student_id), "content": input})
-                )
-            except RuntimeError:
-                # No event loop running, create a new one
-                asyncio.run(
-                    self.store.insert_document('math_related', {"student_id": str(student_id), "content": input})
-                )
-            except Exception as e:
-                logging.log(f"Background storage error: {e}", logger, 0)  # Log but don't crash
-        
-        # Run in daemon thread so it doesn't block program exit
-        thread = threading.Thread(target=background_task)
-        thread.daemon = True
-        thread.start()
-
-    def check_lesson_state(self, lesson_state):
-        if not isinstance(lesson_state, dict):
-            try:
-                lesson_state = json.loads(lesson_state)
-            except json.JSONDecodeError:
-                return False
-        # Count 'in progress' values and track their indices
-        in_progress_count = 0
-        in_progress_indices = []
-        
-        for key, value in lesson_state.items():
-            if key not in ['START_LESSON','CONCEPT_INTRODUCTION','GIVE_EASIER_PROBLEM', 'PROBLEM_WALKTHROUGH', 'GIVE_HARDER_PROBLEM', 'END_LESSON', 'CHECK']:
-                return False
-            if value.lower() not in ['done', 'in progress', 'not done']:
-                return False
-            
-            # Track 'in progress' values and their indices
-            if value.lower() == 'in progress':
-                in_progress_count += 1
-                in_progress_indices.append(list(lesson_state.keys()).index(key))
-        
-        # If there are 2 'in progress' values, turn the one with smallest index to 'done'
-        if in_progress_count == 2:
-            logging.log('Two In Progress found in lesson state, fixing now...', logger, 2)
-            smallest_index = min(in_progress_indices)
-            key_at_smallest_index = list(lesson_state.keys())[smallest_index]
-            lesson_state[key_at_smallest_index] = 'Done'
-        return lesson_state
-
-    def parse_response(self, text):
-        default_response = "I'm sorry, can you repeat that?"
-        default_lesson_state = {
-            'START_LESSON': 'Done',
-            'CONCEPT_INTRODUCTION': 'In Progress', 
-            'GIVE_EASIER_PROBLEM': 'Not Done',
-            'PROBLEM_WALKTHROUGH': 'Not Done',
-            'GIVE_HARDER_PROBLEM': 'Not Done',
-            'END_LESSON': 'Not Done'
-        }
-        
-        # Find the Final Answer section     
-        teaching_response = ""
-        lesson_state = {}
-        
-        try:
-            # Try to parse as JSON first
-            parsed_data = json.loads(text)
-            if isinstance(parsed_data, dict):
-                logging.log("Parsed response as json!", logger, 2)
-                teaching_response = parsed_data.get("teacher_response", "")
-                lesson_state = parsed_data.get("lesson_state", {})
-                logging.log(f"\nExtracted teacher_response: {teaching_response}\nExtracted lesson_match: {lesson_state}\n", logger, 2)
-                
-        except json.JSONDecodeError:
-            # Fallback: Try to extract from structured text format
-            teaching_match = re.search(r'teacher_response:\s*(.*?)(?=lesson_state:|$)', text, re.DOTALL)
-            lesson_match = re.search(r'lesson_state:\s*(\{.*\})', text, re.DOTALL)
-            logging.log(f"Found regex match!\nExtracted teacher_response: {teaching_match}\nExtracted lesson_match: {lesson_match}\n", logger, 2)
-            
-            if teaching_match:
-                teaching_response = teaching_match.group(1).strip()
-            
-            if lesson_match:
-                try:
-                    lesson_state = json.loads(lesson_match.group(1))
-                except json.JSONDecodeError:
-                    logging.log("Failed to parse lesson state JSON", logger, 0)
-                    lesson_state = {}
-        
-        lesson_state = self.check_lesson_state(lesson_state)
-        # Error handling logic
-        if lesson_state:  # state_dict exists
-            if teaching_response:
-                return lesson_state, teaching_response
-            else:
-                logging.log("Teacher response not found, using default", logger, 2)
-                return lesson_state, default_response
-        else:
-            # return default lesson state
-            logging.log("Lesson state not found, using default", logger, 2)
-            return default_lesson_state, default_response
 
     def format_conversation_context(self, messages):
         """Format conversation messages with speaker labels"""
@@ -155,7 +47,7 @@ class MathTeacher:
         student_id = state.get("student_id", "default_student")
         lesson_state = state.get("lesson_state")
         learning_status = state.get("learning_status")
-        context = self.format_conversation_context(state["messages"])
+        context = utils.format_conversation_context(state["messages"])
         cur_mastery = state.get("cur_mastery")
 
         teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status)
@@ -194,10 +86,10 @@ class MathTeacher:
 
         logging.log(f"Raw response: \n{raw_response}\n type: {type(raw_response)}", logger, 2)
 
-        new_lesson_state, final_response = self.parse_response(response["output"])
+        new_lesson_state, final_response = utils.parse_response(response["output"])
         
         # add teacher response to math-related-db
-        self.store_input(student_id, final_response)
+        utils.store_input(self.store, 'math_related',student_id, final_response)
 
         return {"messages": [{"role": "assistant", "content": final_response}],
                 "lesson_state": new_lesson_state

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
+from bson import ObjectId
 
 class ChatResponse(BaseModel):
     response: str
@@ -23,3 +24,6 @@ class ChatStatusResponse(BaseModel):
 
 class MessageResponse(BaseModel):
     message: str
+
+class AssessmentResponse(BaseModel):
+    problems: dict[ObjectId: str]

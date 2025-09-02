@@ -1,4 +1,3 @@
-# Ignore
 
 .env
 db_testing.py

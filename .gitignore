@@ -4,3 +4,4 @@
 .env
 db_testing.py
 static/
+__pycache__/

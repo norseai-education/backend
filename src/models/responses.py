@@ -26,4 +26,9 @@ class MessageResponse(BaseModel):
     message: str
 
 class AssessmentResponse(BaseModel):
-    problems: dict[ObjectId: str]
+    problems: Optional[dict[ObjectId: str]] = None  # Mapping of problem_id to problem text
+    student_score: Optional[list] = None
+    student_id: int
+
+class RouteResponse(BaseModel):
+    route: str

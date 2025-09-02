@@ -80,3 +80,17 @@ async def dashboard_page():
             content="<h1>Error</h1><p>Dashboard page not found. Please ensure static/dashboard.html exists.</p>",
             status_code=404
         )
+    
+
+@router.get("/assessment", response_class=HTMLResponse)
+async def assessment_page():
+    """Assessment page"""
+    try:
+        with open("backend/static/assessment.html", "r", encoding="utf-8") as file:
+            html_content = file.read()
+        return HTMLResponse(content=html_content)
+    except FileNotFoundError:
+        return HTMLResponse(
+            content="<h1>Error</h1><p>Assessment page not found. Please ensure static/assessment.html exists.</p>",
+            status_code=404
+        )

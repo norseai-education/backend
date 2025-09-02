@@ -1,17 +1,20 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
-from backend.src.models.requests import ChatRequest
-from backend.src.models.responses import MessageResponse, ChatStatusResponse
-from backend.src.services.chat_service import chat_service
+from backend.src.models.requests import ChatRequest, AssessmentRequest
+from backend.src.models.responses import MessageResponse, ChatStatusResponse, RouteResponse
+from backend.src.services.chat_service import ChatService
 
 router = APIRouter()
+chat_service = ChatService()
 
-@router.post("/init/{student_id}", response_model=MessageResponse)
+@router.post("/init/{student_id}", response_model=RouteResponse)
 async def init_chat(student_id: int):
     """Initialize chat session for student"""
-    await chat_service.initialize_session(student_id)
-    return MessageResponse(message=f"Student {student_id} initialized successfully")
+    route = await chat_service.initialize_session(student_id)
+    if route:
+        return RouteResponse(route = "/chat")
+    return MessageResponse(route = "/assessment")
 
 @router.post("/s/{student_id}")
 async def chat_stream(student_id: int, message_data: ChatRequest):

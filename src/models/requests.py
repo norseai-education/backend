@@ -20,4 +20,5 @@ class ChatRequest(BaseModel):
 
 class AssessmentRequest(BaseModel):
     student_answers: dict[ObjectId: str]  # Mapping of problem_id to student's answer
+    student_score: list[dict]
     student_id: int

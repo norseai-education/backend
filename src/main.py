@@ -1,9 +1,8 @@
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 
 from backend.src.core.lifespan import lifespan
 from backend.src.core.middleware import setup_middleware
-from backend.src.routes import auth, chat, pages
+from backend.src.routes import auth, chat, assessment
 
 def create_app() -> FastAPI:
     """Create and configure FastAPI application"""
@@ -19,7 +18,7 @@ def create_app() -> FastAPI:
     # Include routers
     app.include_router(auth.router, prefix="/auth", tags=["authentication"])
     app.include_router(chat.router, prefix="/chat", tags=["chat"])
-    app.include_router(pages.router, tags=["pages"])
+    app.include_router(assessment.router, prefix="/assessment", tags=["assessment"])
     
     return app
 

@@ -18,6 +18,8 @@ class ChatRequest(BaseModel):
     message: str
 
 class AssessmentRequest(BaseModel):
-    student_answers: dict[str, str]  # Mapping of problem_id to student's answer
-    student_score: list[dict]
-    student_id: int
+    student_answers: list[dict[str, str]]  # [{"problem_id": <id>, "answer": <student_answer>}, ...]
+    start_time: Optional[float] = None
+
+class UserGraphRequest(BaseModel):
+    user_graph: Optional[dict[str, float]] = None  # {"concept1": <probability>, "concept2": <probability>, ...} Provide if is an assessment given at the end of a lesson, otherwise will just user default graph

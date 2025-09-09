@@ -66,31 +66,6 @@ class ChatService:
                 if key in user_state:
                     user_state[key] = value
             logging.log("State from Redis applied!", self.logger, 1)
-
-
-        # New lesson --> check if need to give assessment or if assessment already done
-        if not redis_state and not persisted_state:
-            # retrieve assessment results if any
-            student_score = await self.assessment_service.retrieve_assessment(student_id)
-            student_score = student_score.get("answers", None)
-            if student_score:
-                for score in student_score:
-                    grade = {}
-                    concepts = score.get("concepts")
-                    difficulty = score.get("difficulty")
-                    score = score.get("correct")
-                    for concept in concepts:
-                        grade[concept] = "correct" if score == True else "incorrect"
-                    # Update student knowledge graph with assessment results
-                    # Using different damping factors based on difficulty
-                    correct_damping = 0.2 if difficulty == 1 else 0.4 if difficulty == 2 else 0.5 if difficulty == 3 else 0.7 if difficulty == 4 else 0.85
-                    incorrect_damping = 0.7 if difficulty == 1 else 0.5 if difficulty == 2 else 0.4 if difficulty == 3 else 0.3 if difficulty == 4 else 0.15
-                    if score == True:
-                        user_state = self.bkt.bkt_algorithm(user_state, grade, correct_damping)
-                    else:
-                        user_state = self.bkt.bkt_algorithm(user_state, grade, incorrect_damping)
-            else:
-                return
         
         # Store session
         session_data = {

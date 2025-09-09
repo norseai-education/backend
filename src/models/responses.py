@@ -24,10 +24,22 @@ class ChatStatusResponse(BaseModel):
 class MessageResponse(BaseModel):
     message: str
 
-class AssessmentResponse(BaseModel):
-    problems: Optional[dict[str, str]] = None  # Mapping of problem_id to problem text
-    student_score: Optional[list] = None
-    student_id: int
 
+class GiveAssessmentResponse(BaseModel):
+    problems: list[dict[Any, Any]]  # [{"_id": <id>, "problem_number": <number>, "problem": <text>}, ...]
+    number_problems: int
+    start_time: float
+
+class AssessmentResultResponse(BaseModel):
+    solutions: list[dict[Any, Any]] # [{"_id": <id>, "correct": <bool>, "correct_answer": str, "solution": <solution_text>}, ...]
+    total_correct: int
+    duration_seconds: float
+
+class AssessmentStoreResponse(BaseModel):
+    assessment_id: str # assessment identifier
+
+class UserGraphResponse(BaseModel):
+    user_graph: Dict[str, float]  # {"concept1": <probability>, "concept2": <probability>, ...}
+    
 class RouteResponse(BaseModel):
-    route: str
+    give_assessment: bool

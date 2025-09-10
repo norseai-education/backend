@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Any
 
 class ChatMessage(BaseModel):
     message: str
@@ -17,9 +17,14 @@ class UserLogin(BaseModel):
 class ChatRequest(BaseModel):
     message: str
 
-class AssessmentRequest(BaseModel):
-    student_answers: list[dict[str, str]]  # [{"problem_id": <id>, "answer": <student_answer>}, ...]
-    start_time: Optional[float] = None
+class AssessmentSubmitRequest(BaseModel):
+    student_answers: list[dict[str, str]]  # [{"problem_id": <id>, "student_answer": <student_answer>}, ...]
+
+class AssessmentStoreRequest(BaseModel):
+    student_answers: list[dict[str, Any]]  # [{"problem_id": <id>, "student_answer": <student_answer>, "time_spent_seconds": <float>},...]
 
 class UserGraphRequest(BaseModel):
     user_graph: Optional[dict[str, float]] = None  # {"concept1": <probability>, "concept2": <probability>, ...} Provide if is an assessment given at the end of a lesson, otherwise will just user default graph
+
+
+

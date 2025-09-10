@@ -24,19 +24,21 @@ class ChatStatusResponse(BaseModel):
 class MessageResponse(BaseModel):
     message: str
 
-
 class GiveAssessmentResponse(BaseModel):
-    problems: list[dict[Any, Any]]  # [{"_id": <id>, "problem_number": <number>, "problem": <text>}, ...]
+    problems: list[dict[Any, Any]]  # [{"problem_id": <id>, "problem_number": <number>, "problem": <text>}, ...]
     number_problems: int
-    start_time: float
 
 class AssessmentResultResponse(BaseModel):
-    solutions: list[dict[Any, Any]] # [{"_id": <id>, "correct": <bool>, "correct_answer": str, "solution": <solution_text>}, ...]
+    solutions: list[dict[Any, Any]] # [{"problem_id": <id>, "correct": <bool>, "correct_answer": str, "solution": <solution_text>}, ...]
     total_correct: int
-    duration_seconds: float
 
 class AssessmentStoreResponse(BaseModel):
     assessment_id: str # assessment identifier
+
+class AssessmentRetrieveResponse(BaseModel):
+    problems: list[dict[Any, Any]]  # [{"problem_id": <id>, "problem_number": <number>, "problem": <text>, "student_answer": <answer>, "correct_answer": <correct_answer>}, ...]
+    number_problems: int
+    number_correct: int
 
 class UserGraphResponse(BaseModel):
     user_graph: Dict[str, float]  # {"concept1": <probability>, "concept2": <probability>, ...}

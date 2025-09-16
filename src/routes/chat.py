@@ -10,9 +10,9 @@ chat_service = ChatService()
     
 
 @router.post("/init/{student_id}", response_model=MessageResponse)
-async def init_chat(student_id: int):
+async def init_chat(student_id: int, user_graph: dict = None):
     """Initialize chat session for student"""
-    await chat_service.initialize_session(student_id)
+    await chat_service.initialize_session(student_id, user_graph)
 
     return MessageResponse(message=f"Chat session initialized for student {student_id}")
 

@@ -145,49 +145,56 @@ class AssessmentService:
             return False
 
     async def update_graph(self, assessment_id: str, user_graph: dict):
-        try: 
-            if not user_graph:
-                user_graph = knowledge_info.amc8_knowledge_graph
+        # try: 
+        if not user_graph:
+            user_graph = knowledge_info.amc8_knowledge_graph
 
-            assessment = self.db.find_documents('assessments', {"assessment_id": assessment_id})
+        assessment = self.db.find_documents('assessments', {"assessment_id": assessment_id})
 
-            if not assessment:
-                logging.log(f"No assessment found with id {assessment_id}", self.logger, 0)
-                return None
-            
-            # student_id = assessment[0].get("student_id")
+        if not assessment:
+            logging.log(f"No assessment found with id {assessment_id}", self.logger, 0)
+            return None
+        
+        # student_id = assessment[0].get("student_id")
 
-            # Logic to update the student's knowledge graph based on assessment results
-            for problem in assessment:
-                grade = {}
-                problem_id = problem.get("problem_id")
-                student_answer = problem.get("student_answer")
-                problem_data = self.db.find_documents('problems', {"_id": ObjectId(problem_id)}, ['concepts', 'difficulty', 'correct_answer'])[0]
-                concepts = problem_data.get('concepts')
-                difficulty = problem_data.get('difficulty')
-                correct_answer = problem_data.get('correct_answer')
+        # Logic to update the student's knowledge graph based on assessment results
+        for problem in assessment:
+            grade = {}
+            problem_id = problem.get("problem_id")
+            student_answer = problem.get("student_answer")
+            problem_data = self.db.find_documents('problems', {"_id": ObjectId(problem_id)}, ['concepts', 'difficulty', 'correct_answer'])[0]
+            concepts = problem_data.get('concepts')
+            difficulty = problem_data.get('difficulty')
+            correct_answer = problem_data.get('correct_answer')
 
-                for concept in concepts:
-                    grade[concept] = "correct" if student_answer == correct_answer else "incorrect"
-                # Update student knowledge graph with assessment results
-                # Using different damping factors based on difficulty
-                correct_damping = 0.2 if difficulty == 1 else 0.4 if difficulty == 2 else 0.5 if difficulty == 3 else 0.7 if difficulty == 4 else 0.9
-                incorrect_damping = 0.6 if difficulty == 1 else 0.5 if difficulty == 2 else 0.35 if difficulty == 3 else 0.2 if difficulty == 4 else 0.1
-                print(f"Grade used for BKT: {grade}\n")
-                print(f"Using graph: {user_graph}")
-                if student_answer == correct_answer:
+            for concept in concepts:
+                grade[concept.lower()] = "correct" if student_answer == correct_answer else "incorrect"
+            # Update student knowledge graph with assessment results
+            # Using different damping factors based on difficulty
+            correct_damping = 0.2 if difficulty == 1 else 0.4 if difficulty == 2 else 0.5 if difficulty == 3 else 0.7 if difficulty == 4 else 0.9
+            incorrect_damping = 0.6 if difficulty == 1 else 0.5 if difficulty == 2 else 0.35 if difficulty == 3 else 0.2 if difficulty == 4 else 0.1
+            print(f"Grade used for BKT: {grade}\n")
+            print(f"Using graph: {user_graph}")
+            if student_answer == correct_answer:
+                try:
                     user_graph = self.bkt.bkt_algorithm(grade, user_graph, correct_damping)
-                else:
+                except Exception as e:
+                    logging.log(f"Failed to update knowledge graph for assessment {assessment_id}: {e}", self.logger, 0)
+                    continue
+            else:
+                try:    
                     user_graph = self.bkt.bkt_algorithm(grade, user_graph, incorrect_damping)
+                except Exception as e:
+                    logging.log(f"Failed to update knowledge graph for assessment {assessment_id}: {e}", self.logger, 0)
+                    continue
+        # self.db.insert_document('user_graphs', {"student_id": student_id, "assessment_id": assessment_id, "user_graph": user_graph})
+        logging.log(f"Updated knowledge graph for assessment {assessment_id}", self.logger, 1)
+        
+        return user_graph
 
-            # self.db.insert_document('user_graphs', {"student_id": student_id, "assessment_id": assessment_id, "user_graph": user_graph})
-            logging.log(f"Updated knowledge graph for assessment {assessment_id}", self.logger, 1)
-            
-            return user_graph
-
-        except Exception as e:
-            logging.log(f"Failed to update knowledge graph for assessment {assessment_id}: {e}", self.logger, 0)
-            return {}
+        # except Exception as e:
+        #     logging.log(f"Failed to update knowledge graph for assessment {assessment_id}: {e}", self.logger, 0)
+        #     return {}
             
     # async def retrieve_student_score(self, student_id: int):
     #     """Retrieve the assessment results from the database"""

@@ -24,7 +24,7 @@ class Nodes:
         self.evaluator = EvaluatorModel(
         models.evaluator_model,
         prompts.evaluator_prompt,
-        [tools.get_math_context_structured, tools.math_engine])
+        [tools.get_math_context_structured, tools.math_engine, tools.check_concepts])
 
         self.bkt = BayesianKnowledgeTracing(knowledge_info.amc8_concepts)
 

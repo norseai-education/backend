@@ -6,7 +6,6 @@ from fastapi import HTTPException
 from backend.src.services.graph import BuildNorseAIGraph
 from backend.src.services.state_manager import StateManager
 from backend.src.services.MongoDBHandler import MongoDBHandler
-from backend.src.services.bkt import BayesianKnowledgeTracing
 from backend.src.services.assessment_service import AssessmentService
 from backend.src.config.settings import settings
 from backend.src.utils import logging
@@ -17,14 +16,14 @@ from backend.src.utils import knowledge_info
 class ChatService:
     def __init__(self):
         self.assessment_service = AssessmentService()
-        self.bkt = BayesianKnowledgeTracing(knowledge_info.amc8_concepts)
         self.active_sessions: Dict[int, Dict[str, Any]] = {}
         self.logger = logging.set_logger(__name__)
     
-    async def initialize_session(self, student_id: int) -> Dict[str, Any]:
+    async def initialize_session(self, student_id: int, user_graph: dict = None) -> Dict[str, Any]:
         """Initialize or retrieve student session with all components"""
         
         logging.log(f"Initializing new session for student {student_id}", self.logger, 1)
+        logging.log(f"User graph: {user_graph}", self.logger, 1)
         
         # Initialize graph
         state_manager = StateManager(student_id)
@@ -50,22 +49,26 @@ class ChatService:
         logging.log(f"Mongo DB state: \n{persisted_state}\n", self.logger, 2)
         logging.log(f"Redis state : \n{redis_state}\n", self.logger, 2)
         
-        # Apply persisted state
-        if persisted_state:
-            logging.log("Applying persisted state from MongoDB...", self.logger, 1)
-            for key, value in persisted_state.items():
-                if key in user_state:
-                    user_state[key] = value
-            user_state['init_learning_objective'] = user_state['cur_learning_objective']
-            logging.log("State from MongoDB applied!", self.logger, 1)
-        
-        # Apply Redis state
-        if redis_state:
-            logging.log("Applying Redis state...", self.logger, 1)
-            for key, value in redis_state.items():
-                if key in user_state:
-                    user_state[key] = value
-            logging.log("State from Redis applied!", self.logger, 1)
+        if not user_graph:
+            # Apply persisted state
+            if persisted_state:
+                logging.log("Applying persisted state from MongoDB...", self.logger, 1)
+                for key, value in persisted_state.items():
+                    if key in user_state:
+                        user_state[key] = value
+                user_state['init_learning_objective'] = user_state['cur_learning_objective']
+                logging.log("State from MongoDB applied!", self.logger, 1)
+            
+            # Apply Redis state
+            if redis_state:
+                logging.log("Applying Redis state...", self.logger, 1)
+                for key, value in redis_state.items():
+                    if key in user_state:
+                        user_state[key] = value
+                logging.log("State from Redis applied!", self.logger, 1)
+        else:
+            user_state['bkt_graph'] = user_graph
+            logging.log("User graph from assessment applied!", self.logger, 1)
         
         # Store session
         session_data = {
@@ -74,6 +77,7 @@ class ChatService:
             'convo_db': convo_db,
             'user_state': user_state
         }
+        logging.log(f"Session data: {session_data}", self.logger, 2)
         
         self.active_sessions[student_id] = session_data
         return session_data
@@ -152,10 +156,10 @@ class ChatService:
             ]
             
             # Send user message
-            yield f"data: {json.dumps({'type': 'user_message', 'content': message})}\n\n"
+            # yield f"data: {json.dumps({'type': 'user_message', 'content': message})}\n\n"
             
             # Get response
-            yield f"data: {json.dumps({'type': 'thinking', 'message': 'Processing...'})}\n\n"
+            # yield f"data: {json.dumps({'type': 'thinking', 'message': 'Processing...'})}\n\n"
             
             logging.log("Running the graph now...", self.logger, 1)
             logging.log(f"State before: \n{user_state}", self.logger, 1)
@@ -181,7 +185,7 @@ class ChatService:
                     yield f"data: {json.dumps({'type': 'ai_response', 'content': ai_response})}\n\n"
             
             # Send completion signal
-            yield f"data: {json.dumps({'type': 'complete'})}\n\n"
+            # yield f"data: {json.dumps({'type': 'complete'})}\n\n"
             
         except Exception as e:
             logging.log(f"Error processing message for student {student_id}: {str(e)}", self.logger, 2)

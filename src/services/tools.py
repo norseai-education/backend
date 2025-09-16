@@ -6,6 +6,7 @@ import backend.src.services.ChromaDBHandler as ChromaDBHandler
 from pydantic import BaseModel, Field, model_validator
 import json
 from backend.src.utils import logging
+from backend.src.utils import knowledge_info
 
 # Configure logging
 logger = logging.set_logger(__name__)
@@ -118,6 +119,26 @@ def math_engine(expression: str) -> str:
         
     except Exception as e:
         return f"Error: {str(e)}"
+    
+@tool
+def check_concepts(concepts: list) -> str:
+    """Verify if concepts are in the Concepts List"""
+    try:
+        logging.log("Using check_concepts tool... ", logger, 2)
+        logging.log(f"Tool inputs: \n{concepts},{type(concepts)}", logger, 2)
+        bad_concepts = []
+        for concept in concepts:
+            if concept not in knowledge_info.amc8_concepts:
+                bad_concepts.append(concept)
+
+        if bad_concepts:
+            return f"These concepts: {bad_concepts} are not in the Concepts List"
+        else:
+            return "All concepts are in the concepts list"
+        
+    except Exception as e:
+        return f"Error: {str(e)}"
+    
     
 def get_math_context(input_data: MathContextInput) -> str:
     """Get further context for the student input if needed."""

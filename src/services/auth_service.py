@@ -5,24 +5,11 @@ import asyncpg
 from fastapi import HTTPException
 
 from backend.src.config.settings import settings
-from backend.src.utils import logging
+from backend.src.utils import logging, security
 
 class AuthService:
     def __init__(self):
         self.logger = logging.set_logger(__name__)
-    
-    def hash_password(self, password: str) -> str:
-        """Hash password with salt"""
-        return hashlib.pbkdf2_hmac(
-            'sha256', 
-            password.encode('utf-8'), 
-            settings.password_salt, 
-            settings.password_iterations
-        ).hex()
-    
-    def generate_session_token(self) -> str:
-        """Generate a secure session token"""
-        return secrets.token_urlsafe(32)
     
     async def create_user(self, conn: asyncpg.Connection, username: str, password: str, email: Optional[str] = None) -> tuple[int, str]:
         """Create new user and return student_id and session_token"""
@@ -48,11 +35,11 @@ class AuthService:
         # Store user
         await conn.execute(
             "INSERT INTO users (student_id, username, password, email) VALUES ($1, $2, $3, $4)",
-            next_student_id, username, self.hash_password(password), email
+            next_student_id, username, security.hash_password(password), email
         )
         
         # Create session
-        session_token = self.generate_session_token()
+        session_token = security.generate_session_token()
         await conn.execute(
             "INSERT INTO sessions (student_id, session_token) VALUES ($1, $2)",
             next_student_id, session_token
@@ -80,19 +67,19 @@ class AuthService:
             username
         )
         
-        if password_result["password"] != self.hash_password(password):
+        if password_result["password"] != security.hash_password(password):
             raise HTTPException(status_code=401, detail="Invalid username or password")
         
         # Get student ID
         student_id_result = await conn.fetchrow(
             "SELECT student_id FROM users WHERE username = $1 AND password = $2",
             username,
-            self.hash_password(password)
+            security.hash_password(password)
         )
         student_id = student_id_result["student_id"]
         
         # Create new session
-        session_token = self.generate_session_token()
+        session_token = security.generate_session_token()
         await conn.execute(
             "INSERT INTO sessions (student_id, session_token) VALUES ($1, $2)",
             student_id, session_token

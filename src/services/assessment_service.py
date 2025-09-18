@@ -171,7 +171,7 @@ class AssessmentService:
                 grade[concept.lower()] = "correct" if student_answer == correct_answer else "incorrect"
             # Update student knowledge graph with assessment results
             # Using different damping factors based on difficulty
-            correct_damping = 0.2 if difficulty == 1 else 0.4 if difficulty == 2 else 0.5 if difficulty == 3 else 0.7 if difficulty == 4 else 0.9
+            correct_damping = 0.4 if difficulty == 1 else 0.6 if difficulty == 2 else 0.7 if difficulty == 3 else 0.8 if difficulty == 4 else 0.95
             incorrect_damping = 0.6 if difficulty == 1 else 0.5 if difficulty == 2 else 0.35 if difficulty == 3 else 0.2 if difficulty == 4 else 0.1
             print(f"Grade used for BKT: {grade}\n")
             print(f"Using graph: {user_graph}")

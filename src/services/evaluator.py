@@ -2,6 +2,7 @@ from langchain.agents import create_react_agent, AgentExecutor
 from backend.src.services.state import State
 import json
 from backend.src.utils import logging
+from backend.src.utils import knowledge_info
 import re
 
 
@@ -77,7 +78,7 @@ class EvaluatorModel:
         
         eval = eval_grade.copy()
         for key in eval.keys():
-            if key not in logging.concepts:
+            if key not in knowledge_info.amc8_concepts:
                 del eval_grade[key]
         if solution:
             return eval_grade, solution

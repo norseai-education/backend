@@ -33,7 +33,7 @@ class AssessmentService:
 
         for i in range(1,26):
             problems = self.db.find_documents('problems', {"problem_number": i}, ['problem_number', 'problem'])
-            problem = random.choice(problems)
+            problem = random.choice(problems)  
             problem['problem_id'] = str(problem['_id'])
             del problem['_id']
             problems_list.append(problem)

@@ -69,12 +69,12 @@ async def delete_assessment(assessment_id: str):
     else:
         return MessageResponse(message=f"Failed to delete assessment {assessment_id}")
     
-@router.delete("/delete_all/{student_id}", response_model=MessageResponse)
-async def delete_all(student_id: int):
-    """Delete all assessments corresponding to student id"""
-    result = await assessment_service.delete_all(student_id)
+# @router.delete("/delete_all/{student_id}", response_model=MessageResponse)
+# async def delete_all(student_id: int):
+#     """Delete all assessments corresponding to student id"""
+#     result = await assessment_service.delete_all(student_id)
 
-    if result:
-        return MessageResponse(message=f"Successfully deleted all assessments for {student_id}")
-    else:
-        return MessageResponse(message=f"Failed to delete assessments for {student_id}")
+#     if result:
+#         return MessageResponse(message=f"Successfully deleted all assessments for {student_id}")
+#     else:
+#         return MessageResponse(message=f"Failed to delete assessments for {student_id}")

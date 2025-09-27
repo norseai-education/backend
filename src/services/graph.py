@@ -31,6 +31,7 @@ class BuildNorseAIGraph:
                 "no-bkt" if (
                     isinstance(state.get("lesson_state"), dict) and (
                         state["lesson_state"].get("START_LESSON", "").lower() == "in progress" or
+                        state["lesson_state"].get("CONCEPT_INTRODUCTION", "").lower() == "in progress" or
                         state["lesson_state"].get("END_LESSON", "").lower() == "in progress"
                     )
                 ) else "bkt"

@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     
     # MongoDB settings
     mongodb_url: str = "mongodb://172.16.0.177:27019"
-    mongodb_database: str = "norseai"
+    mongodb_database: str = "amc8_database"
     
     # Security settings
     password_salt: bytes = b'salt'

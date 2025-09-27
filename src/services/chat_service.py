@@ -98,6 +98,7 @@ class ChatService:
             try:
                 # Close database connection
                 if 'convo_db' in session:
+                    utils.transfer_to_chroma()
                     session['convo_db'].close()
                 logging.log(f"Session cleanup completed for student {student_id}", self.logger, 1)
             except Exception as e:

@@ -352,7 +352,7 @@ class MathTeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{{tool_names}}]
-        Action Input: the input to the action, in the format {{{{"query": "your query", "student_id": "the student_id"}}}} for get_archived tool and {{{{"subject": "the learning objective", "difficulty": "integer from 1 to 8", "concepts": "[concept1, concept2, ...]"}}}} for get_problem tool
+        Action Input: the input to the action, in the format {{{{"query": "your query", "student_id": "the student_id"}}}} for get_archived tool and {{{{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}}}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -512,7 +512,7 @@ class MathTeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 8", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -599,7 +599,7 @@ class MathTeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 8", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -685,7 +685,7 @@ class MathTeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 8", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -844,7 +844,7 @@ class TeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{{tool_names}}]
-        Action Input: the input to the action, in the format {{{{"query": "your query", "student_id": "the student_id"}}}} for get_archived tool and {{{{"subject": "the learning objective", "difficulty": "integer from 1 to 8", "concepts": "[concept1, concept2, ...]"}}}} for get_problem tool
+        Action Input: the input to the action, in the format {{{{"query": "your query", "student_id": "the student_id"}}}} for get_archived tool and {{{{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}}}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -1001,7 +1001,7 @@ class TeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 8", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -1087,7 +1087,7 @@ class TeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 8", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -1171,7 +1171,7 @@ class TeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 8", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]

@@ -1,289 +1,83 @@
 import chromadb
 from chromadb.config import Settings
-from backend.src.utils import logging
+from typing import List, Dict, Optional, Union
 
-# Configure logging
-logger = logging.set_logger(__name__)
-
-class MathRagDB:
-    def __init__(self, embedding_model):
-        self.host = "172.16.0.154"
-        self.port = 8000
-        self.model = embedding_model
-    
-    def connect_to_db(self):
-        """Connect to the remote ChromaDB server"""
-        client = chromadb.HttpClient(
-            host=self.host,
-            port=self.port,
+class ChromaDBHandler:
+    def __init__(self, host: str = "172.16.0.154", port: int = 8000):
+        """
+        Initialize the ChromaDB client
+        
+        Args:
+            host: Chroma DB server host
+            port: Chroma DB server port
+        """
+        self.client = chromadb.HttpClient(
+            host=host,
+            port=port,
             settings=Settings(allow_reset=True)
         )
-        logging.log("Successfully connected to MathRagDB!", logger, 2)
-        return client
     
-    def get_collection(self, client, collection_name: str):
-        """Get existing collection from ChromaDB"""
-        try:
-            collection = client.get_collection(collection_name)
-            logging.log("Successfully got collection from MathRagDB!", logger, 2)
-            return collection
-        except Exception as e:
-            logging.log(f"MathRagDB error getting collection: {e}", logger, 0)
-            return None
-
-    def retrieve(self, collection, query_text: str, n_results: int, metadata_filter: dict = None):
-        """Search with metadata filtering"""
+    def create_collection(self, collection_name: str, metadata: Optional[Dict] = None) -> chromadb.Collection:
+        """
+        Create a new collection
         
-        logging.log(f"Retrieving from MathRagDB with query: {query_text}", logger, 2)
-        # Generate embedding for the query
-        query_embedding = self.model.embed_query(query_text)
-        
-        # Prepare query parameters
-        query_params = {
-            "query_embeddings": [query_embedding],
-            "n_results": n_results,
-            "include": ['documents', 'metadatas', 'distances']
-        }
-        
-        # Add metadata filter if provided
-        if metadata_filter:
-            logging.log(f"Using metadata filters: {metadata_filter}", logger, 2)
-            query_params["where"] = metadata_filter
-        
-        # Search with or without metadata filter
-        try:
-            results = collection.query(**query_params)
-            return results['documents'][0] if results['documents'] else []
-
-        except Exception as e:
-            logging.log(f"MathRagDB filter search error: {e}", logger, 0)
-            return [] 
-
-
-class PersonaDB:
-    def __init__(self, embedding_model):
-        self.model = embedding_model
-        self.host = "172.16.0.154"
-        self.port = 8000
-
-    def connect_to_db(self):
-        """Connect to the remote ChromaDB server"""
-        client = chromadb.HttpClient(
-            host=self.host,
-            port=self.port,
-            settings=Settings(allow_reset=True)
-        )
-        logging.log("Successfully connect to PersonaDB!", logger, 2)
-        return client
-    
-    def get_collection(self, client, collection_name: str):
-        """Get existing collection from ChromaDB"""
-        try:
-            collection = client.get_collection(collection_name)
-            logging.log("Successfully got collection from PersonaDB!", logger, 2)
-            return collection
-        except Exception as e:
-            logging.log(f"PersonaDB error getting collection: {e}", logger, 0)
-            return None
-
-    def retrieve(self, collection, query_text: str, n_results: int, metadata_filter: dict = None):
-        """Search with metadata filtering"""
-
-        logging.log(f"Retrieving from PersonDB with query: {query_text}", logger, 2)
-
-        # Generate embedding for the query
-        query_embedding = self.model.embed_query(query_text)
-        
-        # Prepare query parameters
-        query_params = {
-            "query_embeddings": [query_embedding],
-            "n_results": n_results,
-            "include": ['documents', 'metadatas', 'distances']
-        }
-        
-        # Add metadata filter if provided
-        if metadata_filter:
-            logging.log(f"Using metadata filters: {metadata_filter}", logger, 2)
-            query_params["where"] = metadata_filter
-        
-        # Search with or without metadata filter
-        try:
-            results = collection.query(**query_params)
-            return results['documents'][0] if results['documents'] else []
-
-        except Exception as e:
-            logging.log(f"PersonaDB filter search error: {e}", logger, 0)
-            return [] 
-
-class MathRelatedDB:
-    def __init__(self, embedding_model):
-        self.model = embedding_model
-        #self.session_id = session_id
-        self.host = "172.16.0.154"
-        self.port = 8000
-
-    
-    def connect_to_db(self):
-        """Connect to the remote ChromaDB server"""
-        client = chromadb.HttpClient(
-            host=self.host,
-            port=self.port,
-            settings=Settings(allow_reset=True)
-        )
-        logging.log("Successfully connect to MathRelatedDB!", logger, 2)
-        return client
-    
-    def get_collection(self, client, collection_name: str):
-        """Get existing collection from ChromaDB"""
-        try:
-            collection = client.get_collection(collection_name)
-            logging.log("Successfully got collection from MathRelatedDB!", logger, 2)
-            return collection
-        except Exception as e:
-            logging.log(f"MathRelatedDB error getting collection: {e}", logger, 0)
-            return None
-    
-    def retrieve(self, collection, query_text: str, n_results: int, metadata_filter: dict = None):
-        """Search with metadata filtering"""
-
-        logging.log(f"Retrieving from MathRelatedDB with query: {query_text}", logger, 2)
-        
-        # Generate embedding for the query
-        query_embedding = self.model.embed_query(query_text)
-        
-        # Prepare query parameters
-        query_params = {
-            "query_embeddings": [query_embedding],
-            "n_results": n_results,
-            "include": ['documents', 'metadatas', 'distances']
-        }
-        
-        # Add metadata filter if provided
-        if metadata_filter:
-            logging.log(f"Using metadata filters: {metadata_filter}", logger, 2)
-            query_params["where"] = metadata_filter
-        
-        # Search with or without metadata filter
-        try:
-            results = collection.query(**query_params)
-            return results['documents'][0] if results['documents'] else []
-
-        except Exception as e:
-            logging.log(f"MathRelatedDB filter search error: {e}", logger, 0)
-            return [] 
-
-class ProblemDB:
-    def __init__(self, embedding_model):
-        self.host = "172.16.0.154"
-        self.port = 8000
-        self.model = embedding_model
-    
-    def connect_to_db(self):
-        """Connect to the remote ChromaDB server"""
-        client = chromadb.HttpClient(
-            host=self.host,
-            port=self.port,
-            settings=Settings(allow_reset=True)
-        )
-        logging.log("Successfully connect to ProblemDB!", logger, 2)
-        return client
-    
-    def get_collection(self, client, collection_name: str):
-        """Get existing collection from ChromaDB"""
-        try:
-            collection = client.get_collection(collection_name)
-            logging.log("Successfully got collection from ProblemDB!", logger, 2)
-            return collection
-        except Exception as e:
-            logging.log(f"ProblemDB error getting collection: {e}", logger, 0)
-            return None
-
-    def multiple_metadata(self, metadata_filter: dict):
-        """Convert metadata filter dict to ChromaDB where clause format"""
-        if not metadata_filter:
-            return {}
-        
-        # If only one filter, return it directly
-        if len(metadata_filter) == 1:
-            key, value = list(metadata_filter.items())[0]
-            return {key: value}
-        
-        # For multiple filters, use $and operator
-        conditions = []
-        for key, value in metadata_filter.items():
-            if key == 'concepts':
-                conditions.append({key: {"$in":value}})
-            else:
-                conditions.append({key: value})
-        
-        return {"$and": conditions}
-
-    def retrieve(self, collection, query_text: str, metadata_filter: dict, n_results: int):
-        """Search with metadata filtering"""
-        
-        logging.log(f"Retrieving from ProblemDB with query: {query_text}", logger, 2)
-
-        # Generate embedding for the query
-        query_embedding = self.model.embed_query(query_text)
-        
-        # Prepare query parameters
-        query_params = {
-            "query_embeddings": [query_embedding],
-            "n_results": n_results,
-            "include": ['documents', 'metadatas', 'distances']
-        }
-        
-        # Add metadata filter if provided
-        if metadata_filter:
-            # Convert simple dict to ChromaDB where clause format
-            where_clause = self.multiple_metadata(metadata_filter)
-            logging.log(f"Using metadata filters: {where_clause}", logger, 2)
-            query_params["where"] = where_clause
-        
-        # Search with or without metadata filter
-        try:
-            results = collection.query(**query_params)
-            return results['documents'][0] if results['documents'] else []
-
-        except Exception as e:
-            logging.log(f"ProblemDB filter search error: {e}", logger, 0)
-            return []
+        Args:
+            collection_name: Name of the collection to create
+            metadata: Optional metadata for the collection
             
+        Returns:
+            The created collection
+        """
+        return self.client.create_collection(name=collection_name, metadata=metadata)
     
-
-class ArchivedConversationHistory:
-    def __init__(self, embedding_model):
-        self.host = "172.16.0.154"
-        self.port = 8000
-        self.model = embedding_model
-    
-    def connect_to_db(self):
-        """Connect to the remote ChromaDB server"""
-        client = chromadb.HttpClient(
-            host=self.host,
-            port=self.port,
-            settings=Settings(allow_reset=True)
-        )
-        logging.log("Successfully connect to ArchivedDB!", logger, 2)
-        return client
-    
-    def get_collection(self, client, collection_name: str):
-        """Get existing collection from ChromaDB"""
-        try:
-            collection = client.get_collection(collection_name)
-            logging.log("Successfully got collection from ArchivedDB!", logger, 2)
-            return collection
-        except Exception as e:
-            logging.log(f"ArchivedDB error getting collection: {e}", logger, 0)
-            return None
-
-    def retrieve(self, collection, query_text: str, n_results: int, metadata_filter: dict = None):
-        """Search with metadata filtering"""
+    def get_collection(self, collection_name: str) -> chromadb.Collection:
+        """
+        Get an existing collection
         
-        logging.log(f"Retrieving from ArchivedDB with query: {query_text}", logger, 2)
-
+        Args:
+            collection_name: Name of the collection to retrieve
+            
+        Returns:
+            The requested collection
+        """
+        return self.client.get_collection(name=collection_name)
+    
+    def add_documents(
+        self,
+        collection_name: str,
+        documents: List[str],
+        ids: List[str],
+        metadatas: Optional[List[Dict]] = None,
+        embeddings: Optional[List[List[float]]] = None,
+        embedding_model: Optional[object] = None
+    ) -> None:
+        """
+        Add documents to a collection
+        
+        Args:
+            collection_name: Name of the collection
+            documents: List of document texts
+            ids: List of unique IDs for each document
+            metadatas: Optional list of metadata dictionaries
+            embeddings: Optional pre-computed embeddings
+            embedding_model: Optional custom embedding model to generate embeddings
+        """
+        collection = self.get_collection(collection_name)
+        
+        # Generate embeddings using custom model if provided and embeddings not provided
+        if embedding_model is not None and embeddings is None:
+            embeddings = embedding_model.embed_documents(documents)
+        
+        collection.add(
+            documents=documents,
+            ids=ids,
+            metadatas=metadatas,
+            embeddings=embeddings
+        )
+    
+    def query(self, model, collection, query_text: str, n_results: int, metadata_filter: dict = None):
         # Generate embedding for the query
-        query_embedding = self.model.embed_query(query_text)
+        query_embedding = model.embed_query(query_text)
         
         # Prepare query parameters
         query_params = {
@@ -294,14 +88,169 @@ class ArchivedConversationHistory:
         
         # Add metadata filter if provided
         if metadata_filter:
-            logging.log(f"Using metadata filters: {metadata_filter}", logger, 2)
             query_params["where"] = metadata_filter
         
         # Search with or without metadata filter
         try:
             results = collection.query(**query_params)
-            return results['documents'][0] if results['documents'] else []
+            return results if results['documents'] else []
 
         except Exception as e:
-            logging.log(f"ArchivedDB filter search error: {e}", logger, 0)
-            return [] 
+            return e
+    
+    def update_documents(
+        self,
+        collection_name: str,
+        ids: List[str],
+        documents: Optional[List[str]] = None,
+        metadatas: Optional[List[Dict]] = None,
+        embeddings: Optional[List[List[float]]] = None
+    ) -> None:
+        """
+        Update documents in a collection
+        
+        Args:
+            collection_name: Name of the collection
+            ids: List of document IDs to update
+            documents: Updated document texts (optional)
+            metadatas: Updated metadata (optional)
+            embeddings: Updated embeddings (optional)
+        """
+        collection = self.get_collection(collection_name)
+        collection.update(
+            ids=ids,
+            documents=documents,
+            metadatas=metadatas,
+            embeddings=embeddings
+        )
+    
+    def delete_documents(
+        self,
+        collection_name: str,
+        ids: List[str]
+    ) -> None:
+        """
+        Delete documents from a collection
+        
+        Args:
+            collection_name: Name of the collection
+            ids: List of document IDs to delete
+        """
+        collection = self.get_collection(collection_name)
+        collection.delete(ids=ids)
+    
+    def delete_collection(self, collection_name: str) -> None:
+        """
+        Delete an entire collection
+        
+        Args:
+            collection_name: Name of the collection to delete
+        """
+        self.client.delete_collection(name=collection_name)
+    
+    def list_collections(self) -> List[chromadb.Collection]:
+        """
+        List all collections
+        
+        Returns:
+            List of collection objects
+        """
+        return self.client.list_collections()
+    
+    def get_all_ids(self, collection_name: str) -> List[str]:
+        """
+        Get all document IDs from a collection
+        
+        Args:
+            collection_name: Name of the collection
+            
+        Returns:
+            List of all document IDs in the collection
+        """
+        collection = self.get_collection(collection_name)
+        # Use get() method to retrieve all documents
+        results = collection.get()
+        return results['ids'] if results['ids'] else []
+    
+    def get_all_documents(self, collection_name: str, include_metadata: bool = True) -> Dict:
+        """
+        Get all documents from a collection
+        
+        Args:
+            collection_name: Name of the collection
+            include_metadata: Whether to include metadata in the results
+            
+        Returns:
+            Dictionary containing documents, IDs, and optionally metadata
+        """
+        collection = self.get_collection(collection_name)
+        
+        # include_fields = ['documents', 'ids']
+        # if include_metadata:
+        #     include_fields.append('metadatas')
+            
+        results = collection.get()
+        return results
+    
+    def get_collection_count(self, collection_name: str) -> int:
+        """
+        Get the total number of documents in a collection
+        
+        Args:
+            collection_name: Name of the collection
+            
+        Returns:
+            Number of documents in the collection
+        """
+        collection = self.get_collection(collection_name)
+        results = collection.get()
+        return len(results['ids']) if results['ids'] else 0
+
+# Example usage
+# if __name__ == "__main__":
+#     try:
+#         db_manager = ChromaDBHandler(host="172.16.0.154", port=8000)
+#         print("Successfully connected to Chroma DB server")
+        
+#         # Test connection by listing collections
+#         collections = db_manager.list_collections()
+#         print(f"Existing collections: {[col.name for col in collections]}")
+        
+#         # Create a collection
+#         collection = db_manager.create_collection("test_collection")
+        
+        # # Add documents
+        # db_manager.add_documents(
+        #     collection_name="test_collection",
+        #     documents=["This is document 1", "This is document 2"],
+        #     ids=["doc1", "doc2"],
+        #     metadatas=[{"source": "web"}, {"source": "database"}]
+        # )
+        
+        # # Query documents
+        # results = db_manager.query(
+        #     collection_name="test_collection",
+        #     query_texts=["document"],
+        #     n_results=2
+        # )
+        # print(results)
+        
+        # # Update a document
+        # db_manager.update_documents(
+        #     collection_name="test_collection",
+        #     ids=["doc1"],
+        #     documents=["This is updated document 1"],
+        #     metadatas=[{"source": "updated"}]
+        # )
+        
+        # # Delete a document
+        # db_manager.delete_documents(
+        #     collection_name="test_collection",
+        #     ids=["doc2"]
+        # )
+        
+        # # Delete the collection
+        # db_manager.delete_collection("test_collection")        
+
+    # except Exception as e:
+    #     print(f"Error connecting to Chroma DB: {e}")

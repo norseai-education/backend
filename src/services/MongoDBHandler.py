@@ -8,13 +8,13 @@ from backend.src.utils import logging
 logger = logging.set_logger(__name__)
 
 class MongoDBHandler:
-    def __init__(self, connection_uri: str = "mongodb://localhost:27017/"):
+    def __init__(self, connection_uri: str = "mongodb://172.16.0.177:27019"):
         """
         Initialize MongoDB connection handler.
         
         Args:
             connection_uri: MongoDB connection string
-                           (default: "mongodb://localhost:27017/")
+                           (default: "mongodb://172.16.0.177:27019")
         """
         self.connection_uri = connection_uri
         self.client = None
@@ -52,6 +52,10 @@ class MongoDBHandler:
             self.client = None
             self.db = None
 
+    def list_databases(self):
+        self.client = MongoClient(self.connection_uri)
+        return self.client.list_database_names()
+    
     def list_collections(self):
         return self.db.list_collection_names()
     

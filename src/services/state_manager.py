@@ -11,8 +11,8 @@ logger = logging.set_logger(__name__)
 class StateManager:
     def __init__(self, student_id):
         self.student_id = str(student_id)
-        self.MONGODB_URI = "mongodb://172.16.0.177:27017/"
-        self.DB_NAME = "amc8_math"
+        self.MONGODB_URI = "mongodb://172.16.0.177:27019/"
+        self.DB_NAME = "norseai"
         self.REDIS_URI = "redis://172.16.0.177:6379/"
         self.write_config = {"configurable": {"thread_id": self.student_id, "checkpoint_ns": ""}}
         self.read_config = {"configurable": {"thread_id": self.student_id}}

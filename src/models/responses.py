@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
+from uuid import UUID
 
 class ChatResponse(BaseModel):
     response: str
@@ -45,3 +46,8 @@ class UserGraphResponse(BaseModel):
     
 class RouteResponse(BaseModel):
     give_assessment: bool
+
+class ClassesResponse(BaseModel):
+    class_ids: list[UUID]
+    class_names: list[str]
+    class_descriptions: list[str]

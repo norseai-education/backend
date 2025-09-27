@@ -1,5 +1,5 @@
 
 .env
-db_testing.py
+testing/
 static/
 __pycache__/

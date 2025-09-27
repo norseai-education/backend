@@ -1,8 +1,7 @@
 from langchain_core.tools import tool
 from langchain_core.tools import StructuredTool
 from backend.src.services.math_engine import MathEngine
-import backend.src.services.models as models
-import backend.src.services.ChromaDBHandler as ChromaDBHandler
+import backend.src.services.rag_service as rag_service
 from pydantic import BaseModel, Field, model_validator
 import json
 from backend.src.utils import logging
@@ -92,6 +91,9 @@ class GetProblemInput(BaseModel):
         
         return values
 
+class CheckConceptsInput(BaseModel):
+    concepts: list[str] = Field(description="The concepts you want to check")
+
 @tool
 def math_engine(expression: str) -> str:
     """Math engine for difficult expressions and large computations using SymPy"""
@@ -120,15 +122,17 @@ def math_engine(expression: str) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
     
-@tool
-def check_concepts(concepts: list) -> str:
+
+def check_concepts(input_data: CheckConceptsInput) -> str:
     """Verify if concepts are in the Concepts List"""
+    input_data = json.loads(input_data)
+    concepts = input_data.get('concepts')
     try:
         logging.log("Using check_concepts tool... ", logger, 2)
         logging.log(f"Tool inputs: \n{concepts},{type(concepts)}", logger, 2)
         bad_concepts = []
         for concept in concepts:
-            if concept not in knowledge_info.amc8_concepts:
+            if concept.lower() not in knowledge_info.amc8_concepts:
                 bad_concepts.append(concept)
 
         if bad_concepts:
@@ -139,6 +143,12 @@ def check_concepts(concepts: list) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
     
+check_concepts_structured = StructuredTool.from_function(
+    func=check_concepts,
+    name="check_concepts",
+    description="Verify if concepts are in the Concepts List",
+    args_schema=CheckConceptsInput,
+)
     
 def get_math_context(input_data: MathContextInput) -> str:
     """Get further context for the student input if needed."""
@@ -149,10 +159,8 @@ def get_math_context(input_data: MathContextInput) -> str:
 
     student_id = input_data.get('student_id')
     query = input_data.get('query')
-    math_related_db = ChromaDBHandler.MathRelatedDB(models.embedding_model)
-    math_related_client = math_related_db.connect_to_db()
-    math_related_collection = math_related_db.get_collection(math_related_client, "math_related_db")
-    math_context = math_related_db.retrieve(math_related_collection, query, n_results=1, metadata_filter = {"student_id": student_id})
+    math_related_db = rag_service.MathRelatedDB()
+    math_context = math_related_db.retrieve(query, n_results=1, metadata_filter = {"student_id": str(student_id)})
     return math_context
 
 get_math_context_structured = StructuredTool.from_function(
@@ -173,10 +181,8 @@ def get_archived(input_data: GetArchivedInput):
 
     student_id = input_data.get('student_id')
     query = input_data.get('query')
-    archived_db = ChromaDBHandler.ArchivedConversationHistory(models.embedding_model)
-    archived_db_client = archived_db.connect_to_db()
-    archived_db_collection = archived_db.get_collection(archived_db_client, "conversation_history")
-    archived = archived_db.retrieve(archived_db_collection, query, 1, {"student_id": student_id})
+    archived_db = rag_service.ArchivedConversationHistory()
+    archived = archived_db.retrieve(query, 3, {"student_id": str(student_id)})
     return archived
 
 get_archived_structured = StructuredTool.from_function(
@@ -196,11 +202,18 @@ def get_problem(input_data: GetProblemInput):
     subject = input_data.get('subject')
     difficulty = input_data.get('difficulty')
     concepts = input_data.get('concepts')
-    problem_db = ChromaDBHandler.ProblemDB(models.embedding_model)
-    problem_db_client = problem_db.connect_to_db()
-    problem_db_collection = problem_db.get_collection(problem_db_client, "problem_db")
-    problem = problem_db.retrieve(problem_db_collection, subject, {"difficulty": difficulty, "concepts": concepts}, n_results=1)
-    return problem
+    problem_db = rag_service.ProblemDB()
+    problem, metadata = problem_db.retrieve(subject, n_results=10)
+    place = 0
+    for data in metadata:
+        concepts_list = data['concepts'].split(',')
+        if data['difficulty'] == difficulty:
+            for concept in concepts:
+                if concept in concepts_list:
+                    place = metadata.index(data)
+                    break
+
+    return problem[place]
 
 get_problem_structured = StructuredTool.from_function(
     func=get_problem,

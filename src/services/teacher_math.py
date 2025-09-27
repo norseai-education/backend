@@ -89,7 +89,7 @@ class MathTeacher:
         new_lesson_state, final_response = utils.parse_response(response["output"])
         
         # add teacher response to math-related-db
-        utils.store_input(self.store, 'math_related',student_id, final_response)
+        utils.store_input(self.store, 'math_related', student_id, final_response)
 
         return {"messages": [{"role": "assistant", "content": final_response}],
                 "lesson_state": new_lesson_state

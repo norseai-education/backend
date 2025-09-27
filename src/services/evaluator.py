@@ -40,10 +40,13 @@ class EvaluatorModel:
 
     def format_eval_output(self, eval_result):
         """Format the evaluation result to extract grade and solution"""
+        eval_grade = {}  # Initialize with default value
+        solution = ""     # Initialize with default value
+        
         if isinstance(eval_result, dict):
             if "Evaluation of Concepts" and "Solution" in eval_result.keys():
-                solution = parsed_response.get("Solution","")
-                eval_grade = parsed_response.get("Evaluation of Concepts",{})
+                solution = eval_result.get("Solution","")
+                eval_grade = eval_result.get("Evaluation of Concepts",{})
                 if not isinstance(eval_grade, dict):
                     try:
                         eval_grade = json.loads(eval_grade)
@@ -75,6 +78,9 @@ class EvaluatorModel:
                 except json.JSONDecodeError:
                     logging.log("Failed to parse eval grade JSON", logger, 0)
                     eval_grade = {}
+            else:
+                # No grade match found, keep default empty dict
+                logging.log("No grade match found in regex search", logger, 0)
         
         eval = eval_grade.copy()
         for key in eval.keys():

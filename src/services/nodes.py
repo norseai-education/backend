@@ -3,7 +3,7 @@ from backend.src.services.query_classifier import ClassifierModel
 from backend.src.services.evaluator import EvaluatorModel
 import backend.src.services.prompts as prompts
 import backend.src.services.models as models
-import backend.src.services.ChromaDBHandler as ChromaDBHandler
+import backend.src.services.rag_service as rag_service
 import backend.src.services.MongoDBHandler as MongoDBHandler
 import backend.src.services.tools as tools
 from backend.src.services.bkt import BayesianKnowledgeTracing
@@ -24,15 +24,15 @@ class Nodes:
         self.evaluator = EvaluatorModel(
         models.evaluator_model,
         prompts.evaluator_prompt,
-        [tools.get_math_context_structured, tools.math_engine, tools.check_concepts])
+        [tools.get_math_context_structured, tools.math_engine, tools.check_concepts_structured])
 
         self.bkt = BayesianKnowledgeTracing(knowledge_info.amc8_concepts)
 
         self.math_rag = MathRAG(
-        ChromaDBHandler.MathRagDB(models.embedding_model))
+        rag_service.MathRagDB())
 
         self.personality_rag = PersonalityRAG(
-        ChromaDBHandler.PersonaDB(models.embedding_model))
+        rag_service.PersonaDB())
 
         self.math_teacher = MathTeacher(
         models.teacher_model,

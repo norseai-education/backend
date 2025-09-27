@@ -3,10 +3,16 @@ import threading
 import json
 
 from backend.src.utils import logging
+from backend.src.utils.text_to_vec import TextToVec
 
 # Configure logging
 logger = logging.set_logger(__name__)
 
+def transfer_to_chroma():
+    text_to_vec = TextToVec()
+    text_to_vec.math_related_to_vec()
+    text_to_vec.student_persona_to_vec()
+    text_to_vec.conversation_history_to_vec()
 
 def convert_messages_to_dict(messages, student_id):
     """
@@ -25,9 +31,9 @@ def convert_messages_to_dict(messages, student_id):
         message_type = message.__class__.__name__
         
         if message_type == 'HumanMessage':
-            result.append({'student_id': student_id, 'role': 'student', 'content': message.content})
+            result.append({'student_id': str(student_id), 'role': 'student', 'content': message.content})
         elif message_type == 'AIMessage':
-            result.append({'student_id': student_id, 'role': 'teacher', 'content': message.content})
+            result.append({'student_id': str(student_id), 'role': 'teacher', 'content': message.content})
     
     return result
 

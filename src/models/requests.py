@@ -34,3 +34,5 @@ class CreateClassRequest(BaseModel):
     class_name: str
     class_description: str
 
+class StudentIDRequest(BaseModel):
+    email: str

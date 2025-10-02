@@ -15,5 +15,8 @@ class PersonalityRAG:
         # Retrieve context from the persona database
         rag = self.persona_db.retrieve(student_input, n_results=1, metadata_filter={"student_id": str(state["student_id"])})
         logging.log(f"personality rag result: {rag}", logger, 2)
-        return {"personality_context": rag[0]}
+        if rag:
+            return {"personality_context": rag[0]}
+        else:
+            return {"personality_context": "None"}
     

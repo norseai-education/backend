@@ -51,3 +51,6 @@ class ClassesResponse(BaseModel):
     class_ids: list[UUID]
     class_names: list[str]
     class_descriptions: list[str]
+
+class StudentIDResponse(BaseModel):
+    student_id: int

@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Settings(BaseSettings):
-    # Database settings
+    # Database postgresql settings
     db_user: str = "admin"
     db_password: str = os.getenv('USER_DB_PASSWORD', '')
     db_name: str = "norseai"

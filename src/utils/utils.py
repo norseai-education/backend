@@ -165,3 +165,9 @@ def format_conversation_context(messages):
             formatted_context.append(f"Unknown: {str(msg)}")
     logging.log(f"Context formatted: {formatted_context}", logger, 2)
     return formatted_context
+
+def get_learning_obj(graph):
+    for key,value in graph.items():
+        if value < 0.75:
+            return key
+    return None

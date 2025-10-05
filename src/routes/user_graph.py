@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi import status
 from backend.src.models.requests import UserGraphRequest
 from backend.src.models.responses import UserGraphResponse, MessageResponse
-from backend.src.services.graph_service import UserGraphService
+from backend.src.services.user_graph_service import UserGraphService
 
 router = APIRouter()
 user_graph_service = UserGraphService()
@@ -12,7 +12,7 @@ async def health_check():
     """Health check endpoint"""
     return {"status": "ok"}
 
-@router.get("/user_graph/{student_id}", response_model=UserGraphResponse)
+@router.get("/get_user_graph/{student_id}", response_model=UserGraphResponse)
 async def get_user_graph(student_id: int):
     graph = await user_graph_service.get(student_id)
     return UserGraphResponse(user_graph=graph)

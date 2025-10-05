@@ -1,6 +1,7 @@
 import asyncio
 import threading
 import json
+import re
 
 from backend.src.utils import logging
 from backend.src.utils.text_to_vec import TextToVec

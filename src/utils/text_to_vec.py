@@ -2,6 +2,7 @@ from backend.src.services.ChromaDBHandler import ChromaDBHandler
 from backend.src.services.MongoDBHandler import MongoDBHandler
 from backend.src.services.models import embedding_model
 from backend.src.utils import logging
+from backend.src.config.settings import settings
 from bson import ObjectId
 
 # Configure logging
@@ -24,7 +25,7 @@ class TextToVec:
     change chroma_collection_name to change the collection to add the vectors to.
     """
     def __init__(self):
-        self.mongo_handler = MongoDBHandler("mongodb://172.16.0.177:27019")
+        self.mongo_handler = MongoDBHandler(settings.mongodb_url)
         self.mongo_handler.connect("amc8_database")
         self.chroma_handler = ChromaDBHandler()
         # self.mongo_documents = mongo_handler.find_documents(self.mongo_collection_name)

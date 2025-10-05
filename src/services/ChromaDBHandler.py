@@ -3,7 +3,7 @@ from chromadb.config import Settings
 from typing import List, Dict, Optional, Union
 
 class ChromaDBHandler:
-    def __init__(self, host: str = "172.16.0.154", port: int = 8000):
+    def __init__(self, host: str = "chromadb", port: int = 8000):
         """
         Initialize the ChromaDB client
         

@@ -1,8 +1,9 @@
 from backend.src.services.MongoDBHandler import MongoDBHandler
+from backend.src.config.settings import settings
 
 class UserGraphService:
     def __init__(self):
-        self.db = MongoDBHandler("mongodb://172.16.0.177:27019/")
+        self.db = MongoDBHandler(settings.mongodb_url)
         self.db.connect("norseai")
 
     async def get(self, student_id: int):

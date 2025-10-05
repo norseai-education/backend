@@ -213,12 +213,17 @@ class ChatService:
             convo_db = session['convo_db']
             user_state = session['user_state']
 
-            await convo_db.insert_document(
-                "conversation_history",
-                utils.convert_messages_to_dict(user_state["messages"], student_id),
-                True
-            )
-            logging.log("Stored conversation history into database!", self.logger, 1)
+            # Only save conversation history if there are messages
+            messages_dict = utils.convert_messages_to_dict(user_state["messages"], student_id)
+            if messages_dict:
+                await convo_db.insert_document(
+                    "conversation_history",
+                    messages_dict,
+                    True
+                )
+                logging.log("Stored conversation history into database!", self.logger, 1)
+            else:
+                logging.log("No messages to store for this session", self.logger, 1)
             
             # Clear Redis memory
             await asyncio.get_event_loop().run_in_executor(None, state_manager.clear_redis_memory)

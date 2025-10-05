@@ -34,6 +34,7 @@ humanfriendly==10.0
 idna==3.10
 importlib_metadata==8.7.0
 importlib_resources==6.5.2
+IPython==8.32.0
 jsonpatch==1.33
 jsonpath-ng==1.7.0
 jsonpointer==3.0.0

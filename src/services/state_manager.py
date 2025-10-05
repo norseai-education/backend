@@ -4,6 +4,7 @@ from langchain_core.runnables.graph_mermaid import draw_mermaid_png
 from IPython.display import Image, display
 from backend.src.utils import logging
 from backend.src.utils import knowledge_info
+from backend.src.config.settings import settings
 
 # Configure logging
 logger = logging.set_logger(__name__)
@@ -11,9 +12,9 @@ logger = logging.set_logger(__name__)
 class StateManager:
     def __init__(self, student_id):
         self.student_id = str(student_id)
-        self.MONGODB_URI = "mongodb://172.16.0.177:27019/"
+        self.MONGODB_URI = settings.mongodb_url
         self.DB_NAME = "norseai"
-        self.REDIS_URI = "redis://172.16.0.177:6379/"
+        self.REDIS_URI = settings.redis_url
         self.write_config = {"configurable": {"thread_id": self.student_id, "checkpoint_ns": ""}}
         self.read_config = {"configurable": {"thread_id": self.student_id}}
 

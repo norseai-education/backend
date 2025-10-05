@@ -1,15 +1,16 @@
-from backend.src.utils import logging
-from backend.src.services.MongoDBHandler import MongoDBHandler
+from ..utils import logging
+from .MongoDBHandler import MongoDBHandler
 import random
 from bson import ObjectId
-from backend.src.services.bkt import BayesianKnowledgeTracing
+from .bkt import BayesianKnowledgeTracing
 from backend.src.utils import knowledge_info
+from backend.src.config.settings import settings
 
 
 class AssessmentService:
     def __init__(self):
         self.logger = logging.set_logger(__name__)
-        self.db = MongoDBHandler("mongodb://172.16.0.177:27019")
+        self.db = MongoDBHandler(settings.mongodb_url)
         self.db.connect('amc8_database')
         self.bkt = BayesianKnowledgeTracing(knowledge_info.amc8_concepts)
 

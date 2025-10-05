@@ -2,21 +2,22 @@ from pymongo import MongoClient
 from pymongo.errors import PyMongoError
 from typing import Dict, Any, Union, List, Optional
 from bson import ObjectId
-from backend.src.utils import logging
+from ..utils import logging
+from ..config.settings import settings
 
 # Configure logging
 logger = logging.set_logger(__name__)
 
 class MongoDBHandler:
-    def __init__(self, connection_uri: str = "mongodb://172.16.0.177:27019"):
+    def __init__(self, connection_uri: str = None):
         """
         Initialize MongoDB connection handler.
         
         Args:
             connection_uri: MongoDB connection string
-                           (default: "mongodb://172.16.0.177:27019")
+                           (default: from settings based on environment)
         """
-        self.connection_uri = connection_uri
+        self.connection_uri = connection_uri or settings.mongodb_url
         self.client = None
         self.db = None
         

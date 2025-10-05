@@ -12,6 +12,7 @@ from backend.src.services.personality_rag import PersonalityRAG
 from backend.src.services.math_rag import MathRAG
 from backend.src.services.teacher_math import MathTeacher
 from backend.src.services.teacher import Teacher
+from backend.src.config.settings import settings
 
 class Nodes:
     def __init__(self):
@@ -37,14 +38,14 @@ class Nodes:
         self.math_teacher = MathTeacher(
         models.teacher_model,
         prompts.MathTeacherPrompt(),
-        MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
+        MongoDBHandler.MongoDBHandler(settings.mongodb_url),
         [tools.get_archived_structured, tools.get_problem_structured]
         )
 
         self.teacher = Teacher(
         models.teacher_model,
         prompts.TeacherPrompt(),
-        MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
+        MongoDBHandler.MongoDBHandler(settings.mongodb_url),
         [tools.get_archived_structured, tools.get_problem_structured]
         )
 

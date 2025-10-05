@@ -1,0 +1,129 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    ports:
+      - "6700:6700"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      chromadb:
+        condition: service_started
+      chromadb-seed:
+        condition: service_completed_successfully
+    networks:
+      - norsea-network
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "5173:80"
+    networks:
+      - norsea-network
+
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD:-defaultpassword}
+      POSTGRES_DB: norseai
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - norsea-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis/redis-stack-server:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - norsea-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      # Maps the host machine's port 27019 to the container's internal port 27017
+      - "27019:27017" 
+    environment:
+      # Database name updated to match your settings
+      MONGO_INITDB_DATABASE: amc8_database
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - norsea-network
+
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+    networks:
+      - norsea-network
+
+  chromadb-seed:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    command: sh -c "cd /app/backend && python seed_chromadb.py"
+    depends_on:
+      - chromadb
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    networks:
+      - norsea-network
+    restart: "no"
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama-qwen
+    ports:
+      - "11434:11434" # Ollama's API port
+    volumes:
+      - ./ollama_models:/root/.ollama # Persist model weights on your host
+    restart: always
+    # You must expose your GPU device to the container for faster inference.
+    # If you have an NVIDIA GPU, uncomment the lines below:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    networks:
+      - norsea-network
+
+networks:
+  norsea-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  mongodb_data:
+  chromadb_data:

@@ -6,8 +6,8 @@ WORKDIR /app
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app
+    PYTHONUNBUFFERED=1
+    # PYTHONPATH=/app
 
 # Install system dependencies
 # RUN apt-get update && apt-get install -y \
@@ -25,11 +25,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Create non-root user
-RUN useradd --create-home --shell /bin/bash app && chown -R app:app /app
-USER app
+# RUN useradd --create-home --shell /bin/bash app && chown -R app:app /app
+# USER app
 
 # Expose port
 EXPOSE 6700
 
 # Run the application
-CMD ["python3", "-m", "app.src.main"]
+CMD ["python3", "-m", "src.main"]

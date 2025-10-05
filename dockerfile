@@ -32,4 +32,4 @@ USER app
 EXPOSE 6700
 
 # Run the application
-CMD ["python3", "-m", "src.main"]
+CMD ["python3", "-m", "app.src.main"]

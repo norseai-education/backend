@@ -4,8 +4,8 @@ from typing import Optional
 import asyncpg
 from fastapi import HTTPException
 
-from backend.src.config.settings import settings
-from backend.src.utils import logging, security
+from src.config.settings import settings
+from src.utils import logging, security
 
 class AuthService:
     def __init__(self):

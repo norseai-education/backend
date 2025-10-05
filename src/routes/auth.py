@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 import asyncpg
 
-from backend.src.models.requests import UserSignup, UserLogin
-from backend.src.models.responses import AuthResponse, UserInfoResponse, MessageResponse
-from backend.src.services.auth_service import AuthService
-from backend.src.services.chat_service import chat_service
-from backend.src.core.dependencies import get_db_connection
+from src.models.requests import UserSignup, UserLogin
+from src.models.responses import AuthResponse, UserInfoResponse, MessageResponse
+from src.services.auth_service import AuthService
+from src.services.chat_service import chat_service
+from src.core.dependencies import get_db_connection
 
 router = APIRouter()
 auth_service = AuthService()

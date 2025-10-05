@@ -3,14 +3,14 @@ import json
 from typing import Dict, Any, AsyncGenerator
 from fastapi import HTTPException
 
-from backend.src.services.graph import BuildNorseAIGraph
-from backend.src.services.state_manager import StateManager
-from backend.src.services.MongoDBHandler import MongoDBHandler
-from backend.src.services.assessment_service import AssessmentService
-from backend.src.config.settings import settings
-from backend.src.utils import logging
-from backend.src.utils import utils
-from backend.src.utils import knowledge_info
+from src.services.graph import BuildNorseAIGraph
+from src.services.state_manager import StateManager
+from src.services.MongoDBHandler import MongoDBHandler
+from src.services.assessment_service import AssessmentService
+from src.config.settings import settings
+from src.utils import logging
+from src.utils import utils
+from src.utils import knowledge_info
 
 
 class ChatService:

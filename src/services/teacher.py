@@ -1,7 +1,7 @@
-from backend.src.services.state import State
+from src.services.state import State
 from langchain.agents import create_react_agent, AgentExecutor
-from backend.src.utils import logging
-from backend.src.utils import utils
+from src.utils import logging
+from src.utils import utils
 
 # Configure logging
 logger = logging.set_logger(__name__)

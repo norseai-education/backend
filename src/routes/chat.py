@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
-from backend.src.models.requests import ChatRequest
-from backend.src.models.responses import MessageResponse, ChatStatusResponse
-from backend.src.services.chat_service import ChatService
+from src.models.requests import ChatRequest
+from src.models.responses import MessageResponse, ChatStatusResponse
+from src.services.chat_service import ChatService
 
 router = APIRouter()
 chat_service = ChatService()

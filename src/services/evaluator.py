@@ -1,8 +1,8 @@
 from langchain.agents import create_react_agent, AgentExecutor
-from backend.src.services.state import State
+from src.services.state import State
 import json
-from backend.src.utils import logging
-from backend.src.utils import knowledge_info
+from src.utils import logging
+from src.utils import knowledge_info
 import re
 
 

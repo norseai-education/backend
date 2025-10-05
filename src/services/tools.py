@@ -1,11 +1,11 @@
 from langchain_core.tools import tool
 from langchain_core.tools import StructuredTool
-from backend.src.services.math_engine import MathEngine
-import backend.src.services.rag_service as rag_service
+from src.services.math_engine import MathEngine
+import src.services.rag_service as rag_service
 from pydantic import BaseModel, Field, model_validator
 import json
-from backend.src.utils import logging
-from backend.src.utils import knowledge_info
+from src.utils import logging
+from src.utils import knowledge_info
 
 # Configure logging
 logger = logging.set_logger(__name__)

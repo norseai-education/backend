@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.src.config.settings import settings
+from src.config.settings import settings
 
 def setup_middleware(app: FastAPI):
     app.add_middleware(

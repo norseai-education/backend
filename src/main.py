@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from backend.src.core.lifespan import lifespan
-from backend.src.core.middleware import setup_middleware
-from backend.src.routes import auth, chat, assessment, classes, user_graph, user
+from src.core.lifespan import lifespan
+from src.core.middleware import setup_middleware
+from src.routes import auth, chat, assessment, classes, user_graph, user
 
 def create_app() -> FastAPI:
     """Create and configure FastAPI application"""

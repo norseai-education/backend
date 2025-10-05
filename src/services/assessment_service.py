@@ -1,9 +1,9 @@
-from backend.src.utils import logging
-from backend.src.services.MongoDBHandler import MongoDBHandler
+from src.utils import logging
+from src.services.MongoDBHandler import MongoDBHandler
 import random
 from bson import ObjectId
-from backend.src.services.bkt import BayesianKnowledgeTracing
-from backend.src.utils import knowledge_info
+from src.services.bkt import BayesianKnowledgeTracing
+from src.utils import knowledge_info
 
 
 class AssessmentService:

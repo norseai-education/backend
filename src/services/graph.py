@@ -1,5 +1,5 @@
-from backend.src.services.nodes import Nodes
-from backend.src.services.state import State
+from src.services.nodes import Nodes
+from src.services.state import State
 from langgraph.graph import StateGraph, START, END
 
 class BuildNorseAIGraph:

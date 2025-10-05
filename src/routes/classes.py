@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from fastapi import status
-from backend.src.models.requests import ClassRequest, CreateClassRequest
-from backend.src.models.responses import ClassesResponse, MessageResponse
-from backend.src.services.class_service import ClassService
-from backend.src.core.dependencies import get_db_connection
+from src.models.requests import ClassRequest, CreateClassRequest
+from src.models.responses import ClassesResponse, MessageResponse
+from src.services.class_service import ClassService
+from src.core.dependencies import get_db_connection
 import asyncpg
 
 router = APIRouter()

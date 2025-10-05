@@ -1,7 +1,7 @@
-from backend.src.services.ChromaDBHandler import ChromaDBHandler
-from backend.src.services.MongoDBHandler import MongoDBHandler
-from backend.src.services.models import embedding_model
-from backend.src.utils import logging
+from src.services.ChromaDBHandler import ChromaDBHandler
+from src.services.MongoDBHandler import MongoDBHandler
+from src.services.models import embedding_model
+from src.utils import logging
 from bson import ObjectId
 
 # Configure logging

@@ -2,9 +2,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 import asyncpg
 
-from backend.src.config.settings import settings
-from backend.src.services.chat_service import ChatService
-from backend.src.utils import logging
+from src.config.settings import settings
+from src.services.chat_service import ChatService
+from src.utils import logging
 
 # Global database pool
 db_pool = None

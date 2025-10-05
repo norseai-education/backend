@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi import status
-from backend.src.models.requests import UserGraphRequest
-from backend.src.models.responses import UserGraphResponse, MessageResponse
-from backend.src.services.user_graph_service import UserGraphService
+from src.models.requests import UserGraphRequest
+from src.models.responses import UserGraphResponse, MessageResponse
+from src.services.user_graph_service import UserGraphService
 
 router = APIRouter()
 user_graph_service = UserGraphService()

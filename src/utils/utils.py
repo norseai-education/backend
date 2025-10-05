@@ -1,9 +1,10 @@
 import asyncio
 import threading
 import json
+import re
 
-from backend.src.utils import logging
-from backend.src.utils.text_to_vec import TextToVec
+from src.utils import logging
+from src.utils.text_to_vec import TextToVec
 
 # Configure logging
 logger = logging.set_logger(__name__)

@@ -1,6 +1,6 @@
-from backend.src.services.state import State
-from backend.src.utils import knowledge_info
-from backend.src.utils import logging
+from src.services.state import State
+from src.utils import knowledge_info
+from src.utils import logging
 
 # Configure logging
 logger = logging.set_logger(__name__)

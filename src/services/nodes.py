@@ -1,17 +1,17 @@
-from backend.src.services.state import State
-from backend.src.services.query_classifier import ClassifierModel
-from backend.src.services.evaluator import EvaluatorModel
-import backend.src.services.prompts as prompts
-import backend.src.services.models as models
-import backend.src.services.rag_service as rag_service
-import backend.src.services.MongoDBHandler as MongoDBHandler
-import backend.src.services.tools as tools
-from backend.src.services.bkt import BayesianKnowledgeTracing
-from backend.src.utils import knowledge_info
-from backend.src.services.personality_rag import PersonalityRAG
-from backend.src.services.math_rag import MathRAG
-from backend.src.services.teacher_math import MathTeacher
-from backend.src.services.teacher import Teacher
+from src.services.state import State
+from src.services.query_classifier import ClassifierModel
+from src.services.evaluator import EvaluatorModel
+import src.services.prompts as prompts
+import src.services.models as models
+import src.services.rag_service as rag_service
+import src.services.MongoDBHandler as MongoDBHandler
+import src.services.tools as tools
+from src.services.bkt import BayesianKnowledgeTracing
+from src.utils import knowledge_info
+from src.services.personality_rag import PersonalityRAG
+from src.services.math_rag import MathRAG
+from src.services.teacher_math import MathTeacher
+from src.services.teacher import Teacher
 
 class Nodes:
     def __init__(self):

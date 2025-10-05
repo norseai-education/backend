@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from pymongo.errors import PyMongoError
 from typing import Dict, Any, Union, List, Optional
 from bson import ObjectId
-from backend.src.utils import logging
+from src.utils import logging
 
 # Configure logging
 logger = logging.set_logger(__name__)

@@ -1,5 +1,5 @@
 from langgraph.checkpoint.mongodb import MongoDBSaver
-from backend.src.utils import logging, utils
+from src.utils import logging, utils
 
 class UserGraphService:
     def __init__(self):

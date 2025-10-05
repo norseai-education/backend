@@ -1,6 +1,6 @@
 import hashlib
 import secrets
-from backend.src.config.settings import settings
+from src.config.settings import settings
 
 def hash_password(password: str) -> str:
     """Hash password with salt"""

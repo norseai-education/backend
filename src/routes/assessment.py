@@ -3,9 +3,9 @@ from fastapi import status
 
 import time
 
-from backend.src.models.requests import AssessmentStoreRequest, AssessmentSubmitRequest, UserGraphRequest
-from backend.src.models.responses import GiveAssessmentResponse, AssessmentResultResponse, AssessmentStoreResponse, UserGraphResponse, RouteResponse, AssessmentRetrieveResponse, MessageResponse
-from backend.src.services.assessment_service import AssessmentService
+from src.models.requests import AssessmentStoreRequest, AssessmentSubmitRequest, UserGraphRequest
+from src.models.responses import GiveAssessmentResponse, AssessmentResultResponse, AssessmentStoreResponse, UserGraphResponse, RouteResponse, AssessmentRetrieveResponse, MessageResponse
+from src.services.assessment_service import AssessmentService
 
 router = APIRouter()
 assessment_service = AssessmentService()

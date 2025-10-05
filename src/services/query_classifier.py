@@ -1,8 +1,8 @@
-from backend.src.services.state import State
+from src.services.state import State
 from typing import Literal
 from pydantic import BaseModel, Field
 from langchain.output_parsers import PydanticOutputParser
-from backend.src.utils import logging
+from src.utils import logging
 
 # Configure logging
 logger = logging.set_logger(__name__)

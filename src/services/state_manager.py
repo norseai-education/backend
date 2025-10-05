@@ -1,7 +1,6 @@
 from langgraph.checkpoint.redis import RedisSaver
 from langgraph.checkpoint.mongodb import MongoDBSaver
 from langchain_core.runnables.graph_mermaid import draw_mermaid_png
-from IPython.display import Image, display
 from src.utils import logging
 from src.utils import knowledge_info
 

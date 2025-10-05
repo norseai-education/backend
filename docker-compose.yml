@@ -9,8 +9,8 @@ services:
       - PYTHONPATH=/app
     env_file:
       - stack.env
-    volumes:
-      - ./src:/app/src
+    # volumes:
+    #   - ./src:/app/src
     restart: unless-stopped
     networks:
       - norseai

@@ -10,7 +10,7 @@ services:
     environment:
       - PYTHONPATH=/app
     env_file:
-      - .env
+      - stack.env
     volumes:
       - ./src:/app/src
     restart: unless-stopped

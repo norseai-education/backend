@@ -6,27 +6,30 @@ services:
     container_name: norseai-backend
     ports:
       - "6700:6700"
-    #environment:
-    #  - PYTHONPATH=/norseai-backend
     env_file:
       - stack.env
-    # volumes:
-    #   - ./src:/app/src
     restart: unless-stopped
+
+    # 👇 Give backend container access to the host routing table (so it can reach LAN IPs like 172.16.0.177)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    # 👇 Add Docker's built-in 'bridge' network so the container can route out to your LAN
     networks:
       - traefik-public
+      - bridge
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.norseai-backend.rule=Host(`norseai.sunshinek12.com`) && PathPrefix(`/api`)"
       - "traefik.http.routers.norseai-backend.entrypoints=websecure"
-      - "traefik.http.routers.norseai-backend.tls=true"
       - "traefik.http.routers.norseai-backend.tls.certresolver=letsencrypt"
       - "traefik.http.services.norseai-backend.loadbalancer.server.port=6700"
       - "traefik.http.middlewares.norseai-backend-stripprefix.stripprefix.prefixes=/api"
       - "traefik.http.routers.norseai-backend.middlewares=norseai-backend-stripprefix"
-      
+
 networks:
   traefik-public:
     external: true
-
-    
+  bridge:
+    external: true

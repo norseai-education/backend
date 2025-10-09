@@ -15,7 +15,6 @@ services:
     restart: unless-stopped
     networks:
       - traefik-public
-      - norseai
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.norseai-backend.rule=Host(`napi.sunshinek12.com`)"
@@ -34,6 +33,5 @@ services:
 networks:
   traefik-public:
     external: true
-  norseai:
-    external: true
+
     

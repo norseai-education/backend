@@ -1,12 +1,13 @@
 version: '3.8'
 
 services:
-  app:
+  norseai-backend:
     build: .
+    container_name: norseai-backend
     ports:
       - "6700:6700"
     environment:
-      - PYTHONPATH=/app
+      - PYTHONPATH=/norseai-backend
     env_file:
       - stack.env
     # volumes:

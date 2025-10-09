@@ -1,8 +1,40 @@
-.env
-.env.dev
-.env.prod
-.env.dev.local
-.env.prod.local
+#.env
+#.env.dev
+#.env.prod
+#.env.dev.local
+#.env.prod.local
 testing/
 static/
 __pycache__/
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+*.h5
+*.bin
+
+# Virtual envs
+.venv/
+env/
+
+# Docker
+*.tar
+*.img
+*.log
+
+# Data or cache
+*.csv
+*.zip
+*.gz
+*.jsonl
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

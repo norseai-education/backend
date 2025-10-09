@@ -14,19 +14,8 @@ services:
     #   - ./src:/app/src
     restart: unless-stopped
     networks:
-      - traefik-public
       - norseai
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.norseai-backend.rule=Host(`api.norseai.sunshinek12.com`)"
-      - "traefik.http.routers.norseai-backend.entrypoints=websecure"
-      - "traefik.http.routers.norseai-backend.tls=true"
-      - "traefik.http.routers.norseai-backend.tls.certresolver=letsencrypt"
-      - "traefik.http.services.norseai-backend.loadbalancer.server.port=6700"
-      
+
 networks:
-  traefik-public:
-    external: true
   norseai:
     external: true
-    

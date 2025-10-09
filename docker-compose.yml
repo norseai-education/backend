@@ -6,8 +6,8 @@ services:
     container_name: norseai-backend
     ports:
       - "6700:6700"
-    environment:
-      - PYTHONPATH=/norseai-backend
+    #environment:
+    #  - PYTHONPATH=/norseai-backend
     env_file:
       - stack.env
     # volumes:

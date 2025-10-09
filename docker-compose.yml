@@ -17,7 +17,7 @@ services:
     # 👇 Add Docker's built-in 'bridge' network so the container can route out to your LAN
     networks:
       - traefik-public
-      - bridge
+      - default
 
     labels:
       - "traefik.enable=true"
@@ -31,5 +31,4 @@ services:
 networks:
   traefik-public:
     external: true
-  bridge:
-    external: true
+    

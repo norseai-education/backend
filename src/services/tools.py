@@ -56,9 +56,8 @@ class GetArchivedInput(BaseModel):
         return values
 
 class GetProblemInput(BaseModel):
-    subject: str = Field(description="The main subject you want the problem to cover")
+    subject: str = Field(description="The subject you want the problem to cover")
     difficulty: int = Field(description="The problem difficulty from 1-8")
-    concepts: list[str] = Field(description="The specific concepts you want the problem to cover")
 
     @model_validator(mode="before")
     @classmethod
@@ -79,7 +78,7 @@ class GetProblemInput(BaseModel):
                     try:
                         parsed = json.loads(value)
                         # Only merge if the parsed JSON contains the expected fields
-                        if all(field in parsed for field in ["subject", "difficulty", "concepts"]):
+                        if all(field in parsed for field in ["difficulty", "concepts"]):
                             return parsed
                         else:
                             result[key] = value
@@ -92,7 +91,7 @@ class GetProblemInput(BaseModel):
         return values
 
 class CheckConceptsInput(BaseModel):
-    concepts: list[str] = Field(description="The concepts you want to check")
+    concepts: dict[str, str] = Field(description="The concepts you want to check")
 
 @tool
 def math_engine(expression: str) -> str:
@@ -201,17 +200,14 @@ def get_problem(input_data: GetProblemInput):
 
     subject = input_data.get('subject')
     difficulty = input_data.get('difficulty')
-    concepts = input_data.get('concepts')
     problem_db = rag_service.ProblemDB()
     problem, metadata = problem_db.retrieve(subject, n_results=10)
     place = 0
     for data in metadata:
         concepts_list = data['concepts'].split(',')
-        if data['difficulty'] == difficulty:
-            for concept in concepts:
-                if concept in concepts_list:
-                    place = metadata.index(data)
-                    break
+        if data['difficulty'] == difficulty and subject in concepts_list:
+            place = metadata.index(data)
+            break
 
     return problem[place]
 

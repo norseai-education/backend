@@ -28,7 +28,8 @@ evaluator_prompt = PromptTemplate(
         [
             # Algebra subtopics
             "arithmetic",
-            "order of operations (PEMDAS)",
+            "logic reasoning",
+            "order of operations (pemdas)",
             "manipulating fractions",
             "variables",
             "expressions and evaluation",
@@ -36,15 +37,14 @@ evaluator_prompt = PromptTemplate(
             "distance = rate*time",
             "linear equations",
             "system of equations",
-            "inequalities (linear and basic quadratic)",
+            "inequalities",
             "absolute value",
             "ratios and proportions",
-            "percent of change",
+            "percents, percent of change",
             "distributions",
             "perfect squares",
             "difference of squares",
             "factoring polynomials",
-            "factoring by grouping",
             "quadratic formula",
             "completing the square",
             "Vieta's formulas: sum and product of the roots",
@@ -58,18 +58,18 @@ evaluator_prompt = PromptTemplate(
             "weighted averages",
             "arithmetic sequences and series",
             "geometric sequences and series",
-            "finite sums (Σ notation basics)",
+            "finite sums",
             "continued fractions",
             "calculations with logarithms",
-            "exponential growth and decay (basic)",
-            "functions (input-output, function notation f(x))",
+            "exponential growth and decay",
+            "functions, function notation",
             "graph problems",
             "graphing linear equations",
-            "graphing simple quadratics",
+            "graphing quadratics",
             "slope-intercept form",
             "point-slope form",
             "parallel and perpendicular lines",
-            "symmetry in graphs (even/odd functions, reflection)",
+            "symmetry in graphs",
 
             # Geometry subtopics
             "points",
@@ -118,7 +118,6 @@ evaluator_prompt = PromptTemplate(
             "regular polygons",
             "altitudes",
             "medians",
-            "angle bisectors (triangle)",
             "centroid",
             "orthocenter",
             "circumcenter",
@@ -133,8 +132,8 @@ evaluator_prompt = PromptTemplate(
             "cones",
             "pyramids",
             "frustums",
-            "nets of 3D solids",
-            "cross-sections of 3D solids",
+            "nets of 3d solids",
+            "cross-sections of 3d solids",
             "euler's formula for polyhedra",
             "volume",
             "surface area",
@@ -182,7 +181,7 @@ evaluator_prompt = PromptTemplate(
             "euler's theorem",
             "repeating decimals/fractions",
 
-            # Combinatorics subtopics
+            # Combinatorics and probability subtopics
             "distinguishability",
             "counting independent events",
             "factorials",
@@ -196,11 +195,9 @@ evaluator_prompt = PromptTemplate(
             "counting with symmetry",
             "the pigeonhole principle",
             "recursive counting",
-            "probability",
             "multiplying probabilities",
             "expected value",
             "linearity of expectation",
-            "probability with casework",
             "complementary probability",
             "conditional probability",
             "recursion in probability",
@@ -212,13 +209,11 @@ evaluator_prompt = PromptTemplate(
             "set notation",
             "venn diagrams",
             "truth and logic",
-            "bijective counting(paths on a grid, etc.)",
+            "bijective counting",
             "beyond casework",
-            "complimentary counting",
+            "complementary counting",
             "stars and bars: with restrictions",
             "stars and bars: without restrictions",
-
-            # Probability subtopics
             "compound events",
             "dependent events",
             "independent events",
@@ -232,16 +227,11 @@ evaluator_prompt = PromptTemplate(
             "casework in probability",
             "counting & symmetry in probability",
             "number theory in probability",
-            "arrangements & orderings in probability",
             "probability with inequalities",
-            "complementary counting in probability",
-            "probability with fractions & ratios",
-            "multiple-stage probability",
-            "conditional probability",
             "random selection on grids / coordinate planes",
             "continuous/interval selection",
-            "probability and symmetry",
-            "overcounting & distinguishability in probability"]
+            "overcounting & distinguishability in probability"
+        ]
 
         - Solution: Provide the solution based on the student's current direction
 
@@ -288,7 +278,7 @@ evaluator_prompt = PromptTemplate(
 class MathTeacherPrompt:
     def __init__(self, prompt="prompt"):
         self.prompt = prompt
-        self.base_prompt = '''You are an AI teacher helping students prepare for the AMC 8 math competition. Your lesson focuses on {{learning_objective}}.
+        self.base_prompt = '''You are an AI teacher helping students prepare for the AMC 8 math competition. Your lesson is on {{learning_objective}}.
 
         CURRENT LESSON STATE: {{lesson_state}}
         Your current state is marked by "In Progress"
@@ -298,6 +288,7 @@ class MathTeacherPrompt:
 
         IMPORTANT - TASK PACING:
         - These objectives are NOT a checklist to complete in one response
+        - Each objective should be completed in a one or more seperate responses
         - Work on ONE objective at a time based on what the student needs RIGHT NOW
         - Progress through objectives naturally based on student responses and understanding
         - Some objectives may take multiple interactions to complete
@@ -352,7 +343,7 @@ class MathTeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{{tool_names}}]
-        Action Input: the input to the action, in the format {{{{"query": "your query", "student_id": "the student_id"}}}} for get_archived tool and {{{{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}}}} for get_problem tool
+        Action Input: the input to the action, in the format {{{{"query": "your query", "student_id": "the student_id"}}}} for get_archived tool and {{{{"subject": "the learning objective", "difficulty": <integer from 1 to 5>"}}}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -371,12 +362,12 @@ class MathTeacherPrompt:
                                                - Briefly mention the lesson topic
                                                - Ask them if they are ready to begin''',
                  "START LESSON RULES": '''- Keep your responses short and interactive''',
-                 "CONCEPT INTRODUCTION COMPLETION": '''- Introduce the concept you are trying to teach based on student knowledge.
-                                                       - Explain, in detail and with examples, the concept.
-                                                       - Ask the student if they understand the concept.''',
-                 "CONCEPT INTRODUCTION RULES": '''- Keep explanations short but detailed
-                                                  - Make it interactive by checking in with the student to make sure they understand''',
-                 "EASY PROBLEM COMPLETION": '''- Give the student a problem based on the concept you covered.
+                #  "CONCEPT INTRODUCTION COMPLETION": '''- Introduce the concept you are trying to teach based on student knowledge.
+                #                                        - Explain, in detail and with examples, the concept.
+                #                                        - Ask the student if they understand the concept.''',
+                #  "CONCEPT INTRODUCTION RULES": '''- Keep explanations short but detailed
+                #                                   - Make it interactive by checking in with the student to make sure they understand''',
+                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
@@ -384,7 +375,7 @@ class MathTeacherPrompt:
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
                  "PROBLEM WALKTHROUGH RULES": '''- If the student has a solution, ask them for their solution instead of giving your own even if their answer is incorrect. Let them explain their own thinking and encourage them if they are on the right track or correct them if they are on the wrong track.
                                                  - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
-                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem based on the concept you covered.
+                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
@@ -403,12 +394,12 @@ class MathTeacherPrompt:
         return self.prompt
 
 # Prompt to explain the concept the student is working on if they don't get it correct or don't get it in general
-    def concept_introduction_prompt(self):
-        prompt = self.base_prompt.format(completion_task = self.completion_rules()['CONCEPT INTRODUCTION COMPLETION'], rules = self.completion_rules()['CONCEPT INTRODUCTION RULES'])
-        self.prompt = PromptTemplate(
-        template=prompt
-            )
-        return self.prompt
+    # def concept_introduction_prompt(self):
+    #     prompt = self.base_prompt.format(completion_task = self.completion_rules()['CONCEPT INTRODUCTION COMPLETION'], rules = self.completion_rules()['CONCEPT INTRODUCTION RULES'])
+    #     self.prompt = PromptTemplate(
+    #     template=prompt
+    #         )
+    #     return self.prompt
 
 # gives problems to the student
     def give_easier_problem_prompt(self):
@@ -456,6 +447,7 @@ class MathTeacherPrompt:
 
         IMPORTANT - TASK PACING:
         - These objectives are NOT a checklist to complete in one response
+        - Each objective should be completed in a one or more seperate responses
         - Work on ONE objective at a time based on what the student needs RIGHT NOW
         - Progress through objectives naturally based on student responses and understanding
         - Some objectives may take multiple interactions to complete
@@ -512,7 +504,7 @@ class MathTeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": <integer from 1 to 5>"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -540,6 +532,7 @@ class MathTeacherPrompt:
 
         IMPORTANT - TASK PACING:
         - These objectives are NOT a checklist to complete in one response
+        - Each objective should be completed in a one or more seperate responses
         - Work on ONE objective at a time based on what the student needs RIGHT NOW
         - Progress through objectives naturally based on student responses and understanding
         - Some objectives may take multiple interactions to complete
@@ -599,7 +592,7 @@ class MathTeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": <integer from 1 to 5>"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -630,6 +623,7 @@ class MathTeacherPrompt:
 
         IMPORTANT - TASK PACING:
         - These objectives are NOT a checklist to complete in one response
+        - Each objective should be completed in a one or more seperate responses
         - Work on ONE objective at a time based on what the student needs RIGHT NOW
         - Progress through objectives naturally based on student responses and understanding
         - Some objectives may take multiple interactions to complete
@@ -685,7 +679,7 @@ class MathTeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": <integer from 1 to 5>"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -735,9 +729,9 @@ class MathTeacherPrompt:
         state = self.get_state(lesson_state)
         
         if learning_status == "behind":
-            if state == "CONCEPT_INTRODUCTION":
-                return self.concept_introduction_behind_prompt()
-            elif state == "GIVE_EASIER_PROBLEM":
+            # if state == "CONCEPT_INTRODUCTION":
+            #     return self.concept_introduction_behind_prompt()
+            if state == "GIVE_EASIER_PROBLEM":
                 return self.give_easier_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
                 return self.problem_walkthrough_prompt()
@@ -749,8 +743,8 @@ class MathTeacherPrompt:
         if learning_status == "ahead":
             if state == "CHECK":
                 return self.check_prompt()
-            elif state == "CONCEPT_INTRODUCTION":
-                return self.concept_introduction_prompt()
+            # elif state == "CONCEPT_INTRODUCTION":
+            #     return self.concept_introduction_prompt()
             elif state == "GIVE_EASIER_PROBLEM":
                 return self.give_easier_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
@@ -764,8 +758,8 @@ class MathTeacherPrompt:
         if learning_status == "steady":
             if state == "START_LESSON":
                 return self.start_lesson_prompt()
-            elif state == "CONCEPT_INTRODUCTION":
-                return self.concept_introduction_prompt()
+            # elif state == "CONCEPT_INTRODUCTION":
+            #     return self.concept_introduction_prompt()
             elif state == "GIVE_EASIER_PROBLEM":
                 return self.give_easier_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
@@ -790,6 +784,7 @@ class TeacherPrompt:
 
         IMPORTANT - TASK PACING:
         - These objectives are NOT a checklist to complete in one response
+        - Each objective should be completed in a one or more seperate responses
         - Work on ONE objective at a time based on what the student needs RIGHT NOW
         - Progress through objectives naturally based on student responses and understanding
         - Some objectives may take multiple interactions to complete
@@ -844,7 +839,7 @@ class TeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{{tool_names}}]
-        Action Input: the input to the action, in the format {{{{"query": "your query", "student_id": "the student_id"}}}} for get_archived tool and {{{{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}}}} for get_problem tool
+        Action Input: the input to the action, in the format {{{{"query": "your query", "student_id": "the student_id"}}}} for get_archived tool and {{{{"subject": "the learning objective", "difficulty": <integer from 1 to 5>"}}}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -863,12 +858,12 @@ class TeacherPrompt:
                                                - Briefly mention the lesson topic
                                                - Ask them if they are ready to begin''',
                  "START LESSON RULES": '''- Keep your responses short and interactive''',
-                 "CONCEPT INTRODUCTION COMPLETION": '''- Introduce the concept you are trying to teach based on student knowledge.
-                                                       - Explain, in detail and with examples, the concept.
-                                                       - Ask the student if they understand the concept.''',
-                 "CONCEPT INTRODUCTION RULES": '''- Keep explanations short but detailed
-                                                  - Make it interactive by checking in with the student to make sure they understand''',
-                 "EASY PROBLEM COMPLETION": '''- Give the student a problem based on the concept you covered.
+                #  "CONCEPT INTRODUCTION COMPLETION": '''- Introduce the concept you are trying to teach based on student knowledge.
+                #                                        - Explain, in detail and with examples, the concept.
+                #                                        - Ask the student if they understand the concept.''',
+                #  "CONCEPT INTRODUCTION RULES": '''- Keep explanations short but detailed
+                #                                   - Make it interactive by checking in with the student to make sure they understand''',
+                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
@@ -876,7 +871,7 @@ class TeacherPrompt:
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
                  "PROBLEM WALKTHROUGH RULES": '''- If the student has a solution, ask them for their solution instead of giving your own even if their answer is incorrect. Let them explain their own thinking and encourage them if they are on the right track or correct them if they are on the wrong track.
                                                  - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
-                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem based on the concept you covered.
+                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
@@ -895,12 +890,12 @@ class TeacherPrompt:
         return self.prompt
 
 # Prompt to explain the concept the student is working on if they don't get it correct or don't get it in general
-    def concept_introduction_prompt(self):
-        prompt = self.base_prompt.format(completion_task = self.completion_rules()['CONCEPT INTRODUCTION COMPLETION'], rules = self.completion_rules()['CONCEPT INTRODUCTION RULES'])
-        self.prompt = PromptTemplate(
-        template=prompt
-            )
-        return self.prompt
+    # def concept_introduction_prompt(self):
+    #     prompt = self.base_prompt.format(completion_task = self.completion_rules()['CONCEPT INTRODUCTION COMPLETION'], rules = self.completion_rules()['CONCEPT INTRODUCTION RULES'])
+    #     self.prompt = PromptTemplate(
+    #     template=prompt
+    #         )
+    #     return self.prompt
 
 # gives problems to the student
     def give_easier_problem_prompt(self):
@@ -1001,7 +996,7 @@ class TeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": <integer from 1 to 5>"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -1030,6 +1025,7 @@ class TeacherPrompt:
 
         IMPORTANT - TASK PACING:
         - These objectives are NOT a checklist to complete in one response
+        - Each objective should be completed in a one or more seperate responses
         - Work on ONE objective at a time based on what the student needs RIGHT NOW
         - Progress through objectives naturally based on student responses and understanding
         - Some objectives may take multiple interactions to complete
@@ -1087,7 +1083,7 @@ class TeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": <integer from 1 to 5>"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -1117,6 +1113,7 @@ class TeacherPrompt:
 
         IMPORTANT - TASK PACING:
         - These objectives are NOT a checklist to complete in one response
+        - Each objective should be completed in a one or more seperate responses
         - Work on ONE objective at a time based on what the student needs RIGHT NOW
         - Progress through objectives naturally based on student responses and understanding
         - Some objectives may take multiple interactions to complete
@@ -1171,7 +1168,7 @@ class TeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": "integer from 1 to 5", "concepts": "[concept1, concept2, ...]"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": <integer from 1 to 5>"}} for get_problem tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -1224,9 +1221,9 @@ class TeacherPrompt:
         #     return "END"
         
         if learning_status == "behind":
-            if state == "CONCEPT_INTRODUCTION":
-                return self.concept_introduct_behind_prompt()
-            elif state == "GIVE_EASIER_PROBLEM":
+            # if state == "CONCEPT_INTRODUCTION":
+            #     return self.concept_introduct_behind_prompt()
+            if state == "GIVE_EASIER_PROBLEM":
                 return self.give_easier_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
                 return self.problem_walkthrough_prompt()
@@ -1238,8 +1235,8 @@ class TeacherPrompt:
         if learning_status == "ahead":
             if state == "CHECK":
                 return self.check_prompt()
-            elif state == "CONCEPT_INTRODUCTION":
-                return self.concept_introduction_prompt()
+            # elif state == "CONCEPT_INTRODUCTION":
+            #     return self.concept_introduction_prompt()
             elif state == "GIVE_EASIER_PROBLEM":
                 return self.give_easier_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
@@ -1253,8 +1250,8 @@ class TeacherPrompt:
         if learning_status == "steady":
             if state == "START_LESSON":
                 return self.start_lesson_prompt()
-            elif state == "CONCEPT_INTRODUCTION":
-                return self.concept_introduction_prompt()
+            # elif state == "CONCEPT_INTRODUCTION":
+            #     return self.concept_introduction_prompt()
             elif state == "GIVE_EASIER_PROBLEM":
                 return self.give_easier_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":

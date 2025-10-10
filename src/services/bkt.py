@@ -137,8 +137,7 @@ class BayesianKnowledgeTracing():
                 "bkt_graph": updated_graph,
                 "lesson_state": {
                     'START_LESSON': 'Done', 
-                    'CONCEPT_INTRODUCTION': 'In Progress', 
-                    'GIVE_EASIER_PROBLEM': 'Not Done', 
+                    'GIVE_EASIER_PROBLEM': 'In Progress', 
                     'PROBLEM_WALKTHROUGH': 'Not Done', 
                     'GIVE_HARDER_PROBLEM': 'Not Done', 
                     'END_LESSON': 'Not Done'
@@ -174,9 +173,8 @@ class BayesianKnowledgeTracing():
                         "learning_status": "behind",
                         "bkt_graph": updated_graph,
                         "lesson_state": {
-                            'START_LESSON': 'Done', 
-                            'CONCEPT_INTRODUCTION': 'In Progress', 
-                            'GIVE_EASIER_PROBLEM': 'Not Done', 
+                            'START_LESSON': 'Done',  
+                            'GIVE_EASIER_PROBLEM': 'In Progress', 
                             'PROBLEM_WALKTHROUGH': 'Not Done', 
                             'GIVE_HARDER_PROBLEM': 'Not Done', 
                             'END_LESSON': 'Not Done'
@@ -206,7 +204,6 @@ class BayesianKnowledgeTracing():
                     "lesson_state": {
                         'START_LESSON': 'Done',
                         'CHECK': 'In Progress', 
-                        'CONCEPT_INTRODUCTION': 'Not Done', 
                         'GIVE_EASIER_PROBLEM': 'Not Done', 
                         'PROBLEM_WALKTHROUGH': 'Not Done', 
                         'GIVE_HARDER_PROBLEM': 'Not Done', 
@@ -260,9 +257,9 @@ class BayesianKnowledgeTracing():
                 cur_state = key
 
         # change damping factor based on current state
-        if cur_state.lower() == 'start_lesson' or cur_state.lower() == 'end_lesson':
-            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.3)
-        elif cur_state.lower() == 'concept_introduction' or cur_state.lower() == 'problem_walkthrough':
+        # if cur_state.lower() == 'start_lesson' or cur_state.lower() == 'end_lesson':
+        #     updated_graph = self.bkt_algorithm(grade, cur_graph, 0.3)
+        if cur_state.lower() == 'problem_walkthrough':
             updated_graph = self.bkt_algorithm(grade, cur_graph, 0.6)
         elif cur_state.lower() == 'give_easier_problem' or cur_state.lower() == 'give_harder_problem':
             updated_graph = self.bkt_algorithm(grade, cur_graph, 0.8)

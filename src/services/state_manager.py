@@ -34,7 +34,7 @@ class StateManager:
     def retrieve(self):
         logging.log("Retrieving state from MongoDB...", logger, 1)
         with MongoDBSaver.from_conn_string(self.MONGODB_URI, self.DB_NAME) as checkpointer:
-            logging.log("State successfully retrieved from MongoDB!", logger, 1)
+            # logging.log("State successfully retrieved from MongoDB!", logger, 1)
             return checkpointer.get(self.read_config)
 
     def build_graph_redis(self, graph_builder):
@@ -70,7 +70,7 @@ class StateManager:
                      "cur_learning_objective": next(iter(knowledge_info.amc8_knowledge_graph)), 
                      "learning_status": "steady", 
                      "student_id": self.student_id, 
-                     "lesson_state": {'START_LESSON': 'In Progress','CONCEPT_INTRODUCTION': 'Not Done', 'GIVE_EASIER_PROBLEM': 'Not Done','PROBLEM_WALKTHROUGH': 'Not Done','GIVE_HARDER_PROBLEM': 'Not Done','END_LESSON': 'Not Done'}, 
+                     "lesson_state": {'START_LESSON': 'In Progress', 'GIVE_EASIER_PROBLEM': 'Not Done','PROBLEM_WALKTHROUGH': 'Not Done','GIVE_HARDER_PROBLEM': 'Not Done', 'PROBLEM_WALKTHROUGH': 'Not Done','END_LESSON': 'Not Done'}, 
                      "messages": [], 
                      "evaluator_grade": None, 
                      "evaluator_solution": None, 

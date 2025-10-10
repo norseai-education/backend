@@ -52,7 +52,7 @@ class ChatService:
         if not user_graph:
             # Apply persisted state
             if persisted_state:
-                logging.log("Applying persisted state from MongoDB...", self.logger, 1)
+                logging.log("State found from MongoDB! Applying...", self.logger, 1)
                 for key, value in persisted_state.items():
                     if key in user_state:
                         user_state[key] = value
@@ -61,7 +61,7 @@ class ChatService:
             
             # Apply Redis state
             if redis_state:
-                logging.log("Applying Redis state...", self.logger, 1)
+                logging.log("Redis state foud! Applying Redis state...", self.logger, 1)
                 for key, value in redis_state.items():
                     if key in user_state:
                         user_state[key] = value

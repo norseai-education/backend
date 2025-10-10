@@ -6,20 +6,17 @@ services:
     container_name: norseai-backend
     ports:
       - "6700:6700"
+    #environment:
+    #  - PYTHONPATH=/norseai-backend
     env_file:
       - stack.env
+    # volumes:
+    #   - ./src:/app/src
     restart: unless-stopped
-    
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-      - "ollama.local:host-gateway"
     networks:
       - traefik-public
-      - norseai
-      
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik-public"
       - "traefik.http.routers.norseai-backend.rule=Host(`norseai.sunshinek12.com`) && PathPrefix(`/api`)"
       - "traefik.http.routers.norseai-backend.entrypoints=websecure"
       - "traefik.http.routers.norseai-backend.tls=true"
@@ -31,5 +28,3 @@ services:
 networks:
   traefik-public:
     external: true
-  norseai:
-    driver: bridge

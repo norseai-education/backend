@@ -31,3 +31,6 @@ services:
 networks:
   traefik-public:
     external: true
+  norseai:
+    external: true
+    

@@ -1,20 +1,36 @@
 version: '3.8'
 
 services:
-  app:
+  norseai-backend:
     build: .
+    container_name: norseai-backend
     ports:
       - "6700:6700"
-    environment:
-      - PYTHONPATH=/app
     env_file:
       - stack.env
-    # volumes:
-    #   - ./src:/app/src
     restart: unless-stopped
+    
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+ 
     networks:
+      - traefik-public
       - norseai
-
+      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.norseai-backend.rule=Host(`norseai.sunshinek12.com`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.norseai-backend.entrypoints=websecure"
+      - "traefik.http.routers.norseai-backend.tls=true"
+      - "traefik.http.routers.norseai-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.norseai-backend.loadbalancer.server.port=6700"
+      - "traefik.http.middlewares.norseai-backend-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.routers.norseai-backend.middlewares=norseai-backend-stripprefix"
+      
 networks:
+  traefik-public:
+    external: true
   norseai:
     external: true
+    

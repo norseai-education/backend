@@ -12,8 +12,7 @@ services:
     
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      - "mongodb.local:172.16.0.177"
-      - "chromadb.local:172.16.0.154"    
+ 
     networks:
       - traefik-public
       - bridge

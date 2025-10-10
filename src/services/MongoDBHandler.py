@@ -8,7 +8,8 @@ from src.utils import logging
 logger = logging.set_logger(__name__)
 
 class MongoDBHandler:
-    def __init__(self, connection_uri: str = "mongodb://172.16.0.177:27019"):
+    # def __init__(self, connection_uri: str = "mongodb://172.16.0.177:27019"):
+    def __init__(self, connection_uri: str = "mongodb://mongodb.local:27019"):        
         """
         Initialize MongoDB connection handler.
         

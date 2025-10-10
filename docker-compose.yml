@@ -1,27 +1,6 @@
 version: '3.8'
 
 services:
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama-data:/root/.ollama
-      - ./ollama-entrypoint.sh:/ollama-entrypoint.sh
-    entrypoint: ["/bin/bash", "/ollama-entrypoint.sh"]
-    restart: unless-stopped
-    networks:
-      - norseai
-    # Uncomment if you have GPU
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
-  
   norseai-backend:
     build: .
     container_name: norseai-backend
@@ -33,7 +12,7 @@ services:
     
     extra_hosts:
       - "host.docker.internal:host-gateway"
- 
+      - "ollama.local:host-gateway"
     networks:
       - traefik-public
       - norseai
@@ -55,5 +34,3 @@ networks:
   norseai:
     external: true
 
-volumes:
-  ollama-data:  

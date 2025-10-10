@@ -32,4 +32,4 @@ networks:
   traefik-public:
     external: true
   norseai:
-    external: true
+    driver: bridge

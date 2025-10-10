@@ -12,7 +12,7 @@ services:
     
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      - "ollama.local:host-gateway"
+ 
     networks:
       - traefik-public
       - norseai
@@ -33,4 +33,3 @@ networks:
     external: true
   norseai:
     external: true
-

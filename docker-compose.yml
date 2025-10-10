@@ -15,7 +15,7 @@ services:
 
     networks:
       - traefik-public
-      - bridge
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.norseai-backend.rule=Host(`norseai.sunshinek12.com`) && PathPrefix(`/api`)"
@@ -28,6 +28,5 @@ services:
 networks:
   traefik-public:
     external: true
-  bridge:
-    driver: bridge
+
     

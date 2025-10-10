@@ -15,7 +15,7 @@ services:
  
     networks:
       - traefik-public
-      - bridge
+      - norseai
       
     labels:
       - "traefik.enable=true"
@@ -31,5 +31,5 @@ services:
 networks:
   traefik-public:
     external: true
-  bridge:
-    driver: bridge
+  norseai:
+    external: true

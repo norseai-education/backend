@@ -32,7 +32,7 @@ class AssessmentService:
         logging.log("Fetching assessment problems from database", self.logger, 1)
 
         for i in range(1,26):
-            problems = self.db.find_documents('problems', {"problem_number": i}, ['problem_number', 'problem'])
+            problems = self.db.find_documents('problems', {"problem_number": i}, ['problem_number', 'display_problem'])
             problem = random.choice(problems)  
             problem['problem_id'] = str(problem['_id'])
             del problem['_id']
@@ -53,7 +53,7 @@ class AssessmentService:
         for student_answer in student_answers:
             id = ObjectId(student_answer.get("problem_id"))
             answer = student_answer.get("student_answer")
-            problem = self.db.find_documents('problems', {"_id": id}, ['correct_answer', 'solution'])[0]
+            problem = self.db.find_documents('problems', {"_id": id}, ['correct_answer', 'display_solution'])[0]
             if answer.lower() == problem.get('correct_answer').lower():
                 student_score.append({"problem_id": str(id), "correct": True, "correct_answer": problem.get('correct_answer'), "solution": problem.get('solution')})
             else:
@@ -94,12 +94,12 @@ class AssessmentService:
                 number_correct = 0
                 for entry in assessment:
                     problem_id = entry.get("problem_id")
-                    problem_data = self.db.find_documents('problems', {"_id": ObjectId(problem_id)}, ['problem_number', 'problem', 'correct_answer'])[0]
+                    problem_data = self.db.find_documents('problems', {"_id": ObjectId(problem_id)}, ['problem_number', 'display_problem', 'correct_answer'])[0]
                     problem_entry = {
                         "problem_id": problem_id,
                         "assessment_id": entry.get("assessment_id"),
                         "problem_number": problem_data.get("problem_number"),
-                        "problem": problem_data.get("problem"),
+                        "problem": problem_data.get("display_problem"),
                         "student_answer": entry.get("student_answer"),
                         "correct_answer": problem_data.get("correct_answer"),
                         "time_spent": entry.get("time_spent")   

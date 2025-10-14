@@ -38,14 +38,14 @@ class Nodes:
         models.teacher_model,
         prompts.MathTeacherPrompt(),
         MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
-        [tools.get_archived_structured, tools.get_problem_structured]
+        [tools.get_archived_structured, tools.get_problem]
         )
 
         self.teacher = Teacher(
         models.teacher_model,
         prompts.TeacherPrompt(),
         MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
-        [tools.get_archived_structured, tools.get_problem_structured]
+        [tools.get_archived_structured, tools.get_problem]
         )
 
 

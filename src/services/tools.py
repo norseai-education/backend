@@ -192,9 +192,9 @@ get_archived_structured = StructuredTool.from_function(
 )
 
 @tool
-def get_problem(input_data: dict) -> str:
+def get_problem(problem_input: str) -> str:
     """retrieve a problem to give to the student"""
-    # input_data = json.loads(input_data)
+    input_data = json.loads(problem_input)
     
     logging.log("Using get_problem tool...", logger, 2)
     logging.log(f"Tool inputs: {input_data},{type(input_data)}", logger, 2)

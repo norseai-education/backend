@@ -55,9 +55,9 @@ class GetArchivedInput(BaseModel):
                 pass
         return values
 
-class GetProblemInput(BaseModel):
-    subject: str = Field(description="The subject you want the problem to cover")
-    difficulty: int = Field(description="The problem difficulty from 1-8")
+# class GetProblemInput(BaseModel):
+#     subject: str = Field(description="The subject you want the problem to cover")
+#     difficulty: int = Field(description="The problem difficulty from 1-8")
 
     # @model_validator(mode="before")
     # @classmethod
@@ -191,9 +191,10 @@ get_archived_structured = StructuredTool.from_function(
     args_schema=GetArchivedInput,
 )
 
-def get_problem(input_data: GetProblemInput):
+@tool
+def get_problem(input_data: dict) -> str:
     """retrieve a problem to give to the student"""
-    input_data = json.loads(input_data)
+    # input_data = json.loads(input_data)
     
     logging.log("Using get_problem tool...", logger, 2)
     logging.log(f"Tool inputs: {input_data},{type(input_data)}", logger, 2)
@@ -211,9 +212,9 @@ def get_problem(input_data: GetProblemInput):
 
     return problem[place]
 
-get_problem_structured = StructuredTool.from_function(
-    func=get_problem,
-    name="get_problem",
-    description="retrieve a problem to give to the student based on subject, difficulty, and concepts",
-    args_schema=GetProblemInput,
-)
+# get_problem_structured = StructuredTool.from_function(
+#     func=get_problem,
+#     name="get_problem",
+#     description="retrieve a problem to give to the student based on subject, difficulty, and concepts",
+#     args_schema=GetProblemInput,
+# )

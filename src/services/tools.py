@@ -59,36 +59,36 @@ class GetProblemInput(BaseModel):
     subject: str = Field(description="The subject you want the problem to cover")
     difficulty: int = Field(description="The problem difficulty from 1-8")
 
-    @model_validator(mode="before")
-    @classmethod
-    def fix_double_serialization(cls, values):
-        # If values is a string that looks like JSON, parse it
-        if isinstance(values, str) and values.strip().startswith("{"):
-            try:
-                parsed = json.loads(values)
-                return parsed
-            except json.JSONDecodeError:
-                pass
+    # @model_validator(mode="before")
+    # @classmethod
+    # def fix_double_serialization(cls, values):
+    #     # If values is a string that looks like JSON, parse it
+    #     if isinstance(values, str) and values.strip().startswith("{"):
+    #         try:
+    #             parsed = json.loads(values)
+    #             return parsed
+    #         except json.JSONDecodeError:
+    #             pass
         
-        # If values is a dict, check if any field contains JSON strings
-        if isinstance(values, dict):
-            result = {}
-            for key, value in values.items():
-                if isinstance(value, str) and value.strip().startswith("{"):
-                    try:
-                        parsed = json.loads(value)
-                        # Only merge if the parsed JSON contains the expected fields
-                        if all(field in parsed for field in ["difficulty", "concepts"]):
-                            return parsed
-                        else:
-                            result[key] = value
-                    except json.JSONDecodeError:
-                        result[key] = value
-                else:
-                    result[key] = value
-            return result
+    #     # If values is a dict, check if any field contains JSON strings
+    #     if isinstance(values, dict):
+    #         result = {}
+    #         for key, value in values.items():
+    #             if isinstance(value, str) and value.strip().startswith("{"):
+    #                 try:
+    #                     parsed = json.loads(value)
+    #                     # Only merge if the parsed JSON contains the expected fields
+    #                     if all(field in parsed for field in ["difficulty", "concepts"]):
+    #                         return parsed
+    #                     else:
+    #                         result[key] = value
+    #                 except json.JSONDecodeError:
+    #                     result[key] = value
+    #             else:
+    #                 result[key] = value
+    #         return result
         
-        return values
+    #     return values
 
 class CheckConceptsInput(BaseModel):
     concepts: dict[str, list[str]] = Field(description="The concepts you want to check")

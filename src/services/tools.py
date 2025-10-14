@@ -91,7 +91,7 @@ class GetProblemInput(BaseModel):
         return values
 
 class CheckConceptsInput(BaseModel):
-    concepts: dict[str, str] = Field(description="The concepts you want to check")
+    concepts: dict[str, list[str]] = Field(description="The concepts you want to check")
 
 @tool
 def math_engine(expression: str) -> str:

@@ -49,8 +49,9 @@ class MathTeacher:
         learning_status = state.get("learning_status")
         context = utils.format_conversation_context(state["messages"])
         cur_mastery = state.get("cur_mastery")
+        bkt_graph = state.get("bkt_graph")
 
-        teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status)
+        teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status, bkt_graph.get(learning_objective))
         
 
         agent = create_react_agent(

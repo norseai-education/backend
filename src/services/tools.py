@@ -90,8 +90,8 @@ class GetArchivedInput(BaseModel):
         
     #     return values
 
-class CheckConceptsInput(BaseModel):
-    concepts: dict[str, list[str]] = Field(description="The concepts you want to check")
+# class CheckConceptsInput(BaseModel):
+#     concepts: dict[str, list[str]] = Field(description="The concepts you want to check")
 
 @tool
 def math_engine(expression: str) -> str:
@@ -121,8 +121,8 @@ def math_engine(expression: str) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
     
-
-def check_concepts(input_data: CheckConceptsInput) -> str:
+@tool
+def check_concepts(input_data: str) -> str:
     """Verify if concepts are in the Concepts List"""
     input_data = json.loads(input_data)
     concepts = input_data.get('concepts')
@@ -142,12 +142,12 @@ def check_concepts(input_data: CheckConceptsInput) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
     
-check_concepts_structured = StructuredTool.from_function(
-    func=check_concepts,
-    name="check_concepts",
-    description="Verify if concepts are in the Concepts List",
-    args_schema=CheckConceptsInput,
-)
+# check_concepts_structured = StructuredTool.from_function(
+#     func=check_concepts,
+#     name="check_concepts",
+#     description="Verify if concepts are in the Concepts List",
+#     args_schema=CheckConceptsInput,
+# )
     
 def get_math_context(input_data: MathContextInput) -> str:
     """Get further context for the student input if needed."""

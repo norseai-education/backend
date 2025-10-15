@@ -370,12 +370,12 @@ class MathTeacherPrompt:
                  "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices to the student
+                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) based on the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "MEDIUM PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices to the student
+                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
@@ -384,7 +384,7 @@ class MathTeacherPrompt:
                  "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices to the student
+                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on''',
@@ -895,12 +895,12 @@ class TeacherPrompt:
                  "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices to the student
+                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) based on the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "MEDIUM PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices to the student
+                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
@@ -909,7 +909,7 @@ class TeacherPrompt:
                  "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices to the student
+                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on''',

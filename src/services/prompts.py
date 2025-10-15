@@ -560,6 +560,7 @@ class MathTeacherPrompt:
         - It feels natural to move forward (don't force it)
 
         TASK RULES:                
+        - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
         - Give the student time to complete the problem
         - Do not give the answer to the problem unless they are absolutely lost
         - If they have a solution, ask them to explain their thinking even if their answer is wrong.
@@ -743,8 +744,8 @@ class MathTeacherPrompt:
         state = self.get_state(lesson_state)
         
         if learning_status == "behind":
-            # if state == "CONCEPT_INTRODUCTION":
-            #     return self.concept_introduction_behind_prompt()
+            if state == "BEHIND":
+                return self.concept_introduction_behind_prompt()
             if state == "GIVE_PROBLEM":
                 if mastery < 0.3:
                     return self.give_easier_problem_prompt()
@@ -1081,6 +1082,7 @@ class TeacherPrompt:
         - It feels natural to move forward (don't force it)
 
         TASK RULES:                 
+        - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
         - Give the student time to complete the problem
         - Do not give the answer to the problem unless they are absolutely lost
         - If they have a solution, ask them to explain their thinking even if their answer is wrong.
@@ -1263,8 +1265,8 @@ class TeacherPrompt:
         #     return "END"
         
         if learning_status == "behind":
-            # if state == "CONCEPT_INTRODUCTION":
-            #     return self.concept_introduct_behind_prompt()
+            if state == "BEHIND":
+                return self.concept_introduct_behind_prompt()
             if state == "GIVE_PROBLEM":
                 if mastery < 0.3:
                     return self.give_easier_problem_prompt()

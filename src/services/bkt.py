@@ -137,7 +137,8 @@ class BayesianKnowledgeTracing():
                 "bkt_graph": updated_graph,
                 "lesson_state": {
                     'START_LESSON': 'Done', 
-                    'GIVE_PROBLEM': 'In Progress', 
+                    'BEHIND': 'In Progress',
+                    'GIVE_PROBLEM': 'Not Done', 
                     'PROBLEM_WALKTHROUGH': 'Not Done', 
                     'GIVE_PROBLEM': 'Not Done', 
                     'END_LESSON': 'Not Done'

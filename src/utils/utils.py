@@ -72,7 +72,7 @@ def check_lesson_state(lesson_state):
     in_progress_indices = []
     
     for key, value in lesson_state.items():
-        if key not in ['START_LESSON','CONCEPT_INTRODUCTION','GIVE_EASIER_PROBLEM', 'PROBLEM_WALKTHROUGH', 'GIVE_HARDER_PROBLEM', 'END_LESSON', 'CHECK']:
+        if key not in ['START_LESSON','GIVE_PROBLEM', 'PROBLEM_WALKTHROUGH', 'END_LESSON', 'CHECK', 'BEHIND']:
             return False
         if value.lower() not in ['done', 'in progress', 'not done']:
             return False
@@ -94,10 +94,9 @@ def parse_response(text):
     default_response = "I'm sorry, can you repeat that?"
     default_lesson_state = {
         'START_LESSON': 'Done',
-        'CONCEPT_INTRODUCTION': 'In Progress', 
-        'GIVE_EASIER_PROBLEM': 'Not Done',
+        'GIVE_PROBLEM': 'Not Done',
         'PROBLEM_WALKTHROUGH': 'Not Done',
-        'GIVE_HARDER_PROBLEM': 'Not Done',
+        'GIVE_PROBLEM': 'Not Done',
         'END_LESSON': 'Not Done'
     }
     

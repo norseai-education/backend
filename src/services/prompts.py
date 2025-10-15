@@ -367,17 +367,24 @@ class MathTeacherPrompt:
                 #                                        - Ask the student if they understand the concept.''',
                 #  "CONCEPT INTRODUCTION RULES": '''- Keep explanations short but detailed
                 #                                   - Make it interactive by checking in with the student to make sure they understand''',
-                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem to introduce them to the concept you are covering.
+                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
+                                          - Display the entire problem including the answer choices to the student
+                                          - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
+                 "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) based on the concept you are covering.
+                                               - Give the student time to solve the problem''',
+                 "MEDIUM PROBLEM RULES": '''- Do not give the student the answer to the problem
+                                          - Display the entire problem including the answer choices to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
                  "PROBLEM WALKTHROUGH RULES": '''- If the student has a solution, ask them for their solution instead of giving your own even if their answer is incorrect. Let them explain their own thinking and encourage them if they are on the right track or correct them if they are on the wrong track.
                                                  - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
-                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem based on the concept you covered to further their understanding.
+                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
+                                          - Display the entire problem including the answer choices to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on''',
@@ -404,6 +411,13 @@ class MathTeacherPrompt:
 # gives problems to the student
     def give_easier_problem_prompt(self):
         prompt = self.base_prompt.format(completion_task = self.completion_rules()['EASY PROBLEM COMPLETION'], rules = self.completion_rules()['EASY PROBLEM RULES'])
+        self.prompt = PromptTemplate(
+        template=prompt
+            )
+        return self.prompt
+
+    def give_medium_problem_prompt(self):
+        prompt = self.base_prompt.format(completion_task = self.completion_rules()['MEDIUM PROBLEM COMPLETION'], rules = self.completion_rules()['MEDIUM PROBLEM RULES'])
         self.prompt = PromptTemplate(
         template=prompt
             )
@@ -725,18 +739,23 @@ class MathTeacherPrompt:
                 
         return state
     
-    def get_prompt(self, lesson_state, learning_status):
+    def get_prompt(self, lesson_state, learning_status, mastery):
         state = self.get_state(lesson_state)
         
         if learning_status == "behind":
             # if state == "CONCEPT_INTRODUCTION":
             #     return self.concept_introduction_behind_prompt()
-            if state == "GIVE_EASIER_PROBLEM":
-                return self.give_easier_problem_prompt()
+            if state == "GIVE_PROBLEM":
+                if mastery < 0.3:
+                    return self.give_easier_problem_prompt()
+                elif mastery < 0.6:
+                    return self.give_medium_problem_prompt()
+                else:
+                    return self.give_harder_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
                 return self.problem_walkthrough_prompt()
-            elif state == "GIVE_HARDER_PROBLEM":
-                return self.give_harder_problem_prompt()
+            # elif state == "GIVE_HARDER_PROBLEM":
+            #     return self.give_harder_problem_prompt()
             elif state == "END_LESSON":
                 return self.end_lesson_prompt()
 
@@ -745,12 +764,17 @@ class MathTeacherPrompt:
                 return self.check_prompt()
             # elif state == "CONCEPT_INTRODUCTION":
             #     return self.concept_introduction_prompt()
-            elif state == "GIVE_EASIER_PROBLEM":
-                return self.give_easier_problem_prompt()
+            elif state == "GIVE_PROBLEM":
+                if mastery < 0.3:
+                    return self.give_easier_problem_prompt()
+                elif mastery < 0.6:
+                    return self.give_medium_problem_prompt()
+                else:
+                    return self.give_harder_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
                 return self.problem_walkthrough_prompt()
-            elif state == "GIVE_HARDER_PROBLEM":
-                return self.give_harder_problem_prompt()
+            # elif state == "GIVE_HARDER_PROBLEM":
+            #     return self.give_harder_problem_prompt()
             elif state == "END_LESSON":
                 return self.end_lesson_prompt()
 
@@ -760,12 +784,17 @@ class MathTeacherPrompt:
                 return self.start_lesson_prompt()
             # elif state == "CONCEPT_INTRODUCTION":
             #     return self.concept_introduction_prompt()
-            elif state == "GIVE_EASIER_PROBLEM":
-                return self.give_easier_problem_prompt()
+            # elif state == "GIVE_EASIER_PROBLEM":
+            #     return self.give_easier_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
                 return self.problem_walkthrough_prompt()
-            elif state == "GIVE_HARDER_PROBLEM":
-                return self.give_harder_problem_prompt()
+            elif state == "GIVE_PROBLEM":
+                if mastery < 0.3:
+                    return self.give_easier_problem_prompt()
+                elif mastery < 0.6:
+                    return self.give_medium_problem_prompt()
+                else:
+                    return self.give_harder_problem_prompt()
             elif state == "END_LESSON":
                 return self.end_lesson_prompt()
 
@@ -863,17 +892,24 @@ class TeacherPrompt:
                 #                                        - Ask the student if they understand the concept.''',
                 #  "CONCEPT INTRODUCTION RULES": '''- Keep explanations short but detailed
                 #                                   - Make it interactive by checking in with the student to make sure they understand''',
-                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem to introduce them to the concept you are covering.
+                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
+                                          - Display the entire problem including the answer choices to the student
+                                          - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
+                 "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) based on the concept you are covering.
+                                               - Give the student time to solve the problem''',
+                 "MEDIUM PROBLEM RULES": '''- Do not give the student the answer to the problem
+                                          - Display the entire problem including the answer choices to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
                  "PROBLEM WALKTHROUGH RULES": '''- If the student has a solution, ask them for their solution instead of giving your own even if their answer is incorrect. Let them explain their own thinking and encourage them if they are on the right track or correct them if they are on the wrong track.
                                                  - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
-                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem based on the concept you covered to further their understanding.
+                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
+                                          - Display the entire problem including the answer choices to the student
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on''',
@@ -905,6 +941,12 @@ class TeacherPrompt:
             )
         return self.prompt
 
+    def give_medium_problem_prompt(self):
+        prompt = self.base_prompt.format(completion_task = self.completion_rules()['MEDIUM PROBLEM COMPLETION'], rules = self.completion_rules()['MEDIUM PROBLEM RULES'])
+        self.prompt = PromptTemplate(
+        template=prompt
+            )
+        return self.prompt
 
 # Explain the question to the student if they don't understand it
     def problem_walkthrough_prompt(self):
@@ -1214,7 +1256,7 @@ class TeacherPrompt:
                 
         return state
     
-    def get_prompt(self, lesson_state, learning_status):
+    def get_prompt(self, lesson_state, learning_status, mastery):
         state = self.get_state(lesson_state)
 
         # if state == "END":
@@ -1223,12 +1265,17 @@ class TeacherPrompt:
         if learning_status == "behind":
             # if state == "CONCEPT_INTRODUCTION":
             #     return self.concept_introduct_behind_prompt()
-            if state == "GIVE_EASIER_PROBLEM":
-                return self.give_easier_problem_prompt()
+            if state == "GIVE_PROBLEM":
+                if mastery < 0.3:
+                    return self.give_easier_problem_prompt()
+                elif mastery < 0.6:
+                    return self.give_medium_problem_prompt()
+                else:
+                    return self.give_harder_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
                 return self.problem_walkthrough_prompt()
-            elif state == "GIVE_HARDER_PROBLEM":
-                return self.give_harder_problem_prompt()
+            # elif state == "GIVE_HARDER_PROBLEM":
+            #     return self.give_harder_problem_prompt()
             elif state == "END_LESSON":
                 return self.end_lesson_prompt()
 
@@ -1237,12 +1284,17 @@ class TeacherPrompt:
                 return self.check_prompt()
             # elif state == "CONCEPT_INTRODUCTION":
             #     return self.concept_introduction_prompt()
-            elif state == "GIVE_EASIER_PROBLEM":
-                return self.give_easier_problem_prompt()
+            elif state == "GIVE_PROBLEM":
+                if mastery < 0.3:
+                    return self.give_easier_problem_prompt()
+                elif mastery < 0.6:
+                    return self.give_medium_problem_prompt()
+                else:
+                    return self.give_harder_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
                 return self.problem_walkthrough_prompt()
-            elif state == "GIVE_HARDER_PROBLEM":
-                return self.give_harder_problem_prompt()
+            # elif state == "GIVE_HARDER_PROBLEM":
+            #     return self.give_harder_problem_prompt()
             elif state == "END_LESSON":
                 return self.end_lesson_prompt()
 
@@ -1252,12 +1304,17 @@ class TeacherPrompt:
                 return self.start_lesson_prompt()
             # elif state == "CONCEPT_INTRODUCTION":
             #     return self.concept_introduction_prompt()
-            elif state == "GIVE_EASIER_PROBLEM":
-                return self.give_easier_problem_prompt()
+            elif state == "GIVE_PROBLEM":
+                if mastery < 0.3:
+                    return self.give_easier_problem_prompt()
+                elif mastery < 0.6:
+                    return self.give_medium_problem_prompt()
+                else:
+                    return self.give_harder_problem_prompt()
             elif state == "PROBLEM_WALKTHROUGH":
                 return self.problem_walkthrough_prompt()
-            elif state == "GIVE_HARDER_PROBLEM":
-                return self.give_harder_problem_prompt()
+            # elif state == "GIVE_HARDER_PROBLEM":
+            #     return self.give_harder_problem_prompt()
             elif state == "END_LESSON":
                 return self.end_lesson_prompt()
 

@@ -32,9 +32,10 @@ class Teacher:
         lesson_state = state.get("lesson_state")
         learning_status = state.get("learning_status")
         cur_mastery = state.get("cur_mastery")
+        bkt_graph = state.get("bkt_graph")
 
         logging.log("Getting teacher prompt", logger, 2)
-        teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status)
+        teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status, bkt_graph.get(learning_objective))
 
         agent = create_react_agent(
             llm=self.model,

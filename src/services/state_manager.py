@@ -70,7 +70,7 @@ class StateManager:
                      "cur_learning_objective": next(iter(knowledge_info.amc8_knowledge_graph)), 
                      "learning_status": "steady", 
                      "student_id": self.student_id, 
-                     "lesson_state": {'START_LESSON': 'In Progress', 'GIVE_EASIER_PROBLEM': 'Not Done','PROBLEM_WALKTHROUGH': 'Not Done','GIVE_HARDER_PROBLEM': 'Not Done', 'PROBLEM_WALKTHROUGH': 'Not Done','END_LESSON': 'Not Done'}, 
+                     "lesson_state": {'START_LESSON': 'In Progress', 'GIVE_PROBLEM': 'Not Done','PROBLEM_WALKTHROUGH': 'Not Done','GIVE_PROBLEM': 'Not Done', 'PROBLEM_WALKTHROUGH': 'Not Done','END_LESSON': 'Not Done'}, 
                      "messages": [], 
                      "evaluator_grade": None, 
                      "evaluator_solution": None, 

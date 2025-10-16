@@ -323,6 +323,7 @@ class MathTeacherPrompt:
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{{{"problem_id": "<id>"}}}} to the student instead of the problem text
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -369,13 +370,13 @@ class MathTeacherPrompt:
                 #                                   - Make it interactive by checking in with the student to make sure they understand''',
                  "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
-                 "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
+                 "EASY PROBLEM RULES": '''- Do not give the student the solution to the problem
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) based on the concept you are covering.
                                                - Give the student time to solve the problem''',
-                 "MEDIUM PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
+                 "MEDIUM PROBLEM RULES": '''- Do not give the student the solution to the problem
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
@@ -383,8 +384,8 @@ class MathTeacherPrompt:
                                                  - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
                  "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
-                 "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
+                 "HARD PROBLEM RULES": '''- Do not give the student the solution to the problem
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on''',
@@ -560,9 +561,9 @@ class MathTeacherPrompt:
         - It feels natural to move forward (don't force it)
 
         TASK RULES:                
-        - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
+        - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
         - Give the student time to complete the problem
-        - Do not give the answer to the problem unless they are absolutely lost
+        - Do not give the solution to the problem unless they are absolutely lost
         - If they have a solution, ask them to explain their thinking even if their answer is wrong.
         - DO NOT move on if they do not show understanding. 
         - Explain the solution clearly and in-detailed if the student failed the problem.
@@ -586,6 +587,7 @@ class MathTeacherPrompt:
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -849,6 +851,7 @@ class TeacherPrompt:
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{{{"problem_id": "<id>"}}}} to the student instead of the problem text
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -896,12 +899,12 @@ class TeacherPrompt:
                  "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) based on the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "MEDIUM PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
@@ -910,7 +913,7 @@ class TeacherPrompt:
                  "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the entire problem including the answer choices A, B, C, D, and E and their corresponding values to the student
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on''',
@@ -1108,6 +1111,7 @@ class TeacherPrompt:
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -1192,6 +1196,7 @@ class TeacherPrompt:
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same

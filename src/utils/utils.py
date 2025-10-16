@@ -5,9 +5,39 @@ import re
 
 from src.utils import logging
 from src.utils.text_to_vec import TextToVec
+from src.services.problem_service import ProblemHandler
 
 # Configure logging
 logger = logging.set_logger(__name__)
+
+def parse_problem(response):
+    problem_handler = ProblemHandler()
+    
+    # Use regex to check if response contains {'problem_id':<id>} pattern
+    if "problem_id" in response:
+        pattern = r"\{'problem_id':\s*'([^']+)'\}"
+        match = re.search(pattern, response)
+        
+        if match:
+            problem_id = match.group(1).strip()
+            logging.log(f"Problem ID found: {problem_id}", logger, 2)
+            problem = problem_handler.get_problem(problem_id)
+            
+            if problem:
+                # Replace the problem_id pattern with the actual problem content
+                problem_text = str(problem)  # Convert problem to string
+                modified_response = re.sub(pattern, problem_text, response)
+                return modified_response
+            else:
+                logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
+                return response
+        else:
+            logging.log("Couldn't extract ID from response", logger, 2)
+            return response
+    else:
+        return response
+
+
 
 def transfer_to_chroma():
     text_to_vec = TextToVec()

@@ -202,7 +202,7 @@ def get_problem(problem_input: str) -> str:
     subject = input_data.get('subject')
     difficulty = input_data.get('difficulty')
     problem_db = rag_service.ProblemDB()
-    problem, metadata = problem_db.retrieve(subject, n_results=10)
+    problem, metadata, ids = problem_db.retrieve(subject, n_results=10)
     place = 0
     for data in metadata:
         concepts_list = data['concepts'].split(',')
@@ -210,7 +210,11 @@ def get_problem(problem_input: str) -> str:
             place = metadata.index(data)
             break
 
-    return problem[place]
+    problem_id = ids[place]
+    problem_text = problem[place]
+    solution = metadata[place]['solution']
+
+    return f"Problem id: {problem_id}\nProblem text: {problem_text}\nSolution: {solution}"
 
 # get_problem_structured = StructuredTool.from_function(
 #     func=get_problem,

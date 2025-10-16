@@ -14,29 +14,6 @@ class MathTeacher:
         self.store.connect("amc8_database")
         self.tools = list_of_tools
 
-    def format_conversation_context(self, messages):
-        """Format conversation messages with speaker labels"""
-        formatted_context = []
-        for msg in messages:
-            if hasattr(msg, 'content'):  # For HumanMessage/AIMessage objects
-                if hasattr(msg, '__class__') and 'Human' in msg.__class__.__name__:
-                    formatted_context.append(f"Student: {msg.content}")
-                elif hasattr(msg, '__class__') and 'AI' in msg.__class__.__name__:
-                    formatted_context.append(f"Teacher: {msg.content}")
-                else:
-                    formatted_context.append(f"Unknown: {msg.content}")
-            elif isinstance(msg, dict) and 'role' in msg:  # For dict format
-                if msg['role'] == 'human':
-                    formatted_context.append(f"Student: {msg['content']}")
-                elif msg['role'] == 'assistant':
-                    formatted_context.append(f"Teacher: {msg['content']}")
-                else:
-                    formatted_context.append(f"{msg['role'].title()}: {msg['content']}")
-            else:
-                formatted_context.append(f"Unknown: {str(msg)}")
-        logging.log(f"Context formatted: {formatted_context}", logger, 2)
-        return formatted_context
-
     def build_node(self, state: State):
         logging.log(f"Current state: \n{state}", logger, 2)
         logging.log(f"Going through math teacher node...", logger, 2)
@@ -89,6 +66,9 @@ class MathTeacher:
 
         new_lesson_state, final_response = utils.parse_response(response["output"])
         
+        # if problem then use display problem
+        final_response = utils.parse_problem(final_response)
+
         # add teacher response to math-related-db
         utils.store_input(self.store, 'math_related', student_id, final_response)
 

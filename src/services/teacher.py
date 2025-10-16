@@ -69,6 +69,8 @@ class Teacher:
 
         new_lesson_state, final_response = utils.parse_response(response["output"])
 
+        final_response = utils.parse_problem(final_response)
+
         return {"messages": [{"role": "assistant", "content": final_response}],
                 "lesson_state": new_lesson_state
                 }

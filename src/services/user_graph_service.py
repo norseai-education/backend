@@ -9,7 +9,11 @@ class UserGraphService:
 
     async def get(self, student_id: int):
         with MongoDBSaver.from_conn_string(self.MONGODB_URI, self.DB_NAME) as checkpointer:
-            return list(checkpointer.list({"configurable": {"thread_id": str(student_id)}}))[-1].checkpoint.get("bkt_graph")
+            try:
+                return list(checkpointer.list({"configurable": {"thread_id": str(student_id)}}))[-1].checkpoint.get("bkt_graph")
+            except Exception as e:
+                logging.log(f"Failed to retrieve user graph for student {student_id}: {e}", self.logger, 0)
+                return None
 
     async def update(self, student_id: int, user_graph: dict):
         with MongoDBSaver.from_conn_string(self.MONGODB_URI, self.DB_NAME) as checkpointer:

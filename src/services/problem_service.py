@@ -8,7 +8,7 @@ class ProblemHandler:
 
     def get_problem(self, problem_id: str):
         problem = self.db_handler.find_documents("problems", {"_id": ObjectId(problem_id)}, ["display_problem"])
-        return problem
+        return problem.get("display_problem", "")
 
     def delete_problem(self, problem_id: str):
         self.db_handler.delete_document("problems", {"_id": ObjectId(problem_id)})

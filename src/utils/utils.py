@@ -147,10 +147,11 @@ def parse_response(text):
             logging.log(f"\nExtracted teacher_response: {teaching_response}\nExtracted lesson_match: {lesson_state}\nExtracted problem_id_match: {problem_id}\n", logger, 2)
             
             problem = problem_handler.get_problem(problem_id)
+            logging.log(f"Found Problem: \n{problem}", logger, 2)
             if not problem:
                 logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
                 problem = ""
-                
+
             teaching_response = str(teaching_response) + str(problem)
             logging.log(f"Teaching response with problem: {teaching_response}", logger, 2)
 

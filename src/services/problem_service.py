@@ -12,7 +12,7 @@ class ProblemHandler:
     def get_problem(self, problem_id: str):
         try:
             problem = self.db_handler.find_documents("problems", {"_id": ObjectId(problem_id)}, ["display_problem"])
-            display_problem = problem.get("display_problem", "")
+            display_problem = problem[0].get("display_problem", "")
             logging.log(f"Found problem: {display_problem}", logger, 2)
             return display_problem
         except Exception as e:

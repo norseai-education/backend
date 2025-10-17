@@ -317,7 +317,7 @@ class MathTeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
 
 
         DECISION FRAMEWORK:
@@ -580,7 +580,7 @@ class MathTeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -667,7 +667,7 @@ class MathTeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -843,7 +843,7 @@ class TeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, DO NOT use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student's response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1102,7 +1102,7 @@ class TeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1186,7 +1186,7 @@ class TeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer

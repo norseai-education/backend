@@ -67,7 +67,7 @@ class MathTeacher:
         new_lesson_state, final_response = utils.parse_response(response["output"])
         
         # if problem then use display problem
-        final_response = utils.parse_problem(final_response)
+        # final_response = utils.parse_problem(final_response)
 
         # add teacher response to math-related-db
         utils.store_input(self.store, 'math_related', student_id, final_response)

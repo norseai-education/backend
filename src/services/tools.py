@@ -214,7 +214,7 @@ def get_problem(problem_input: str) -> str:
     problem_text = problem[place]
     solution = metadata[place]['solution']
 
-    return f"Problem id: {problem_id}\nProblem text: {problem_text}\nSolution: {solution}"
+    return f"problem_id: {problem_id}\nProblem text: {problem_text}\nSolution: {solution}"
 
 # get_problem_structured = StructuredTool.from_function(
 #     func=get_problem,

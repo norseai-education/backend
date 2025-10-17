@@ -315,15 +315,14 @@ class MathTeacherPrompt:
         9. Focus on being helpful rather than perfect
         10. Do not use emoji’s
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
-        12. Use natural, common language like a human teacher
-        13. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
-        14. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
+        13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        14. If you are giving the student a problem, display the problem in only this format: {{{{"problem_id": "<id>"}}}} to the student instead of the problem text
 
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
-        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{{{"problem_id": "<id>"}}}} to the student instead of the problem text
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -490,9 +489,8 @@ class MathTeacherPrompt:
         9. Focus on being helpful rather than perfect
         10. Do not use emoji’s
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
-        12. Use natural, common language like a human teacher
-        13. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
-        14. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
+        13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
 
 
         DECISION FRAMEWORK:
@@ -580,14 +578,13 @@ class MathTeacherPrompt:
         9. Focus on being helpful rather than perfect
         10. Do not use emoji’s
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
-        12. Use natural, common language like a human teacher
-        13. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
-        14. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
+        13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        14. If you are giving the student a problem, display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
-        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -668,9 +665,9 @@ class MathTeacherPrompt:
         9. Focus on being helpful rather than perfect
         10. Do not use emoji’s
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
-        12. Use natural, common language like a human teacher
-        13. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
-        14. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
+        13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        14. If you are giving the student a problem, display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -844,9 +841,9 @@ class TeacherPrompt:
         9. Focus on being helpful rather than perfect
         10. Do not use emoji's
         11. Connect clauses with commas, periods, or separate sentences, DO NOT use hyphens or em dashes
-        12. Use natural, common language like a human teacher
-        13. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student's response before asking the next one
-        14. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student's response before asking the next one
+        13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        14. If you are giving the student a problem, display the problem in only this format: {{{{"problem_id": "<id>"}}}} to the student instead of the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1015,9 +1012,8 @@ class TeacherPrompt:
         9. Focus on being helpful rather than perfect
         10. Do not use emoji’s
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
-        12. Use natural, common language like a human teacher
-        13. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
-        14. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
+        13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1042,7 +1038,7 @@ class TeacherPrompt:
 
         [ONLY IF TOOLS NEEDED - MAX 3 USES:]
         Action: the action to take, should be one of [{tool_names}]
-        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool and {{"subject": "the learning objective", "difficulty": <integer from 1 to 5>"}} for get_problem tool
+        Action Input: the input to the action, in the format {{"query": "your query", "student_id": "the student_id"}} for get_archived tool
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
@@ -1104,14 +1100,13 @@ class TeacherPrompt:
         9. Focus on being helpful rather than perfect
         10. Do not use emoji’s
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
-        12. Use natural, common language like a human teacher
-        13. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
-        14. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
+        13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        14. If you are giving the student a problem, display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
-        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -1189,14 +1184,13 @@ class TeacherPrompt:
         9. Focus on being helpful rather than perfect
         10. Do not use emoji’s
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
-        12. Use natural, common language like a human teacher
-        13. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
-        14. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
+        13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
+        14. If you are giving the student a problem, display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
-        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{"problem_id": "<id>"}} to the student instead of the problem text
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same

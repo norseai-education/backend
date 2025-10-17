@@ -35,6 +35,7 @@ def parse_problem(response):
             logging.log("Couldn't extract ID from response", logger, 2)
             return response
     else:
+        logging.log("No problem ID found in response", logger, 2)
         return response
 
 

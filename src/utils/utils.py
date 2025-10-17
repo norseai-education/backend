@@ -146,6 +146,14 @@ def parse_response(text):
             problem_id = parsed_data.get("problem_id", "")
             logging.log(f"\nExtracted teacher_response: {teaching_response}\nExtracted lesson_match: {lesson_state}\nExtracted problem_id_match: {problem_id}\n", logger, 2)
             
+            problem = problem_handler.get_problem(problem_id)
+            if not problem:
+                logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
+                problem = ""
+                
+            teaching_response = str(teaching_response) + str(problem)
+            logging.log(f"Teaching response with problem: {teaching_response}", logger, 2)
+
     except json.JSONDecodeError:
         # Fallback: Try to extract from structured text format
         teaching_match = re.search(r'teacher_response:\s*(.*?)(?=lesson_state:|$)', text, re.DOTALL)
@@ -154,7 +162,7 @@ def parse_response(text):
         logging.log(f"Found regex match!\nExtracted teacher_response: {teaching_match}\nExtracted lesson_match: {lesson_match}\nExtracted problem_id_match: {problem_id_match}\n", logger, 2)
         if problem_id_match:
             problem_id = problem_id_match.group(1).strip()  
-            problem = problem_handler.get_problem(problem_id)
+            
             if not problem:
                 logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
                 problem = ""

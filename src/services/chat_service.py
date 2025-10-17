@@ -143,7 +143,7 @@ class ChatService:
                 # Store final conversation
                 await convo_db.insert_document(
                     "conversation_history",
-                    logging.convert_messages_to_dict(user_state["messages"]),
+                    utils.convert_messages_to_dict(user_state["messages"], student_id),
                     True
                 )
                 

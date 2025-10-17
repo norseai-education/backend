@@ -122,6 +122,7 @@ def check_lesson_state(lesson_state):
     return lesson_state
 
 def parse_response(text):
+    problem_handler = ProblemHandler()
     default_response = "I'm sorry, can you repeat that?"
     default_lesson_state = {
         'START_LESSON': 'Done',
@@ -142,17 +143,28 @@ def parse_response(text):
             logging.log("Parsed response as json!", logger, 2)
             teaching_response = parsed_data.get("teacher_response", "")
             lesson_state = parsed_data.get("lesson_state", {})
-            logging.log(f"\nExtracted teacher_response: {teaching_response}\nExtracted lesson_match: {lesson_state}\n", logger, 2)
+            problem_id = parsed_data.get("problem_id", "")
+            logging.log(f"\nExtracted teacher_response: {teaching_response}\nExtracted lesson_match: {lesson_state}\nExtracted problem_id_match: {problem_id}\n", logger, 2)
             
     except json.JSONDecodeError:
         # Fallback: Try to extract from structured text format
         teaching_match = re.search(r'teacher_response:\s*(.*?)(?=lesson_state:|$)', text, re.DOTALL)
         lesson_match = re.search(r'lesson_state:\s*(\{.*\})', text, re.DOTALL)
-        logging.log(f"Found regex match!\nExtracted teacher_response: {teaching_match}\nExtracted lesson_match: {lesson_match}\n", logger, 2)
-        
+        problem_id_match = re.search(r'problem_id:\s*"([^"]+)"', text, re.DOTALL)
+        logging.log(f"Found regex match!\nExtracted teacher_response: {teaching_match}\nExtracted lesson_match: {lesson_match}\nExtracted problem_id_match: {problem_id_match}\n", logger, 2)
+        if problem_id_match:
+            problem_id = problem_id_match.group(1).strip()  
+            problem = problem_handler.get_problem(problem_id)
+            if not problem:
+                logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
+                problem = ""
+
         if teaching_match:
             teaching_response = teaching_match.group(1).strip()
-        
+            teaching_response = str(teaching_response) + str(problem)
+            logging.log(f"Teaching response with problem: {teaching_response}", logger, 2)
+
+
         if lesson_match:
             try:
                 lesson_state = json.loads(lesson_match.group(1))

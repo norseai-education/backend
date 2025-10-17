@@ -317,12 +317,13 @@ class MathTeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, provide the problem_id from the tool call in the "problem_id" field of the final response instead of where you would normally display the problem text
 
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Fill in the problem_id in the final answer with the problem_id from the tool call. if NO: Fill in the problem_id in the final answer with ""
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -351,6 +352,7 @@ class MathTeacherPrompt:
         Final Answer: {{{{
             "teacher_response": "[Your comprehensive teaching response addressing both the student's input and current lesson objective]",
             "lesson_state": [Updated lesson state in same format as {{lesson_state}}]
+            "problem_id": "[The problem_id from the tool call if you used the get_problem tool]"
         }}}}
 
         Question: {{student_input}}
@@ -580,11 +582,12 @@ class MathTeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, provide the problem_id from the tool call in the "problem_id" field of the final response instead of where you would normally display the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Fill in the problem_id in the final answer with the problem_id from the tool call. if NO: Fill in the problem_id in the final answer with ""
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -614,6 +617,7 @@ class MathTeacherPrompt:
         Final Answer: {{
             "teacher_response": "[Your comprehensive teaching response addressing both the student's input and current lesson objective]",
             "lesson_state": [Updated lesson state in same format as {lesson_state}]
+            "problem_id": "[The problem_id from the tool call if you used the get_problem tool]"
         }}
 
         Question: {student_input}
@@ -667,11 +671,12 @@ class MathTeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, provide the problem_id from the tool call in the "problem_id" field of the final response instead of where you would normally display the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Fill in the problem_id in the final answer with the problem_id from the tool call. if NO: Fill in the problem_id in the final answer with ""
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -701,6 +706,7 @@ class MathTeacherPrompt:
         Final Answer: {{
             "teacher_response": "[Your comprehensive teaching response addressing both the student's input and current lesson objective]",
             "lesson_state": [Updated lesson state in same format as {lesson_state}]
+            "problem_id": "[The problem_id from the tool call if you used the get_problem tool]"
         }}
 
         Question: {student_input}
@@ -843,12 +849,12 @@ class TeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, DO NOT use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student's response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, provide the problem_id from the tool call in the "problem_id" field of the final response instead of where you would normally display the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
-        - Did I use the get_problem tool? If YES: Display the problem in only this format: {{{{"problem_id": "<id>"}}}} to the student instead of the problem text
+        - Did I use the get_problem tool? If YES: Fill in the problem_id in the final answer with the problem_id from the tool call. if NO: Fill in the problem_id in the final answer with ""
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -877,6 +883,7 @@ class TeacherPrompt:
         Final Answer: {{{{
             "teacher_response": "[Your comprehensive teaching response addressing both the student's input and current lesson objective]",
             "lesson_state": [Updated lesson state in same format as {{lesson_state}}]
+            "problem_id": "[The problem_id from the tool call if you used the get_problem tool]"
         }}}}
 
         Question: {{student_input}}
@@ -1102,11 +1109,12 @@ class TeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
-
+        14. If you are giving the student a problem using the get_problem tool, provide the problem_id from the tool call in the "problem_id" field of the final response instead of where you would normally display the problem text
+        
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Fill in the problem_id in the final answer with the problem_id from the tool call. if NO: Fill in the problem_id in the final answer with ""
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -1134,6 +1142,7 @@ class TeacherPrompt:
         Final Answer: {{
             "teacher_response": "[Your comprehensive teaching response addressing both the student's input and current lesson objective]",
             "lesson_state": [Updated lesson state in same format as {lesson_state}]
+            "problem_id": "[The problem_id from the tool call if you used the get_problem tool]"
         }}
 
         Question: {student_input}
@@ -1186,11 +1195,12 @@ class TeacherPrompt:
         11. Connect clauses with commas, periods, or separate sentences, do not use hyphens or em dashes
         12. Do not string multiple questions together. When you want to ask the student multiple questions, begin with the first one and wait for the student’s response before asking the next one
         13. Don’t be repetitive. Do not affirm or repeat what the student has said in your response. 
-        14. If you are giving the student a problem using the get_problem tool, give the problem in your final response in this format: {{{{"problem_id": "<id>"}}}} instead of where you would normally display the problem text
+        14. If you are giving the student a problem using the get_problem tool, provide the problem_id from the tool call in the "problem_id" field of the final response instead of where you would normally display the problem text
 
         DECISION FRAMEWORK:
         - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific AMC 8 problems? If YES: Use get_problem tool
+        - Did I use the get_problem tool? If YES: Fill in the problem_id in the final answer with the problem_id from the tool call. if NO: Fill in the problem_id in the final answer with ""
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer
         - When giving the Final Answer: Can I move on to the next state? if YES: update the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress”. if NO: Keep the current state the same
@@ -1219,6 +1229,7 @@ class TeacherPrompt:
         Final Answer: {{
             "teacher_response": "[Your comprehensive teaching response addressing both the student's input and current lesson objective]",
             "lesson_state": [Updated lesson state in same format as {lesson_state}]
+            "problem_id": "[The problem_id from the tool call if you used the get_problem tool]"
         }}
 
         Question: {student_input}

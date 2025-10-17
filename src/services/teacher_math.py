@@ -62,7 +62,7 @@ class MathTeacher:
     
         raw_response = response["output"]
 
-        logging.log(f"Raw response: \n{raw_response}\n type: {type(raw_response)}", logger, 2)
+        logging.log(f"Raw response: \n{raw_response}", logger, 2)
 
         new_lesson_state, final_response = utils.parse_response(response["output"])
         

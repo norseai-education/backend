@@ -149,7 +149,6 @@ def parse_response(text):
             # Only try to get problem if problem_id is not empty
             if problem_id and problem_id.strip():
                 problem = problem_handler.get_problem(problem_id)
-                logging.log(f"Found Problem: \n{problem}", logger, 2)
                 if not problem:
                     logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
                     problem = ""

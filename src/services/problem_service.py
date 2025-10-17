@@ -1,5 +1,8 @@
 from src.services.MongoDBHandler import MongoDBHandler
+from src.utils import logging
 from bson import ObjectId
+
+logger = logging.set_logger(__name__)
 
 class ProblemHandler:
     def __init__(self):
@@ -7,15 +10,13 @@ class ProblemHandler:
         self.db_handler.connect("amc8_database")
 
     def get_problem(self, problem_id: str):
-        # Validate problem_id before creating ObjectId
-        if not problem_id or not problem_id.strip():
-            return ""
-        
         try:
             problem = self.db_handler.find_documents("problems", {"_id": ObjectId(problem_id)}, ["display_problem"])
-            return problem.get("display_problem", "")
+            display_problem = problem.get("display_problem", "")
+            logging.log(f"Found problem: {display_problem}", logger, 2)
+            return display_problem
         except Exception as e:
-            # Handle ObjectId validation errors gracefully
+            logging.log(f"Error getting problem: {e}", logger, 0)
             return ""
 
     def delete_problem(self, problem_id: str):

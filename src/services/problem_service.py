@@ -7,8 +7,16 @@ class ProblemHandler:
         self.db_handler.connect("amc8_database")
 
     def get_problem(self, problem_id: str):
-        problem = self.db_handler.find_documents("problems", {"_id": ObjectId(problem_id)}, ["display_problem"])
-        return problem.get("display_problem", "")
+        # Validate problem_id before creating ObjectId
+        if not problem_id or not problem_id.strip():
+            return ""
+        
+        try:
+            problem = self.db_handler.find_documents("problems", {"_id": ObjectId(problem_id)}, ["display_problem"])
+            return problem.get("display_problem", "")
+        except Exception as e:
+            # Handle ObjectId validation errors gracefully
+            return ""
 
     def delete_problem(self, problem_id: str):
         self.db_handler.delete_document("problems", {"_id": ObjectId(problem_id)})

@@ -19,6 +19,13 @@ async def get_user_graph(student_id: int):
         return UserGraphResponse(user_graph={})
     return UserGraphResponse(user_graph=graph)
 
+@router.get("/get_close_graph/{student_id}", response_model=UserGraphResponse)
+async def get_close_graph(student_id: int):
+    graph = await user_graph_service.get_close(student_id)
+    if not graph:
+        return UserGraphResponse(user_graph={})
+    return UserGraphResponse(user_graph=graph)
+
 @router.post("/update_user_graph/{student_id}", response_model=MessageResponse)
 async def update_user_graph(student_id: int, request: UserGraphRequest):
     update = await user_graph_service.update(student_id, request.user_graph)

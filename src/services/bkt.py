@@ -261,11 +261,11 @@ class BayesianKnowledgeTracing():
         # if cur_state.lower() == 'start_lesson' or cur_state.lower() == 'end_lesson':
         #     updated_graph = self.bkt_algorithm(grade, cur_graph, 0.3)
         if cur_state.lower() == 'problem_walkthrough':
-            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.6)
+            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.85)
         elif cur_state.lower() == 'give_problem': #or cur_state.lower() == 'give_harder_problem':
-            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.8)
+            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.95)
         else:
-            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.5)
+            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.75)
 
 
         logging.log(f"Updated bkt graph: \n{updated_graph}", logger, 2)

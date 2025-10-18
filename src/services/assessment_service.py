@@ -172,7 +172,7 @@ class AssessmentService:
             # Update student knowledge graph with assessment results
             # Using different damping factors based on difficulty
             correct_damping = 0.7 if difficulty == 1 else 0.75 if difficulty == 2 else 0.8 if difficulty == 3 else 0.9 if difficulty == 4 else 0.95
-            incorrect_damping = 0.85 if difficulty == 1 else 0.75 if difficulty == 2 else 0.7 if difficulty == 3 else 0.65 if difficulty == 4 else 0.6
+            incorrect_damping = 0.7 if difficulty == 1 else 0.65 if difficulty == 2 else 0.6 if difficulty == 3 else 0.5 if difficulty == 4 else 0.45
             print(f"Grade used for BKT: {grade}\n")
             print(f"Using graph: {user_graph}")
             if student_answer == correct_answer:

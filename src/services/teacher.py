@@ -67,7 +67,7 @@ class Teacher:
 
         logging.log(f"Raw response: \n{raw_response}", logger, 2)
 
-        new_lesson_state, final_response = utils.parse_response(response["output"])
+        new_lesson_state, final_response = utils.parse_response(raw_response)
 
         # final_response = utils.parse_problem(final_response)
 

@@ -4,6 +4,7 @@ import json
 import re
 
 from src.utils import logging
+from src.utils import knowledge_info
 from src.utils.text_to_vec import TextToVec
 from src.services.problem_service import ProblemHandler
 
@@ -233,3 +234,58 @@ def get_learning_obj(graph):
         if value < 0.75:
             return key
     return None
+
+
+def format_eval_output(eval_result):
+    """Format the evaluation result to extract grade and solution"""
+    eval_grade = {}  # Initialize with default value
+    solution = ""     # Initialize with default value
+    
+    if isinstance(eval_result, dict):
+        if "Evaluation of Concepts" and "Solution" in eval_result.keys():
+            solution = eval_result.get("Solution","")
+            eval_grade = eval_result.get("Evaluation of Concepts",{})
+            if not isinstance(eval_grade, dict):
+                try:
+                    eval_grade = json.loads(eval_grade)
+                except json.JSONDecodeError:
+                    logging.log("Failed to parse eval grade JSON", logger, 0)
+    else:
+        try:
+            parsed_response = json.loads(eval_result)
+            if isinstance(parsed_response, dict):
+                solution = parsed_response.get("Solution","")
+                eval_grade = parsed_response.get("Evaluation of Concepts",{})
+                if not isinstance(eval_grade, dict):
+                    try:
+                        eval_grade = json.loads(eval_grade)
+                    except json.JSONDecodeError:
+                        logging.log("Failed to parse eval grade JSON", logger, 0)
+        except:
+            grade_match = re.search(r'"Evaluation of Concepts":\s*(\{(?:[^{}]|{[^{}]*})*\})', eval_result, re.DOTALL)
+            solution_match = re.search(r'"Solution":\s*"([^"]*(?:\\.[^"]*)*)"', eval_result, re.DOTALL)
+
+            if solution_match:
+                solution = solution_match.group(1).strip()
+            else:
+                logging.log("No solution match found in regex search", logger, 0)
+
+            
+            if grade_match:
+                if not isinstance(grade_match.group(1), dict):
+                    try:
+                        eval_grade = json.loads(grade_match.group(1))
+                    except json.JSONDecodeError:
+                        logging.log("Failed to parse eval grade JSON", logger, 0)
+                else:
+                    eval_grade = grade_match.group(1)
+            else:
+                # No grade match found, keep default empty dict
+                logging.log("No grade match found in regex search", logger, 0)
+    
+    eval = eval_grade.copy()
+    for key in eval.keys():
+        if key not in knowledge_info.amc8_concepts:
+            del eval_grade[key]
+
+    return eval_grade, solution

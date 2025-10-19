@@ -43,6 +43,7 @@ class AssessmentRetrieveResponse(BaseModel):
 
 class UserGraphResponse(BaseModel):
     user_graph: Dict[str, float]  # {"concept1": <probability>, "concept2": <probability>, ...}
+    learning_objective: Optional[str] = None
     
 class RouteResponse(BaseModel):
     give_assessment: bool

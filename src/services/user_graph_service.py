@@ -10,7 +10,7 @@ class UserGraphService:
     async def get(self, student_id: int):
         with MongoDBSaver.from_conn_string(self.MONGODB_URI, self.DB_NAME) as checkpointer:
             try:
-                return list(checkpointer.list({"configurable": {"thread_id": str(student_id)}}))[-1].checkpoint.get("bkt_graph")
+                return list(checkpointer.list({"configurable": {"thread_id": str(student_id)}}))[-1].checkpoint.get("bkt_graph"), list(checkpointer.list({"configurable": {"thread_id": str(student_id)}}))[-1].checkpoint.get("cur_learning_objective")
             except Exception as e:
                 logging.log(f"Failed to retrieve user graph for student {student_id}: {e}", self.logger, 0)
                 return None

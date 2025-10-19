@@ -14,10 +14,10 @@ async def health_check():
 
 @router.get("/get_user_graph/{student_id}", response_model=UserGraphResponse)
 async def get_user_graph(student_id: int):
-    graph = await user_graph_service.get(student_id)
+    graph, learning_objective = await user_graph_service.get(student_id)
     if not graph:
-        return UserGraphResponse(user_graph={})
-    return UserGraphResponse(user_graph=graph)
+        return UserGraphResponse(user_graph={}, learning_objective="")
+    return UserGraphResponse(user_graph=graph, learning_objective=learning_objective)
 
 @router.get("/get_close_graph/{student_id}", response_model=UserGraphResponse)
 async def get_close_graph(student_id: int):

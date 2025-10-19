@@ -4,6 +4,7 @@ from src.services.math_engine import MathEngine
 import src.services.rag_service as rag_service
 from pydantic import BaseModel, Field, model_validator
 import json
+import random
 from src.utils import logging
 from src.utils import knowledge_info
 
@@ -195,6 +196,10 @@ get_archived_structured = StructuredTool.from_function(
 def get_problem(problem_input: str) -> str:
     """retrieve a problem to give to the student"""
     input_data = json.loads(problem_input)
+
+    problem_id = ""
+    problem_text = ""
+    solution = ""
     
     logging.log("Using get_problem tool...", logger, 2)
     logging.log(f"Tool inputs: {input_data},{type(input_data)}", logger, 2)
@@ -203,16 +208,18 @@ def get_problem(problem_input: str) -> str:
     difficulty = input_data.get('difficulty')
     problem_db = rag_service.ProblemDB()
     problem, metadata, ids = problem_db.retrieve(subject, n_results=10)
-    place = 0
+    valid_problems = []
     for data in metadata:
         concepts_list = data['concepts'].split(',')
         if data['difficulty'] == difficulty and subject in concepts_list:
-            place = metadata.index(data)
-            break
+            valid = metadata.index(data)
+            valid_problems.append(valid)
 
-    problem_id = ids[place]
-    problem_text = problem[place]
-    solution = metadata[place]['solution']
+    if valid_problems:
+        place = random.choice(valid_problems)
+        problem_id = ids[place]
+        problem_text = problem[place]
+        solution = metadata[place]['solution']
 
     return f"problem_id: {problem_id}\nProblem text: {problem_text}\nSolution: {solution}"
 

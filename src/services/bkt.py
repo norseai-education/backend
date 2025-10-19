@@ -141,6 +141,7 @@ class BayesianKnowledgeTracing():
                     'GIVE_PROBLEM': 'Not Done', 
                     'PROBLEM_WALKTHROUGH': 'Not Done', 
                     'GIVE_PROBLEM': 'Not Done', 
+                    'PROBLEM_WALKTHROUGH': 'Not Done',
                     'END_LESSON': 'Not Done'
                 }
             }
@@ -177,7 +178,8 @@ class BayesianKnowledgeTracing():
                             'START_LESSON': 'Done',  
                             'GIVE_PROBLEM': 'In Progress', 
                             'PROBLEM_WALKTHROUGH': 'Not Done', 
-                            'GIVE_PROBLEM': 'Not Done', 
+                            'GIVE_PROBLEM': 'Not Done',
+                            'PROBLEM_WALKTHROUGH': 'Not Done',
                             'END_LESSON': 'Not Done'
                         }
                     }
@@ -208,6 +210,7 @@ class BayesianKnowledgeTracing():
                         'GIVE_PROBLEM': 'Not Done', 
                         'PROBLEM_WALKTHROUGH': 'Not Done', 
                         'GIVE_PROBLEM': 'Not Done', 
+                        'PROBLEM_WALKTHROUGH': 'Not Done',
                         'END_LESSON': 'Not Done'
                     }
                 }

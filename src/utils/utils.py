@@ -130,6 +130,9 @@ def parse_response(text):
         'GIVE_PROBLEM': 'Not Done',
         'PROBLEM_WALKTHROUGH': 'Not Done',
         'GIVE_PROBLEM': 'Not Done',
+        'PROBLEM_WALKTHROUGH': 'Not Done',
+        'GIVE_PROBLEM': 'Not Done',
+        'PROBLEM_WALKTHROUGH': 'Not Done',
         'END_LESSON': 'Not Done'
     }
     

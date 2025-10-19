@@ -220,6 +220,8 @@ class ChatService:
             )
             logging.log("Stored conversation history into database!", self.logger, 1)
             
+            # Store final state
+            await asyncio.get_event_loop().run_in_executor(None, state_manager.store, user_state)
             # Clear Redis memory
             await asyncio.get_event_loop().run_in_executor(None, state_manager.clear_redis_memory)
             await self.cleanup_session(student_id)

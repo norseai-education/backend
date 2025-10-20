@@ -207,7 +207,7 @@ def get_problem(problem_input: str) -> str:
     subject = input_data.get('subject')
     difficulty = input_data.get('difficulty')
     problem_db = rag_service.ProblemDB()
-    problem, metadata, ids = problem_db.retrieve(subject, n_results=10)
+    problem, metadata, ids = problem_db.retrieve(subject, n_results=25)
     valid_problems = []
     for data in metadata:
         concepts_list = data['concepts'].split(',')

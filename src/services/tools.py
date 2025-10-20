@@ -200,15 +200,11 @@ def get_problem(problem_input: str) -> str:
     problem_id = ""
     problem_text = ""
     solution = ""
-    
-    logging.log("Using get_problem tool...", logger, 2)
-    logging.log(f"Tool inputs: {input_data},{type(input_data)}", logger, 2)
 
     subject = input_data.get('subject')
     difficulty = input_data.get('difficulty')
     problem_db = rag_service.ProblemDB()
     problem, metadata, ids = problem_db.retrieve(subject, n_results=25)
-    logging.log(f"Retrieved problems: {problem}", logger, 2)
     valid_problems = []
     for data in metadata:
         concepts_list = data['concepts'].split(',')
@@ -218,7 +214,6 @@ def get_problem(problem_input: str) -> str:
 
     if valid_problems:
         place = random.choice(valid_problems)
-        logging.log(f"Selected problem: {place}", logger, 2)
         problem_id = ids[place]
         problem_text = problem[place]
         solution = metadata[place]['solution']

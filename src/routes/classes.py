@@ -44,3 +44,8 @@ async def get_user_classes(student_id: int, conn: asyncpg.Connection = Depends(g
 async def create_class(request: CreateClassRequest, conn: asyncpg.Connection = Depends(get_db_connection)):
     create = await class_service.create_class(conn, request.class_name, request.class_description)
     return MessageResponse(message=f"Class {create} created successfully")
+
+@router.delete("/delete_class", response_model=MessageResponse)
+async def delete_class(request: ClassRequest, conn: asyncpg.Connection = Depends(get_db_connection)):
+    delete = await class_service.delete_class(conn, request.class_id)
+    return MessageResponse(message=f"Class {delete} deleted successfully")

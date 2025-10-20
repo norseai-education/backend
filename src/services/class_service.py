@@ -32,3 +32,9 @@ class ClassService:
             class_name, class_description, class_id
         )
         return class_id
+
+    async def delete_class(self, conn: asyncpg.Connection, class_id: uuid.UUID):
+        await conn.execute("DELETE FROM classes WHERE id = $1",
+            class_id
+        )
+        return class_id

@@ -217,6 +217,7 @@ def get_problem(problem_input: str) -> str:
 
     if valid_problems:
         place = random.choice(valid_problems)
+        logging.log(f"Selected problem: {place}", logger, 2)
         problem_id = ids[place]
         problem_text = problem[place]
         solution = metadata[place]['solution']

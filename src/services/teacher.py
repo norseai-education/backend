@@ -67,10 +67,11 @@ class Teacher:
 
         logging.log(f"Raw response: \n{raw_response}", logger, 2)
 
-        new_lesson_state, final_response = utils.parse_response(raw_response)
+        new_lesson_state, display_response, context_response = utils.parse_response(raw_response)
 
         # final_response = utils.parse_problem(final_response)
 
-        return {"messages": [{"role": "assistant", "content": final_response}],
-                "lesson_state": new_lesson_state
+        return {"messages": [{"role": "assistant", "content": context_response}],
+                "lesson_state": new_lesson_state,
+                "display_response": display_response
                 }

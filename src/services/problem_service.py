@@ -11,13 +11,14 @@ class ProblemHandler:
 
     def get_problem(self, problem_id: str):
         try:
-            problem = self.db_handler.find_documents("problems", {"_id": ObjectId(problem_id)}, ["display_problem"])
+            problem = self.db_handler.find_documents("problems", {"_id": ObjectId(problem_id)}, ["display_problem", "problem"])
             display_problem = problem[0].get("display_problem", "")
+            problem_text = problem[0].get("problem", "")
             logging.log(f"Found problem: {display_problem}", logger, 2)
-            return display_problem
+            return display_problem, problem_text
         except Exception as e:
             logging.log(f"Error getting problem: {e}", logger, 0)
-            return ""
+            return "", ""
 
     def delete_problem(self, problem_id: str):
         self.db_handler.delete_document("problems", {"_id": ObjectId(problem_id)})

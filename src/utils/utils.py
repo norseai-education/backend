@@ -139,6 +139,7 @@ def parse_response(text):
     # Find the Final Answer section     
     teaching_response = ""
     lesson_state = {}
+    context_response = ""
     
     try:
         # Try to parse as JSON first
@@ -152,15 +153,18 @@ def parse_response(text):
             
             # Only try to get problem if problem_id is not empty
             if problem_id and problem_id.strip():
-                problem = problem_handler.get_problem(problem_id)
+                display_problem, problem = problem_handler.get_problem(problem_id)
                 if not problem:
                     logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
                     problem = ""
+                    display_problem = ""
             else:
                 logging.log(f"Empty problem_id provided, skipping problem retrieval", logger, 2)
                 problem = ""
+                display_problem = ""
 
-            teaching_response = str(teaching_response) + str(problem)
+            teaching_response = str(teaching_response) + str(display_problem)
+            context_response = str(teaching_response) + str(problem)
             logging.log(f"Teaching response with problem: {teaching_response}", logger, 2)
 
     except json.JSONDecodeError:
@@ -174,17 +178,20 @@ def parse_response(text):
             
             # Only try to get problem if problem_id is not empty
             if problem_id and problem_id.strip():
-                problem = problem_handler.get_problem(problem_id)
+                display_problem, problem = problem_handler.get_problem(problem_id)
                 if not problem:
                     logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
                     problem = ""
+                    display_problem = ""
             else:
                 logging.log(f"Empty problem_id provided, skipping problem retrieval", logger, 2)
                 problem = ""
+                display_problem = ""
 
         if teaching_match:
             teaching_response = teaching_match.group(1).strip()
-            teaching_response = str(teaching_response) + str(problem)
+            teaching_response = str(teaching_response) + str(display_problem)
+            context_response = str(teaching_response) + str(problem)
             logging.log(f"Teaching response with problem: {teaching_response}", logger, 2)
 
 
@@ -199,14 +206,14 @@ def parse_response(text):
     # Error handling logic
     if lesson_state:  # state_dict exists
         if teaching_response:
-            return lesson_state, teaching_response
+            return lesson_state, teaching_response, context_response
         else:
             logging.log("Teacher response not found, using default", logger, 2)
-            return lesson_state, default_response
+            return lesson_state, default_response, default_response
     else:
         # return default lesson state
         logging.log("Lesson state not found, using default", logger, 2)
-        return default_lesson_state, default_response
+        return default_lesson_state, default_response, context_response
     
 
 def format_conversation_context(messages):
@@ -292,3 +299,6 @@ def format_eval_output(eval_result):
             del eval_grade[key]
 
     return eval_grade, solution
+
+
+    

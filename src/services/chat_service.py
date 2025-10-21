@@ -176,20 +176,20 @@ class ChatService:
             logging.log(f"State after: \n{user_state}", self.logger, 1)
             
             # Extract and send AI response
-            if "messages" in user_state and user_state["messages"]:
-                last_message = user_state["messages"][-1]
-                if hasattr(last_message, 'type') and last_message.type == 'ai':
-                    ai_response = last_message.content
-                    yield f"data: {json.dumps({'type': 'ai_response', 'content': ai_response})}\n\n"
-                elif hasattr(last_message, 'role') and last_message.get('role') == 'assistant':
-                    ai_response = last_message.get('content', '')
-                    yield f"data: {json.dumps({'type': 'ai_response', 'content': ai_response})}\n\n"
+            # if "messages" in user_state and user_state["messages"]:
+            #     last_message = user_state["messages"][-1]
+            #     if hasattr(last_message, 'type') and last_message.type == 'ai':
+            #         ai_response = last_message.content
+            #         yield f"data: {json.dumps({'type': 'ai_response', 'content': ai_response})}\n\n"
+            #     elif hasattr(last_message, 'role') and last_message.get('role') == 'assistant':
+            #         ai_response = last_message.get('content', '')
+            #         yield f"data: {json.dumps({'type': 'ai_response', 'content': ai_response})}\n\n"
             
-            # Send completion signal
-            # yield f"data: {json.dumps({'type': 'complete'})}\n\n"
+            last_message = user_state["display_response"]
+            yield f"data: {json.dumps({'type': 'ai_response', 'content': last_message})}\n\n"
             
         except Exception as e:
-            logging.log(f"Error processing message for student {student_id}: {str(e)}", self.logger, 2)
+            logging.log(f"Error processing message for student {student_id}: {str(e)}", self.logger, 1)
             yield f"data: {json.dumps({'type': 'error', 'message': f'An error occurred: {str(e)}'})}\n\n"
     
     def get_session_status(self, student_id: int) -> Dict[str, Any]:

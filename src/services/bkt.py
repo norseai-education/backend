@@ -138,10 +138,10 @@ class BayesianKnowledgeTracing():
                 "lesson_state": {
                     'START_LESSON': 'Done', 
                     'BEHIND': 'In Progress',
-                    'GIVE_PROBLEM': 'Not Done', 
-                    'PROBLEM_WALKTHROUGH': 'Not Done', 
-                    'GIVE_PROBLEM': 'Not Done', 
-                    'PROBLEM_WALKTHROUGH': 'Not Done',
+                    'GIVE_FIRST_PROBLEM': 'Done',
+                    'FIRST_PROBLEM_WALKTHROUGH': 'Done',
+                    'GIVE_SECOND_PROBLEM': 'In Progress',
+                    'SECOND_PROBLEM_WALKTHROUGH': 'Not Done',
                     'END_LESSON': 'Not Done'
                 }
             }
@@ -176,10 +176,11 @@ class BayesianKnowledgeTracing():
                         "bkt_graph": updated_graph,
                         "lesson_state": {
                             'START_LESSON': 'Done',  
-                            'GIVE_PROBLEM': 'In Progress', 
-                            'PROBLEM_WALKTHROUGH': 'Not Done', 
-                            'GIVE_PROBLEM': 'Not Done',
-                            'PROBLEM_WALKTHROUGH': 'Not Done',
+                            "BEHIND": 'In Progress',
+                            'GIVE_FIRST_PROBLEM': 'Not Done',
+                            'FIRST_PROBLEM_WALKTHROUGH': 'Not Done',
+                            'GIVE_SECOND_PROBLEM': 'Not Done',
+                            'SECOND_PROBLEM_WALKTHROUGH': 'Not Done',
                             'END_LESSON': 'Not Done'
                         }
                     }
@@ -207,10 +208,10 @@ class BayesianKnowledgeTracing():
                     "lesson_state": {
                         'START_LESSON': 'Done',
                         'CHECK': 'In Progress', 
-                        'GIVE_PROBLEM': 'Not Done', 
-                        'PROBLEM_WALKTHROUGH': 'Not Done', 
-                        'GIVE_PROBLEM': 'Not Done', 
-                        'PROBLEM_WALKTHROUGH': 'Not Done',
+                        'GIVE_FIRST_PROBLEM': 'Not Done',
+                        'FIRST_PROBLEM_WALKTHROUGH': 'Not Done',
+                        'GIVE_SECOND_PROBLEM': 'Not Done',
+                        'SECOND_PROBLEM_WALKTHROUGH': 'Not Done',
                         'END_LESSON': 'Not Done'
                     }
                 }

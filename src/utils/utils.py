@@ -104,7 +104,7 @@ def check_lesson_state(lesson_state):
     in_progress_indices = []
     
     for key, value in lesson_state.items():
-        if key not in ['START_LESSON','GIVE_PROBLEM', 'PROBLEM_WALKTHROUGH', 'END_LESSON', 'CHECK', 'BEHIND']:
+        if key not in ['START_LESSON','GIVE_FIRST_PROBLEM', 'FIRST_PROBLEM_WALKTHROUGH', 'GIVE_SECOND_PROBLEM', 'SECOND_PROBLEM_WALKTHROUGH', 'GIVE_THIRD_PROBLEM', 'THIRD_PROBLEM_WALKTHROUGH', 'END_LESSON']:
             return False
         if value.lower() not in ['done', 'in progress', 'not done']:
             return False
@@ -126,13 +126,13 @@ def parse_response(text):
     problem_handler = ProblemHandler()
     default_response = "I'm sorry, can you repeat that?"
     default_lesson_state = {
-        'START_LESSON': 'Done',
-        'GIVE_PROBLEM': 'Not Done',
-        'PROBLEM_WALKTHROUGH': 'Not Done',
-        'GIVE_PROBLEM': 'Not Done',
-        'PROBLEM_WALKTHROUGH': 'Not Done',
-        'GIVE_PROBLEM': 'Not Done',
-        'PROBLEM_WALKTHROUGH': 'Not Done',
+        'START_LESSON': 'Done', 
+        'GIVE_FIRST_PROBLEM': 'Done',
+        'FIRST_PROBLEM_WALKTHROUGH': 'Done',
+        'GIVE_SECOND_PROBLEM': 'In Progress',
+        'SECOND_PROBLEM_WALKTHROUGH': 'Not Done',
+        'GIVE_THIRD_PROBLEM': 'Not Done',
+        'THIRD_PROBLEM_WALKTHROUGH': 'Not Done',
         'END_LESSON': 'Not Done'
     }
     

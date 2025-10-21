@@ -759,14 +759,14 @@ class MathTeacherPrompt:
         if learning_status == "behind":
             if state == "BEHIND":
                 return self.concept_introduction_behind_prompt()
-            if state == "GIVE_PROBLEM":
+            if state in ["GIVE_FIRST_PROBLEM", "GIVE_SECOND_PROBLEM", "GIVE_THIRD_PROBLEM"]:
                 if mastery < 0.3:
                     return self.give_easier_problem_prompt()
                 elif mastery < 0.6:
                     return self.give_medium_problem_prompt()
                 else:
                     return self.give_harder_problem_prompt()
-            elif state == "PROBLEM_WALKTHROUGH":
+            elif state in ["FIRST_PROBLEM_WALKTHROUGH", "SECOND_PROBLEM_WALKTHROUGH", "THIRD_PROBLEM_WALKTHROUGH"]:
                 return self.problem_walkthrough_prompt()
             # elif state == "GIVE_HARDER_PROBLEM":
             #     return self.give_harder_problem_prompt()
@@ -778,14 +778,14 @@ class MathTeacherPrompt:
                 return self.check_prompt()
             # elif state == "CONCEPT_INTRODUCTION":
             #     return self.concept_introduction_prompt()
-            elif state == "GIVE_PROBLEM":
+            elif state in ["GIVE_FIRST_PROBLEM", "GIVE_SECOND_PROBLEM", "GIVE_THIRD_PROBLEM"]:
                 if mastery < 0.3:
                     return self.give_easier_problem_prompt()
                 elif mastery < 0.6:
                     return self.give_medium_problem_prompt()
                 else:
                     return self.give_harder_problem_prompt()
-            elif state == "PROBLEM_WALKTHROUGH":
+            elif state in ["FIRST_PROBLEM_WALKTHROUGH", "SECOND_PROBLEM_WALKTHROUGH", "THIRD_PROBLEM_WALKTHROUGH"]:
                 return self.problem_walkthrough_prompt()
             # elif state == "GIVE_HARDER_PROBLEM":
             #     return self.give_harder_problem_prompt()
@@ -800,9 +800,9 @@ class MathTeacherPrompt:
             #     return self.concept_introduction_prompt()
             # elif state == "GIVE_EASIER_PROBLEM":
             #     return self.give_easier_problem_prompt()
-            elif state == "PROBLEM_WALKTHROUGH":
+            elif state in ["FIRST_PROBLEM_WALKTHROUGH", "SECOND_PROBLEM_WALKTHROUGH", "THIRD_PROBLEM_WALKTHROUGH"]:
                 return self.problem_walkthrough_prompt()
-            elif state == "GIVE_PROBLEM":
+            elif state in ["GIVE_FIRST_PROBLEM", "GIVE_SECOND_PROBLEM", "GIVE_THIRD_PROBLEM"]:
                 if mastery < 0.3:
                     return self.give_easier_problem_prompt()
                 elif mastery < 0.6:
@@ -1292,14 +1292,14 @@ class TeacherPrompt:
         if learning_status == "behind":
             if state == "BEHIND":
                 return self.concept_introduct_behind_prompt()
-            if state == "GIVE_PROBLEM":
+            if state in ["GIVE_FIRST_PROBLEM", "GIVE_SECOND_PROBLEM", "GIVE_THIRD_PROBLEM"]:
                 if mastery < 0.3:
                     return self.give_easier_problem_prompt()
                 elif mastery < 0.6:
                     return self.give_medium_problem_prompt()
                 else:
                     return self.give_harder_problem_prompt()
-            elif state == "PROBLEM_WALKTHROUGH":
+            elif state in ["FIRST_PROBLEM_WALKTHROUGH", "SECOND_PROBLEM_WALKTHROUGH", "THIRD_PROBLEM_WALKTHROUGH"]:
                 return self.problem_walkthrough_prompt()
             # elif state == "GIVE_HARDER_PROBLEM":
             #     return self.give_harder_problem_prompt()
@@ -1311,14 +1311,14 @@ class TeacherPrompt:
                 return self.check_prompt()
             # elif state == "CONCEPT_INTRODUCTION":
             #     return self.concept_introduction_prompt()
-            elif state == "GIVE_PROBLEM":
+            elif state in ["GIVE_FIRST_PROBLEM", "GIVE_SECOND_PROBLEM", "GIVE_THIRD_PROBLEM"]:
                 if mastery < 0.3:
                     return self.give_easier_problem_prompt()
                 elif mastery < 0.6:
                     return self.give_medium_problem_prompt()
                 else:
                     return self.give_harder_problem_prompt()
-            elif state == "PROBLEM_WALKTHROUGH":
+            elif state in ["FIRST_PROBLEM_WALKTHROUGH", "SECOND_PROBLEM_WALKTHROUGH", "THIRD_PROBLEM_WALKTHROUGH"]:
                 return self.problem_walkthrough_prompt()
             # elif state == "GIVE_HARDER_PROBLEM":
             #     return self.give_harder_problem_prompt()
@@ -1331,14 +1331,14 @@ class TeacherPrompt:
                 return self.start_lesson_prompt()
             # elif state == "CONCEPT_INTRODUCTION":
             #     return self.concept_introduction_prompt()
-            elif state == "GIVE_PROBLEM":
+            elif state in ["GIVE_FIRST_PROBLEM", "GIVE_SECOND_PROBLEM", "GIVE_THIRD_PROBLEM"]:
                 if mastery < 0.3:
                     return self.give_easier_problem_prompt()
                 elif mastery < 0.6:
                     return self.give_medium_problem_prompt()
                 else:
                     return self.give_harder_problem_prompt()
-            elif state == "PROBLEM_WALKTHROUGH":
+            elif state in ["FIRST_PROBLEM_WALKTHROUGH", "SECOND_PROBLEM_WALKTHROUGH", "THIRD_PROBLEM_WALKTHROUGH"]:
                 return self.problem_walkthrough_prompt()
             # elif state == "GIVE_HARDER_PROBLEM":
             #     return self.give_harder_problem_prompt()

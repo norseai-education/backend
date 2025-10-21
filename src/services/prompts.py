@@ -372,30 +372,31 @@ class MathTeacherPrompt:
                 #                                        - Ask the student if they understand the concept.''',
                 #  "CONCEPT INTRODUCTION RULES": '''- Keep explanations short but detailed
                 #                                   - Make it interactive by checking in with the student to make sure they understand''',
-                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) to introduce them to the concept you are covering.
+                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) using the get_problem tool to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the solution to the problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
-                 "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) based on the concept you are covering.
+                 "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) using the get_problem tool based on the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "MEDIUM PROBLEM RULES": '''- Do not give the student the solution to the problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
                  "PROBLEM WALKTHROUGH RULES": '''- If the student has a solution, ask them for their solution instead of giving your own even if their answer is incorrect. Let them explain their own thinking and encourage them if they are on the right track or correct them if they are on the wrong track.
                                                  - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
-                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) based on the concept you covered to further their understanding.
+                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) using the get_problem tool based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the solution to the problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
-                                          - Give a Problem for the student to work on''',
+                                          - Give a Problem for the student to work on using the get_problem tool''',
                  "DEFAULT RULES": '''- Teach interactively
                                      - Keep responses short and concise
-                                     - Do not give the answer to any problem until the student has attempted it'''
+                                     - Do not give the answer to any problem until the student has attempted it
+                                     - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text'''
                  }
 # Prompt to start the lesson
     def start_lesson_prompt(self):
@@ -909,30 +910,31 @@ class TeacherPrompt:
                 #                                        - Ask the student if they understand the concept.''',
                 #  "CONCEPT INTRODUCTION RULES": '''- Keep explanations short but detailed
                 #                                   - Make it interactive by checking in with the student to make sure they understand''',
-                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) to introduce them to the concept you are covering.
+                 "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) using the get_problem tool to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
-                 "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) based on the concept you are covering.
+                 "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) using the get_problem tool based on the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "MEDIUM PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
                  "PROBLEM WALKTHROUGH RULES": '''- If the student has a solution, ask them for their solution instead of giving your own even if their answer is incorrect. Let them explain their own thinking and encourage them if they are on the right track or correct them if they are on the wrong track.
                                                  - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
-                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) based on the concept you covered to further their understanding.
+                 "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) using the get_problem tool based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the problem text
+                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
                                           - If they are truly stuck, move to the next state "PROBLEM_WALKTHROUGH" to begin explaining the solution to the problem''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
-                                          - Give a Problem for the student to work on''',
+                                          - Give a Problem for the student to work on using the get_problem tool''',
                  "DEFAULT RULES": '''- Teach interactively
                                      - Keep responses short and concise
-                                     - Do not give the answer to any problem until the student has attempted it'''
+                                     - Do not give the answer to any problem until the student has attempted it
+                                     - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text'''
                  }
 # Prompt to start the lesson
     def start_lesson_prompt(self):

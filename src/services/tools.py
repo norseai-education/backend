@@ -208,7 +208,7 @@ def get_problem(problem_input: str) -> str:
     valid_problems = []
     for data in metadata:
         concepts_list = data['concepts'].split(',')
-        if data['difficulty'] == difficulty and subject in concepts_list:
+        if data['difficulty'] == difficulty and subject.lower() in [concept.lower() for concept in concepts_list]:
             valid = metadata.index(data)
             valid_problems.append(valid)
 
@@ -217,6 +217,10 @@ def get_problem(problem_input: str) -> str:
         problem_id = ids[place]
         problem_text = problem[place]
         solution = metadata[place]['solution']
+    else:
+        problem_id = ids[0]
+        problem_text = problem[0]
+        solution = metadata[0]['solution']
 
     return f"problem_id: {problem_id}\nProblem text: {problem_text}\nSolution: {solution}"
 

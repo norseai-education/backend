@@ -163,8 +163,9 @@ def parse_response(text):
                 problem = ""
                 display_problem = ""
 
-            teaching_response = str(teaching_response) + str(display_problem)
             context_response = str(teaching_response) + str(problem)
+            teaching_response = str(teaching_response) + str(display_problem)
+            
             logging.log(f"Teaching response with problem: {teaching_response}", logger, 2)
 
     except json.JSONDecodeError:
@@ -190,8 +191,8 @@ def parse_response(text):
 
         if teaching_match:
             teaching_response = teaching_match.group(1).strip()
-            teaching_response = str(teaching_response) + str(display_problem)
             context_response = str(teaching_response) + str(problem)
+            teaching_response = str(teaching_response) + str(display_problem)
             logging.log(f"Teaching response with problem: {teaching_response}", logger, 2)
 
 

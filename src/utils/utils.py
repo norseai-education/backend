@@ -165,9 +165,9 @@ def parse_response(text):
 
     except json.JSONDecodeError:
         # Fallback: Try to extract from structured text format
-        teaching_match = re.search(r'teacher_response:\s*(.*?)(?=lesson_state:|$)', text, re.DOTALL)
-        lesson_match = re.search(r'lesson_state:\s*(\{.*\})', text, re.DOTALL)
-        problem_id_match = re.search(r'problem_id:\s*"([^"]+)"', text, re.DOTALL)
+        teaching_match = re.search(r'teacher_response":\s*(.*?)(?=,\s*"lesson_state|$)', text, re.DOTALL)
+        lesson_match = re.search(r'lesson_state":\s*(\{.*?\})', text, re.DOTALL)
+        problem_id_match = re.search(r'problem_id":\s*"([^"]+)"', text, re.DOTALL)
         logging.log(f"Found regex match!\nExtracted teacher_response: {teaching_match}\nExtracted lesson_match: {lesson_match}\nExtracted problem_id_match: {problem_id_match}\n", logger, 2)
         if problem_id_match:
             problem_id = problem_id_match.group(1).strip()  

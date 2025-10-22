@@ -72,8 +72,8 @@ class BayesianKnowledgeTracing():
         self.P_slip = p_slip
         self.P_guess = p_guess
 
-    def bkt_algorithm(self, grade, cur_graph, damping_factor):
-        logging.log(f"Used damping factor of {damping_factor}", logger, 2)
+    def bkt_algorithm(self, grade, cur_graph, correct_damping_factor, incorrect_damping_factor):
+        logging.log(f"Used correct damping factor of {correct_damping_factor} and incorrect damping factor of {incorrect_damping_factor}", logger, 2)
         # Process each graded concept
         for concept, result in grade.items():
             # Get current P_known value and P_init
@@ -89,7 +89,7 @@ class BayesianKnowledgeTracing():
                 
                 # Apply damping to reduce sensitivity
                 raw_update = P_learned + (1-P_learned) * self.P_will_learn
-                updated_probability = P_known + damping_factor * (raw_update - P_known)
+                updated_probability = P_known + correct_damping_factor * (raw_update - P_known)
                     
             else:
                 # Student answered incorrectly
@@ -97,7 +97,7 @@ class BayesianKnowledgeTracing():
                 
                 # Apply damping to reduce sensitivity
                 raw_update = P_learned + (1-P_learned) * self.P_will_learn
-                updated_probability = P_known + damping_factor * (raw_update - P_known)
+                updated_probability = P_known + incorrect_damping_factor * (raw_update - P_known)
             
             # Ensure probability stays within [0, 1] bounds
             updated_probability = max(0.0, min(1.0, updated_probability))
@@ -264,12 +264,23 @@ class BayesianKnowledgeTracing():
         # change damping factor based on current state
         # if cur_state.lower() == 'start_lesson' or cur_state.lower() == 'end_lesson':
         #     updated_graph = self.bkt_algorithm(grade, cur_graph, 0.3)
-        if cur_state.lower() == 'problem_walkthrough':
-            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.85)
-        elif cur_state.lower() == 'give_problem': #or cur_state.lower() == 'give_harder_problem':
-            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.95)
+        status = cur_graph.get(cur_learning_obj, 0.0)
+        if cur_state.lower() in ['first_problem_walkthrough', 'second_problem_walkthrough', 'third_problem_walkthrough']:
+            if status < 0.3:
+                updated_graph = self.bkt_algorithm(grade, cur_graph, 0.7, 0.65)
+            elif status < 0.6:
+                updated_graph = self.bkt_algorithm(grade, cur_graph, 0.65, 0.55)
+            else:
+                updated_graph = self.bkt_algorithm(grade, cur_graph, 0.85, 0.4)
+        elif cur_state.lower() in ['give_first_problem', 'give_second_problem', 'give_third_problem']: #or cur_state.lower() == 'give_harder_problem':
+            if status < 0.3:
+                updated_graph = self.bkt_algorithm(grade, cur_graph, 0.8, 0.75)
+            elif status < 0.6:
+                updated_graph = self.bkt_algorithm(grade, cur_graph, 0.75, 0.65)
+            else:
+                updated_graph = self.bkt_algorithm(grade, cur_graph, 0.95, 0.5)
         else:
-            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.75)
+            updated_graph = self.bkt_algorithm(grade, cur_graph, 0.65, 0.65)
 
 
         logging.log(f"Updated bkt graph: \n{updated_graph}", logger, 2)

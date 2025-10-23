@@ -48,7 +48,7 @@ class ProblemDB:
     def retrieve(self, query_text: str, n_results: int):
         """Search with metadata filtering"""
         result = db_handler.query(self.model, self.collection, query_text, n_results)
-        logging.log(f"Retrieved problems: {result}", logger, 2)
+        # logging.log(f"Retrieved problems: {result}", logger, 2)
         return result['documents'][0], result['metadatas'][0], result['ids'][0]
 
 

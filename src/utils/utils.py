@@ -102,6 +102,7 @@ def check_lesson_state(lesson_state):
     # Count 'in progress' values and track their indices
     in_progress_count = 0
     in_progress_indices = []
+    check_done = 0
     
     for key, value in lesson_state.items():
         if key not in ['START_LESSON','GIVE_FIRST_PROBLEM', 'FIRST_PROBLEM_WALKTHROUGH', 'GIVE_SECOND_PROBLEM', 'SECOND_PROBLEM_WALKTHROUGH', 'GIVE_THIRD_PROBLEM', 'THIRD_PROBLEM_WALKTHROUGH', 'END_LESSON']:
@@ -111,8 +112,15 @@ def check_lesson_state(lesson_state):
         
         # Track 'in progress' values and their indices
         if value.lower() == 'in progress':
+            check_done = 1
             in_progress_count += 1
             in_progress_indices.append(list(lesson_state.keys()).index(key))
+
+
+        if check_done == 0:
+            if value.lower() != 'done':
+                lesson_state[key] = "Done"
+
     
     # If there are 2 'in progress' values, turn the one with smallest index to 'done'
     if in_progress_count == 2:
@@ -120,6 +128,8 @@ def check_lesson_state(lesson_state):
         smallest_index = min(in_progress_indices)
         key_at_smallest_index = list(lesson_state.keys())[smallest_index]
         lesson_state[key_at_smallest_index] = 'Done'
+
+    
     return lesson_state
 
 def parse_response(text):

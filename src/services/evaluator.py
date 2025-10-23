@@ -22,6 +22,7 @@ class EvaluatorModel:
         student_input = state["messages"][-1].content
         learning_objective = state.get("cur_learning_objective", "DEFAULT")
         context = utils.format_conversation_context(state["messages"][-4:])
+        cur_problem = state.get("cur_problem", "no problem provided")
         logging.log(f"Inputs of Evaluator: \ninput: {student_input}\nlearning_obj: {learning_objective}\ncontext: {context}", logger, 2)
 
         # Create and run agent
@@ -42,7 +43,8 @@ class EvaluatorModel:
         response = agent_executor.invoke({
             "student_input": student_input,
             "learning_objective": learning_objective,
-            "context": context
+            "context": context,
+            "cur_problem": cur_problem
         })
         
         raw_response = response["output"]

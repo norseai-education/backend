@@ -17,4 +17,5 @@ class State(TypedDict):
     personality_context: str
     cur_mastery: list[str]
     display_response: str
+    cur_problem: str
 

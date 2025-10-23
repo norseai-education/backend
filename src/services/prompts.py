@@ -238,6 +238,7 @@ evaluator_prompt = PromptTemplate(
         - Solution: Provide the solution based on the student's current direction
 
         Student Response: {student_input}
+        Problem they are working on: {cur_problem}
         Convversation history: {context}
         Learning Objective: {learning_objective}
 

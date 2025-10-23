@@ -217,14 +217,14 @@ def parse_response(text):
     # Error handling logic
     if lesson_state:  # state_dict exists
         if teaching_response:
-            return lesson_state, teaching_response, context_response
+            return lesson_state, teaching_response, context_response, problem
         else:
             logging.log("Teacher response not found, using default", logger, 2)
-            return lesson_state, default_response, default_response
+            return lesson_state, default_response, default_response, problem
     else:
         # return default lesson state
         logging.log("Lesson state not found, using default", logger, 2)
-        return default_lesson_state, default_response, context_response
+        return default_lesson_state, default_response, context_response, problem
     
 
 def format_conversation_context(messages):

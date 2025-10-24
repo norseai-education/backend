@@ -1,7 +1,7 @@
 from langchain_core.tools import tool
 from langchain_core.tools import StructuredTool
-from services import MongoDBHandler
 from src.services.math_engine import MathEngine
+from src.services.MongoDBHandler import MongoDBHandler
 import src.services.rag_service as rag_service
 from pydantic import BaseModel, Field, model_validator
 import json

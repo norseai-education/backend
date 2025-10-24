@@ -203,12 +203,13 @@ def get_problem(problem_input: str) -> str:
 
     subject = input_data.get('subject')
     difficulty = input_data.get('difficulty')
+    difficulty_range = [difficulty, difficulty+1 if difficulty != 5 else difficulty-1]
     problem_db = rag_service.ProblemDB()
-    problem, metadata, ids = problem_db.retrieve(subject, n_results=25)
+    problem, metadata, ids = problem_db.retrieve(subject, n_results=15)
     valid_problems = []
     for data in metadata:
         concepts_list = data['concepts'].split(',')
-        if data['difficulty'] == difficulty and subject.lower() in [concept.lower() for concept in concepts_list]:
+        if data['difficulty'] in difficulty_range and subject.lower() in [concept.lower() for concept in concepts_list]:
             valid = metadata.index(data)
             valid_problems.append(valid)
 

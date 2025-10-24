@@ -31,8 +31,8 @@ class Settings(BaseSettings):
     password_iterations: int = 100000
     
     # Session settings
-    max_conversation_length: int = 60
-    conversation_keep_recent: int = 30
+    max_conversation_length: int = 24
+    conversation_keep_recent: int = 12
     
     # CORS settings
     cors_origins: list = ["*"]

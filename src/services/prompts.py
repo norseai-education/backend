@@ -377,13 +377,15 @@ class MathTeacherPrompt:
                                                - Give the student time to solve the problem''',
                  "EASY PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
+                                          - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
+                                          - Do not include the problem text in your teacher response
                                           - If they are stuck, move on to the next state in the lesson state to give hints to the problem, but not the full solution''',
                  "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) using the get_problem tool based on the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "MEDIUM PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
+                                          - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
+                                          - Do not include the problem text in your teacher response
                                           - If they are stuck, move on to the next state in the lesson state to give hints to the problem, but not the full solution''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
@@ -393,7 +395,8 @@ class MathTeacherPrompt:
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
+                                          - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
+                                          - Do not include the problem text in your teacher response
                                           - If they are stuck, move on to the next state in the lesson state to give hints to the problem, but not the full solution''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on using the get_problem tool''',
@@ -917,15 +920,17 @@ class TeacherPrompt:
                 #                                   - Make it interactive by checking in with the student to make sure they understand''',
                  "EASY PROBLEM COMPLETION": '''- Give the student a easier problem (around difficulty 1-2) using the get_problem tool to introduce them to the concept you are covering.
                                                - Give the student time to solve the problem''',
-                 "EASY PROBLEM RULES": '''- Do not give the student the answer to the problem
+                 "EASY PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
+                                          - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
+                                          - Do not include the problem text in your teacher response
                                           - If they are stuck, move on to the next state in the lesson state to give hints to the problem, but not the full solution''',
                  "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) using the get_problem tool based on the concept you are covering.
                                                - Give the student time to solve the problem''',
-                 "MEDIUM PROBLEM RULES": '''- Do not give the student the answer to the problem
+                 "MEDIUM PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
+                                          - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
+                                          - Do not include the problem text in your teacher response
                                           - If they are stuck, move on to the next state in the lesson state to give hints to the problem, but not the full solution''',
                  "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
                                                       - The student understands the solution if they weren't able to solve the problem correctly''',
@@ -933,9 +938,10 @@ class TeacherPrompt:
                                                  - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
                  "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) using the get_problem tool based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
-                 "HARD PROBLEM RULES": '''- Do not give the student the answer to the problem
+                 "HARD PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
-                                          - Display the problem in ONLY this format: {{"problem_id": "<id>"}} to the student instead of the actual problem text
+                                          - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
+                                          - Do not include the problem text in your teacher response
                                           - If they are stuck, move on to the next state in the lesson state to give hints to the problem, but not the full solution''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on using the get_problem tool''',

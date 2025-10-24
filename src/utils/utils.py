@@ -99,13 +99,30 @@ def check_lesson_state(lesson_state):
             lesson_state = json.loads(lesson_state)
         except json.JSONDecodeError:
             return False
+
+    if "In Progress" not in lesson_state.values():
+        # Find the latest "done" value and set the next one to "in progress"
+        keys = list(lesson_state.keys())
+        latest_done_index = -1
+        
+        # Find the index of the latest "done" value
+        for i, (key, value) in enumerate(lesson_state.items()):
+            if value.lower() == 'done':
+                latest_done_index = i
+        
+        # If we found a "done" value and there's a next item, set it to "in progress"
+        if latest_done_index >= 0 and latest_done_index + 1 < len(keys):
+            next_key = keys[latest_done_index + 1]
+            lesson_state[next_key] = "In Progress"
+            logging.log(f'No "In Progress" found, setting {next_key} to "In Progress"', logger, 2)
+            
     # Count 'in progress' values and track their indices
     in_progress_count = 0
     in_progress_indices = []
     check_done = 0
     
     for key, value in lesson_state.items():
-        if key not in ['START_LESSON','GIVE_FIRST_PROBLEM', 'FIRST_PROBLEM_WALKTHROUGH', 'GIVE_SECOND_PROBLEM', 'SECOND_PROBLEM_WALKTHROUGH', 'GIVE_THIRD_PROBLEM', 'THIRD_PROBLEM_WALKTHROUGH', 'END_LESSON']:
+        if key not in ['START_LESSON','GIVE_FIRST_PROBLEM', 'FIRST_PROBLEM_WALKTHROUGH', 'GIVE_SECOND_PROBLEM', 'SECOND_PROBLEM_WALKTHROUGH', 'GIVE_THIRD_PROBLEM', 'THIRD_PROBLEM_WALKTHROUGH', 'END_LESSON', "CHECK", "BEHIND"]:
             return False
         if value.lower() not in ['done', 'in progress', 'not done']:
             return False
@@ -128,7 +145,6 @@ def check_lesson_state(lesson_state):
         smallest_index = min(in_progress_indices)
         key_at_smallest_index = list(lesson_state.keys())[smallest_index]
         lesson_state[key_at_smallest_index] = 'Done'
-
     
     return lesson_state
 

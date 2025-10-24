@@ -1,5 +1,6 @@
 from langchain_core.tools import tool
 from langchain_core.tools import StructuredTool
+from services import MongoDBHandler
 from src.services.math_engine import MathEngine
 import src.services.rag_service as rag_service
 from pydantic import BaseModel, Field, model_validator
@@ -204,24 +205,32 @@ def get_problem(problem_input: str) -> str:
     subject = input_data.get('subject')
     difficulty = input_data.get('difficulty')
     difficulty_range = [difficulty, difficulty+1 if difficulty != 5 else difficulty-1]
-    problem_db = rag_service.ProblemDB()
-    problem, metadata, ids = problem_db.retrieve(subject, n_results=15)
-    valid_problems = []
-    for data in metadata:
-        concepts_list = data['concepts'].split(',')
-        if data['difficulty'] in difficulty_range and subject.lower() in [concept.lower() for concept in concepts_list]:
-            valid = metadata.index(data)
-            valid_problems.append(valid)
+    mongo = MongoDBHandler()
+    mongo.connect("amc8_database")
+    problems = mongo.find_documents("problems", {"difficulty": {"$in": difficulty_range}, "concepts": subject}, ["problem", "solution"])
+    if problems:
+        problem = random.choice(problems)
+        problem_id = str(problem.get("_id"))
+        problem_text = problem.get("problem")
+        solution = problem.get("solution")
+    # problem_db = rag_service.ProblemDB()
+    # problem, metadata, ids = problem_db.retrieve(subject, n_results=15)
+    # valid_problems = []
+    # for data in metadata:
+    #     concepts_list = data['concepts'].split(',')
+    #     if data['difficulty'] in difficulty_range and subject.lower() in [concept.lower() for concept in concepts_list]:
+    #         valid = metadata.index(data)
+    #         valid_problems.append(valid)
 
-    if valid_problems:
-        place = random.choice(valid_problems)
-        problem_id = ids[place]
-        problem_text = problem[place]
-        solution = metadata[place]['solution']
-    else:
-        problem_id = ids[0]
-        problem_text = problem[0]
-        solution = metadata[0]['solution']
+    # if valid_problems:
+    #     place = random.choice(valid_problems)
+    #     problem_id = ids[place]
+    #     problem_text = problem[place]
+    #     solution = metadata[place]['solution']
+    # else:
+    #     problem_id = ids[0]
+    #     problem_text = problem[0]
+    #     solution = metadata[0]['solution']
 
     return f"problem_id: {problem_id}\nProblem text: {problem_text}\nSolution: {solution}"
 

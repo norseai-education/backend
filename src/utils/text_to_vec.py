@@ -31,12 +31,12 @@ class TextToVec:
         # self.chroma_documents = chroma_handler.get_collection(self.chroma_collection_name)
         self.embedding_model = embedding_model
 
-    def need_to_transfer(self, db_name: str):
+    def need_to_transfer(self, mongo_db_name: str, chroma_db_name: str):
         ids = []
-        documents = self.mongo_handler.find_documents(db_name)
-        collection = self.chroma_handler.get_collection(db_name)
+        documents = self.mongo_handler.find_documents(mongo_db_name)
+        collection = self.chroma_handler.get_collection(chroma_db_name)
         for document in documents:
-            if str(document["_id"]) not in collection.get_all_ids(db_name):
+            if str(document["_id"]) not in collection.get()["ids"]:
                 ids.append(str(document["_id"]))
         return ids
 
@@ -44,8 +44,8 @@ class TextToVec:
         document_list = []
         ids = []
         metadata = []
-        ids = self.need_to_transfer("problems")
-        collection = self.chroma_handler.get_collection("problems")
+        ids = self.need_to_transfer("problems", "AMC8_problems")
+        collection = self.chroma_handler.get_collection("AMC8_problems")
         for id in ids:
             document = self.mongo_handler.find_document("problems", {"_id":ObjectId(id)})
             document_list.append(document["problem"])
@@ -73,7 +73,7 @@ class TextToVec:
         document_list = []
         ids = []
         metadata = []
-        ids = self.need_to_transfer("math_related")
+        ids = self.need_to_transfer("math_related", "math_related")
         collection = self.chroma_handler.get_collection("math_related")
         for id in ids:
             document = self.mongo_handler.find_document("math_related", {"_id":ObjectId(id)})
@@ -91,7 +91,7 @@ class TextToVec:
         document_list = []
         ids = []
         metadata = []
-        ids = self.need_to_transfer("student_persona")
+        ids = self.need_to_transfer("student_persona", "student_persona")
         collection = self.chroma_handler.get_collection("student_persona")
         for id in ids:
             document = self.mongo_handler.find_document("student_persona", {"_id":ObjectId(id)})
@@ -109,7 +109,7 @@ class TextToVec:
         document_list = []
         ids = []
         metadata = []
-        ids = self.need_to_transfer("conversation_history")
+        ids = self.need_to_transfer("conversation_history", "conversation_history")
         collection = self.chroma_handler.get_collection("conversation_history")
         for id in ids:
             document = self.mongo_handler.find_document("conversation_history", {"_id":ObjectId(id)})
@@ -127,7 +127,7 @@ class TextToVec:
         document_list = []
         ids = []
         metadata = []
-        ids = self.need_to_transfer("AMC8_math")
+        ids = self.need_to_transfer("AMC8_math", "AMC8_math")
         collection = self.chroma_handler.get_collection("AMC8_math")
         for id in ids:
             document = self.mongo_handler.find_document("AMC8_math", {"_id":ObjectId(id)})

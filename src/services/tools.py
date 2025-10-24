@@ -15,47 +15,47 @@ logger = logging.set_logger(__name__)
 math_engine_instance = MathEngine()
 
 
-class MathContextInput(BaseModel):
-    student_id: str = Field(description="The student's unique id")
-    query: str = Field(description="The mathematics context you are searching for")
+# class MathContextInput(BaseModel):
+#     student_id: str = Field(description="The student's unique id")
+#     query: str = Field(description="The mathematics context you are searching for")
 
-    @model_validator(mode="before")
-    @classmethod
-    def fix_double_serialization(cls, values):
-        if (
-            isinstance(values, dict)
-            and "student_id" in values
-            and isinstance(values["student_id"], str)
-            and values["student_id"].strip().startswith("{")
-        ):
-            try:
-                parsed = json.loads(values["student_id"])
-                return {**values, **parsed}
-            except json.JSONDecodeError:
-                pass
-        return values
+#     @model_validator(mode="before")
+#     @classmethod
+#     def fix_double_serialization(cls, values):
+#         if (
+#             isinstance(values, dict)
+#             and "student_id" in values
+#             and isinstance(values["student_id"], str)
+#             and values["student_id"].strip().startswith("{")
+#         ):
+#             try:
+#                 parsed = json.loads(values["student_id"])
+#                 return {**values, **parsed}
+#             except json.JSONDecodeError:
+#                 pass
+#         return values
 
 
 
-class GetArchivedInput(BaseModel):
-    student_id: str = Field(description="The student's unique id")
-    query: str = Field(description="The text you are trying to get context for")
+# class GetArchivedInput(BaseModel):
+#     student_id: str = Field(description="The student's unique id")
+#     query: str = Field(description="The text you are trying to get context for")
 
-    @model_validator(mode="before")
-    @classmethod
-    def fix_double_serialization(cls, values):
-        if (
-            isinstance(values, dict)
-            and "student_id" in values
-            and isinstance(values["student_id"], str)
-            and values["student_id"].strip().startswith("{")
-        ):
-            try:
-                parsed = json.loads(values["student_id"])
-                return {**values, **parsed}
-            except json.JSONDecodeError:
-                pass
-        return values
+#     @model_validator(mode="before")
+#     @classmethod
+#     def fix_double_serialization(cls, values):
+#         if (
+#             isinstance(values, dict)
+#             and "student_id" in values
+#             and isinstance(values["student_id"], str)
+#             and values["student_id"].strip().startswith("{")
+#         ):
+#             try:
+#                 parsed = json.loads(values["student_id"])
+#                 return {**values, **parsed}
+#             except json.JSONDecodeError:
+#                 pass
+#         return values
 
 # class GetProblemInput(BaseModel):
 #     subject: str = Field(description="The subject you want the problem to cover")
@@ -150,10 +150,11 @@ def check_concepts(input_data: str) -> str:
 #     description="Verify if concepts are in the Concepts List",
 #     args_schema=CheckConceptsInput,
 # )
-    
-def get_math_context(input_data: MathContextInput) -> str:
+
+@tool
+def get_math_context(MathContextInput: str) -> str:
     """Get further context for the student input if needed."""
-    input_data = json.loads(input_data)
+    input_data = json.loads(MathContextInput)
 
     logging.log("Using get_math_context tool...", logger, 2)
     logging.log(f"Tool inputs: {input_data},{type(input_data)}", logger, 2)
@@ -164,34 +165,34 @@ def get_math_context(input_data: MathContextInput) -> str:
     math_context = math_related_db.retrieve(query, n_results=1, metadata_filter = {"student_id": str(student_id)})
     return math_context
 
-get_math_context_structured = StructuredTool.from_function(
-    func=get_math_context,
-    name="get_math_context",
-    description="get further context for the student input if needed",
-    args_schema=MathContextInput,
-)
+# get_math_context_structured = StructuredTool.from_function(
+#     func=get_math_context,
+#     name="get_math_context",
+#     description="get further context for the student input if needed",
+#     args_schema=MathContextInput,
+# )
 
 
-# @tool(args_schema = GetArchivedInput)
-def get_archived(input_data: GetArchivedInput):
+@tool
+def get_archived(input_data: str) -> str:
     """get conversation history for more context"""
-    input_data = json.loads(input_data)
+    input_dict = json.loads(input_data)
     
     logging.log("Using get_archived tool...", logger, 2)
-    logging.log(f"Tool inputs: {input_data},{type(input_data)}", logger, 2)
+    logging.log(f"Tool inputs: {input_dict},{type(input_dict)}", logger, 2)
 
-    student_id = input_data.get('student_id')
-    query = input_data.get('query')
+    student_id = input_dict.get('student_id')
+    query = input_dict.get('query')
     archived_db = rag_service.ArchivedConversationHistory()
-    archived = archived_db.retrieve(query, 3, {"student_id": str(student_id)})
+    archived = archived_db.retrieve(query, 5, {"student_id": str(student_id)})
     return archived
 
-get_archived_structured = StructuredTool.from_function(
-    func=get_archived,
-    name="get_archived",
-    description="get further context for the student input if needed",
-    args_schema=GetArchivedInput,
-)
+# get_archived_structured = StructuredTool.from_function(
+#     func=get_archived,
+#     name="get_archived",
+#     description="get further context for the student input if needed",
+#     args_schema=GetArchivedInput,
+# )
 
 @tool
 def get_problem(problem_input: str) -> str:

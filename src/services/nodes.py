@@ -24,7 +24,7 @@ class Nodes:
         self.evaluator = EvaluatorModel(
         models.evaluator_model,
         prompts.evaluator_prompt,
-        [tools.get_math_context_structured, tools.math_engine, tools.check_concepts])
+        [tools.get_math_context, tools.math_engine, tools.check_concepts])
 
         self.bkt = BayesianKnowledgeTracing(knowledge_info.amc8_concepts)
 
@@ -38,14 +38,14 @@ class Nodes:
         models.teacher_model,
         prompts.MathTeacherPrompt(),
         MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
-        [tools.get_archived_structured, tools.get_problem]
+        [tools.get_archived, tools.get_problem]
         )
 
         self.teacher = Teacher(
         models.teacher_model,
         prompts.TeacherPrompt(),
         MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
-        [tools.get_archived_structured, tools.get_problem]
+        [tools.get_archived, tools.get_problem]
         )
 
 

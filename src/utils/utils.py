@@ -295,7 +295,7 @@ def format_eval_output(eval_result):
         try:
             parsed_response = json.loads(eval_result)
             if isinstance(parsed_response, dict):
-                student_anaylsis = parsed_response.get("Student Analysis","")
+                student_analysis = parsed_response.get("Student Analysis","")
                 eval_grade = parsed_response.get("Evaluation of Concepts",{})
                 if not isinstance(eval_grade, dict):
                     try:

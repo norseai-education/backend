@@ -283,8 +283,8 @@ def format_eval_output(eval_result):
     solution = ""     # Initialize with default value
     
     if isinstance(eval_result, dict):
-        if "Evaluation of Concepts" and "Solution" in eval_result.keys():
-            solution = eval_result.get("Solution","")
+        if "Evaluation of Concepts" and "Student Analysis" in eval_result.keys():
+            student_analysis = eval_result.get("Student Analysis","")
             eval_grade = eval_result.get("Evaluation of Concepts",{})
             if not isinstance(eval_grade, dict):
                 try:
@@ -295,7 +295,7 @@ def format_eval_output(eval_result):
         try:
             parsed_response = json.loads(eval_result)
             if isinstance(parsed_response, dict):
-                solution = parsed_response.get("Solution","")
+                student_anaylsis = parsed_response.get("Student Analysis","")
                 eval_grade = parsed_response.get("Evaluation of Concepts",{})
                 if not isinstance(eval_grade, dict):
                     try:
@@ -304,12 +304,12 @@ def format_eval_output(eval_result):
                         logging.log("Failed to parse eval grade JSON", logger, 0)
         except:
             grade_match = re.search(r'"Evaluation of Concepts":\s*(\{(?:[^{}]|{[^{}]*})*\})', eval_result, re.DOTALL)
-            solution_match = re.search(r'"Solution":\s*"([^"]*(?:\\.[^"]*)*)"', eval_result, re.DOTALL)
+            analysis_match = re.search(r'"Student Analysis":\s*"([^"]*(?:\\.[^"]*)*)"', eval_result, re.DOTALL)
 
-            if solution_match:
-                solution = solution_match.group(1).strip()
+            if analysis_match:
+                student_analysis = analysis_match.group(1).strip()
             else:
-                logging.log("No solution match found in regex search", logger, 0)
+                logging.log("No analysis match found in regex search", logger, 0)
 
             
             if grade_match:
@@ -329,7 +329,7 @@ def format_eval_output(eval_result):
         if key not in knowledge_info.amc8_concepts:
             del eval_grade[key]
 
-    return eval_grade, solution
+    return eval_grade, student_analysis
 
 
     

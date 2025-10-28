@@ -280,7 +280,7 @@ def get_learning_obj(graph):
 def format_eval_output(eval_result):
     """Format the evaluation result to extract grade and solution"""
     eval_grade = {}  # Initialize with default value
-    solution = ""     # Initialize with default value
+    student_analysis = ""     # Initialize with default value
     
     if isinstance(eval_result, dict):
         if "Evaluation of Concepts" and "Student Analysis" in eval_result.keys():

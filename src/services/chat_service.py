@@ -186,8 +186,8 @@ class ChatService:
             #         yield f"data: {json.dumps({'type': 'ai_response', 'content': ai_response})}\n\n"
             
             last_message = user_state["display_response"]
-            eval_response = user_state["evaluation"]
-            eval_grade = user_state["evaluator_grade"]
+            eval_response = user_state.get("evaluation", "")
+            eval_grade = user_state.get("evaluator_grade", "")
             yield f"data: {json.dumps({'type': 'ai_response', 'content': last_message, 'evaluation': eval_response, 'grade': eval_grade})}\n\n"
             
         except Exception as e:

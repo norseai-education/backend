@@ -237,8 +237,8 @@ evaluator_prompt = PromptTemplate(
 
         Student Analysis: 
         - Provide a short, in-depth evaluation of the student's response based on what they seem to understand or not understand about the concepts covered.
-        - Identify specific gaps in the student's knowledge: Answer why did they get that concept incorrect? 
-        - Keep the analysis short and concise.
+        - Identify specific gaps in the student's knowledge: Answer why did they get that concept incorrect or correct? 
+        - Keep the analysis short and concise. Do not be repetitive or include the thinking process.
 
         Student Response: {student_input}
         Learning Objective: {learning_objective}

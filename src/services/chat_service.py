@@ -186,7 +186,9 @@ class ChatService:
             #         yield f"data: {json.dumps({'type': 'ai_response', 'content': ai_response})}\n\n"
             
             last_message = user_state["display_response"]
-            yield f"data: {json.dumps({'type': 'ai_response', 'content': last_message})}\n\n"
+            eval_response = user_state["evaluation"]
+            eval_grade = user_state["evaluator_grade"]
+            yield f"data: {json.dumps({'type': 'ai_response', 'content': last_message, 'evaluation': eval_response, 'grade': eval_grade})}\n\n"
             
         except Exception as e:
             logging.log(f"Error processing message for student {student_id}: {str(e)}", self.logger, 1)

@@ -24,7 +24,7 @@ class EvaluatorModel:
         solution = state.get("solution", "no solution provided")
         context = utils.format_conversation_context(state["messages"][-4:])
         cur_problem = state.get("cur_problem", "no problem provided")
-        logging.log(f"Inputs of Evaluator: \ninput: {student_input}\nlearning_obj: {learning_objective}\ncontext: {context}", logger, 2)
+        logging.log(f"Inputs of Evaluator: \ninput: {student_input}\ncur_problem: {cur_problem}\nsolution: {solution}", logger, 2)
 
         # Create and run agent
         agent = create_react_agent(

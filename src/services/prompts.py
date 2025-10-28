@@ -235,12 +235,17 @@ evaluator_prompt = PromptTemplate(
             "overcounting & distinguishability in probability"
         ]
 
-        - Solution: Provide the solution based on the student's current direction
+        Student Analysis: 
+        - Provide a short, in-depth evaluation of the student's response based on what they seem to understand or not understand about the concepts covered.
+        - Identify specific gaps in the student's knowledge: Answer why did they get that concept incorrect? 
+        - Keep the analysis short and concise.
 
         Student Response: {student_input}
-        Problem they are working on: {cur_problem}
-        Convversation history: {context}
         Learning Objective: {learning_objective}
+        Problem they are working on: {cur_problem}
+        Solution to the problem: {solution}
+        Convversation history: {context}
+        
 
 
         DECISION FRAMEWORK:
@@ -270,7 +275,7 @@ evaluator_prompt = PromptTemplate(
         Thought: I have sufficient information to help the student (even if not perfect)
         Final Answer: {{
             "Evaluation of Concepts": "[Dictionary of evaluated concepts that the student input covered]",
-            "Solution": [The solution based on the student's reasoning]
+            "Student Analysis": [Analysis of the student's gaps of knowledge and understanding]
         }}
 
         Question: {student_input}
@@ -339,6 +344,7 @@ class MathTeacherPrompt:
         Conversation History: {{context}}
         Math context: {{math_context}}
         Solution: {{solution}}
+        Evaluation of student: {{evaluation}}
 
         Available tools: {{tools}}
 
@@ -523,6 +529,8 @@ class MathTeacherPrompt:
         Conversation History: {context}
         Math context: {math_context}
         Solution: {solution}
+        Evaluation of student: {evaluation}
+        
 
         Available tools: {tools}
 
@@ -615,6 +623,7 @@ class MathTeacherPrompt:
         Conversation History: {context}
         Math context: {math_context}
         Solution: {solution}
+        Evaluation of student: {evaluation}
 
         Available tools: {tools}
 
@@ -706,6 +715,7 @@ class MathTeacherPrompt:
         Conversation History: {context}
         Math context: {math_context}
         Solution: {solution}
+        Evaluation of student: {evaluation}
 
         Available tools: {tools}
 
@@ -884,6 +894,8 @@ class TeacherPrompt:
         Student has already mastered: {{cur_mastery}}
         Conversation History: {{context}}
         Student Personality Context: {{personality_context}}
+        Solution to problem: {{solution}}
+        Evaluation of student: {{evaluation}}
 
         Available tools: {{tools}}
 
@@ -1064,6 +1076,8 @@ class TeacherPrompt:
         Student has already mastered: {cur_mastery}
         Conversation History: {context}
         Student Personality Context: {personality_context}
+        Solution to problem: {solution}
+        Evaluation of student: {evaluation}
 
         Available tools: {tools}
 
@@ -1155,6 +1169,8 @@ class TeacherPrompt:
         Student has already mastered: {cur_mastery}
         Conversation History: {context}
         Student Personality Context: {personality_context}
+        Solution to problem: {solution}
+        Evaluation of student: {evaluation}
 
         Available tools: {tools}
 
@@ -1245,6 +1261,8 @@ class TeacherPrompt:
         Student has already mastered: {cur_mastery}
         Conversation History: {context}
         Student Personality Context: {personality_context}
+        Solution to problem: {solution}
+        Evaluation of student: {evaluation}
 
         Available tools: {tools}
 

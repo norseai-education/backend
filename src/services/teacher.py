@@ -29,6 +29,8 @@ class Teacher:
 
         learning_objective = state.get("cur_learning_objective", "DEFAULT")
         personality_context = state.get("personality_context", "DEFAULT")
+        solution = state.get("solution", "no solution provided")
+        evaluation = state.get("evaluation", "no evaluation provided")
         lesson_state = state.get("lesson_state")
         learning_status = state.get("learning_status")
         cur_mastery = state.get("cur_mastery")
@@ -58,6 +60,8 @@ class Teacher:
             "learning_objective": learning_objective,
             "personality_context": personality_context,
             "context": utils.format_conversation_context(state["messages"]),
+            "solution": solution,
+            "evaluation": evaluation,
             "lesson_state": lesson_state,
             "student_id": student_id,
             "cur_mastery": cur_mastery

@@ -18,10 +18,11 @@ class MathTeacher:
         logging.log(f"Current state: \n{state}", logger, 2)
         logging.log(f"Going through math teacher node...", logger, 2)
         student_input = state["messages"][-1]
-        learning_objective = state.get("cur_learning_objective", "DEFAULT")
-        solution = state.get("solution", "DEFAULT")
-        math_context = state.get("math_context", "DEFAULT")
-        student_id = state.get("student_id", "default_student")
+        learning_objective = state.get("cur_learning_objective", "triangles")
+        solution = state.get("solution", "no solution provided")
+        evaluation = state.get("evaluation", "no evaluation provided")
+        math_context = state.get("math_context", "no math context")
+        student_id = state.get("student_id", "1")
         lesson_state = state.get("lesson_state")
         learning_status = state.get("learning_status")
         context = utils.format_conversation_context(state["messages"])
@@ -52,6 +53,7 @@ class MathTeacher:
             "student_id": student_id,
             "learning_objective": learning_objective,
             "solution": solution,
+            "evaluation": evaluation,
             "math_context": math_context,
             "context": context,
             "lesson_state": lesson_state,
@@ -64,7 +66,7 @@ class MathTeacher:
 
         logging.log(f"Raw response: \n{raw_response}", logger, 2)
 
-        new_lesson_state, display_response, context_response, raw_problem = utils.parse_response(raw_response)
+        new_lesson_state, display_response, context_response, raw_problem, solution = utils.parse_response(raw_response)
 
         # add teacher response to math-related-db
         utils.store_input(self.store, 'math_related', student_id, context_response)
@@ -72,7 +74,8 @@ class MathTeacher:
         return {"messages": [{"role": "assistant", "content": context_response}],
                 "lesson_state": new_lesson_state,
                 "display_response": display_response,
-                "cur_problem": raw_problem
+                "cur_problem": raw_problem,
+                "solution": solution
                 }
 
     

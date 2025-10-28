@@ -179,15 +179,17 @@ def parse_response(text):
             
             # Only try to get problem if problem_id is not empty
             if problem_id and problem_id.strip():
-                display_problem, problem = problem_handler.get_problem(problem_id)
+                display_problem, problem, solution = problem_handler.get_problem(problem_id)
                 if not problem:
                     logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
                     problem = ""
                     display_problem = ""
+                    solution = ""
             else:
                 logging.log(f"Empty problem_id provided, skipping problem retrieval", logger, 2)
                 problem = ""
                 display_problem = ""
+                solution = ""
 
             context_response = str(teaching_response) + str(problem)
             teaching_response = str(teaching_response) + str(display_problem)
@@ -205,15 +207,17 @@ def parse_response(text):
             
             # Only try to get problem if problem_id is not empty
             if problem_id and problem_id.strip():
-                display_problem, problem = problem_handler.get_problem(problem_id)
+                display_problem, problem, solution = problem_handler.get_problem(problem_id)
                 if not problem:
                     logging.log(f"Problem not found for ID: {problem_id}", logger, 2)
                     problem = ""
                     display_problem = ""
+                    solution = ""
             else:
                 logging.log(f"Empty problem_id provided, skipping problem retrieval", logger, 2)
                 problem = ""
                 display_problem = ""
+                solution = ""
 
         if teaching_match:
             teaching_response = teaching_match.group(1).strip()
@@ -233,14 +237,14 @@ def parse_response(text):
     # Error handling logic
     if lesson_state:  # state_dict exists
         if teaching_response:
-            return lesson_state, teaching_response, context_response, problem
+            return lesson_state, teaching_response, context_response, problem, solution
         else:
             logging.log("Teacher response not found, using default", logger, 2)
-            return lesson_state, default_response, default_response, problem
+            return lesson_state, default_response, default_response, problem, solution
     else:
         # return default lesson state
         logging.log("Lesson state not found, using default", logger, 2)
-        return default_lesson_state, default_response, context_response, problem
+        return default_lesson_state, default_response, context_response, problem, solution
     
 
 def format_conversation_context(messages):

@@ -21,6 +21,7 @@ class EvaluatorModel:
         logging.log(f"Going through evaluator node...", logger, 2)
         student_input = state["messages"][-1].content
         learning_objective = state.get("cur_learning_objective", "DEFAULT")
+        solution = state.get("solution", "no solution provided")
         context = utils.format_conversation_context(state["messages"][-4:])
         cur_problem = state.get("cur_problem", "no problem provided")
         logging.log(f"Inputs of Evaluator: \ninput: {student_input}\nlearning_obj: {learning_objective}\ncontext: {context}", logger, 2)
@@ -44,18 +45,19 @@ class EvaluatorModel:
             "student_input": student_input,
             "learning_objective": learning_objective,
             "context": context,
-            "cur_problem": cur_problem
+            "cur_problem": cur_problem,
+            "solution": solution
         })
         
         raw_response = response["output"]
         logging.log(f"Raw response: {raw_response}", logger, 2)
-        grade, solution = utils.format_eval_output(raw_response)
+        grade, evaluation = utils.format_eval_output(raw_response)
 
-        logging.log(f"Formatted evaluator grade: {grade}\nFormatted evaluator solution: {solution}", logger, 2)
+        logging.log(f"Formatted evaluator grade: {grade}\nFormatted evaluation: {evaluation}", logger, 2)
 
         return {
             "evaluator_grade": grade,
-            "evaluator_solution": solution
+            "evaluation": evaluation
         }
 
         

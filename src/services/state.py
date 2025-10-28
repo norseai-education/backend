@@ -11,7 +11,8 @@ class State(TypedDict):
     lesson_state: dict[str, str]
     messages: Annotated[list, add_messages]
     evaluator_grade: dict[str, str]
-    evaluator_solution: str
+    evaluation: str
+    solution: str
     bkt_graph: dict[str, list]  #bkt_graph: dict[str, dict[str, float]] | None for multiple topics i.e. alg, geo, number theory etc.
     math_context: str
     personality_context: str

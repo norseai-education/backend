@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from src.core.lifespan import lifespan
 from src.core.middleware import setup_middleware
-from src.routes import auth, chat, assessment, classes, user_graph, user
+from src.routes import auth, chat, assessment, classes, user_graph, user, evaluator_store
 
 def create_app() -> FastAPI:
     """Create and configure FastAPI application"""
@@ -22,6 +22,7 @@ def create_app() -> FastAPI:
     app.include_router(classes.router, prefix="/classes", tags=["classes"])
     app.include_router(user_graph.router, prefix="/user_graph", tags=["user_graph"])
     app.include_router(user.router, prefix="/user", tags=["user"])
+    app.include_router(evaluator_store.router, prefix="/evaluator_store", tags=["evaluator_store"])
     
     return app
 

@@ -12,7 +12,7 @@ class EvaluatorService:
         """Store the evaluation in the database"""
         try:
             await self.db.insert_document('evaluations', {
-                "student_id": student_id,
+                "student_id": str(student_id),
                 "evaluation": evaluation,
                 "grade": grade,
                 "student_grade": student_grade,
@@ -23,3 +23,11 @@ class EvaluatorService:
 
         except Exception as e:
             return {"message": "Failed to store evaluation: " + str(e)}
+
+    async def get_evaluations(self, student_id: int) -> list[dict[Any, Any]]:
+        """Get the evaluations for a student"""
+        try:
+            evaluations = self.db.find_documents('evaluations', {"student_id": str(student_id)})
+            return evaluations
+        except Exception as e:
+            return [{"message": "Failed to get evaluations: " + str(e)}]

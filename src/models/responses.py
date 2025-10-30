@@ -55,3 +55,6 @@ class ClassesResponse(BaseModel):
 
 class StudentIDResponse(BaseModel):
     student_id: int
+
+class EvaluationsResponse(BaseModel):
+    evaluations: list[dict[Any, Any]]  # [{"student_id": <id>, "evaluation": <evaluation>, "grade": <grade>, "student_grade": <student_grade>, "student_evaluation": <student_evaluation>}, ...]

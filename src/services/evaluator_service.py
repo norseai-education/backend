@@ -29,7 +29,7 @@ class EvaluatorService:
     async def update_evaluation(self, object_id: str, student_grade: dict, student_evaluation: str) -> dict:
         """Update the evaluation in the database"""
         try:
-            await self.db.update_document('evaluations', {"_id": ObjectId(object_id)}, {"student_grade": student_grade, "student_evaluation": student_evaluation})
+            update = self.db.update_document('evaluations', {"_id": ObjectId(object_id)}, {"student_grade": student_grade, "student_evaluation": student_evaluation})
             return {"message": "Evaluation updated successfully"}
         except Exception as e:
             return {"message": "Failed to update evaluation: " + str(e)}

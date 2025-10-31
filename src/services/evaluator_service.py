@@ -38,6 +38,8 @@ class EvaluatorService:
         """Get the evaluations for a student"""
         try:
             evaluations = self.db.find_documents('evaluations', {"student_id": str(student_id)})
+            for eval in evaluations:
+                eval.remove('_id')
             return evaluations
         except Exception as e:
             return [{"message": "Failed to get evaluations: " + str(e)}]

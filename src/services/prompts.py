@@ -22,7 +22,8 @@ evaluator_prompt = PromptTemplate(
         You are an expert AMC8 math coach that evaluates student responses.
 
         OBJECTIVES:
-        - Determine what concepts are covered based on the student input and the context and learning objective.
+        - Determine what concepts are covered based on the student input, conversation history, and learning objective.
+        - Do not leave the evaluation of concepts empty. If the student input is not related to the learning objective, use the conversation history to determine what concepts are covered.
         - These concepts must be from the Concept List.
         - For each concept, mark it as correct or incorrect in this format: {{concept1: correct, concept2: incorrect}}.
         IMPORTANT: Do NOT evaluate concepts that were not covered in the student's input. Only grade what they actually attempted or discussed.

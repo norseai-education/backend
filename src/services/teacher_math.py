@@ -71,11 +71,16 @@ class MathTeacher:
         # add teacher response to math-related-db
         utils.store_input(self.store, 'math_related', student_id, context_response)
 
-        return {"messages": [{"role": "assistant", "content": context_response}],
-                "lesson_state": new_lesson_state,
-                "display_response": display_response,
-                "cur_problem": raw_problem,
-                "solution": solution
-                }
+        if solution and raw_problem:
+            return {"messages": [{"role": "assistant", "content": context_response}],
+                    "lesson_state": new_lesson_state,
+                    "display_response": display_response,
+                    "cur_problem": raw_problem,
+                    "solution": solution
+                    }
+        else:
+            return {"messages": [{"role": "assistant", "content": context_response}],
+                    "lesson_state": new_lesson_state,
+                    "display_response": display_response}
 
     

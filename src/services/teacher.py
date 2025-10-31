@@ -74,10 +74,14 @@ class Teacher:
         new_lesson_state, display_response, context_response, raw_problem, solution = utils.parse_response(raw_response)
 
         # final_response = utils.parse_problem(final_response)
-
-        return {"messages": [{"role": "assistant", "content": context_response}],
-                "lesson_state": new_lesson_state,
-                "display_response": display_response,
-                "cur_problem": raw_problem,
-                "solution": solution
-                }
+        if solution and raw_problem:
+            return {"messages": [{"role": "assistant", "content": context_response}],
+                    "lesson_state": new_lesson_state,
+                    "display_response": display_response,
+                    "cur_problem": raw_problem,
+                    "solution": solution
+                    }
+        else:
+            return {"messages": [{"role": "assistant", "content": context_response}],
+                    "lesson_state": new_lesson_state,
+                    "display_response": display_response}

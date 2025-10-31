@@ -38,8 +38,9 @@ class StudentIDRequest(BaseModel):
     email: str
 
 class StoreEvaluationRequest(BaseModel):
-    evaluation: str
-    grade: dict
-    student_id: int
-    student_grade: dict
-    student_evaluation: str
+    evaluation: Optional[str] = None
+    grade: Optional[dict] = None
+    student_id: Optional[int] = None
+    student_grade: Optional[dict] = None
+    student_evaluation: Optional[str] = None
+    object_id: Optional[str] = None

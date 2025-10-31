@@ -14,10 +14,15 @@ async def health_check():
 
 @router.post("/store_evaluation", response_model=MessageResponse)
 async def store_evaluation(request: StoreEvaluationRequest):
-    store_response = await evaluator_service.store_evaluation(request.evaluation, request.grade, request.student_id, request.student_grade, request.student_evaluation)
+    store_response = await evaluator_service.store_evaluation(request.evaluation, request.grade, request.student_id)
     return MessageResponse(message=store_response['message'])
 
 @router.get("/get_evaluations/{student_id}", response_model=EvaluationsResponse)
 async def get_evaluations(student_id: int):
     evaluations = await evaluator_service.get_evaluations(student_id)
     return EvaluationsResponse(evaluations=evaluations)
+
+@router.post("/update_evaluation", response_model=MessageResponse)
+async def update_evaluation(request: StoreEvaluationRequest):
+    update_response = await evaluator_service.update_evaluation(request.object_id, request.student_grade, request.student_evaluation)
+    return MessageResponse(message=update_response['message'])

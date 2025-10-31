@@ -47,7 +47,7 @@ class TextToVec:
         ids = self.need_to_transfer("problems", "AMC8_problems")
         collection = self.chroma_handler.get_collection("AMC8_problems")
         for id in ids:
-            document = self.mongo_handler.find_document("problems", {"_id":ObjectId(id)})
+            document = self.mongo_handler.find_documents("problems", {"_id":ObjectId(id)})
             document_list.append(document["problem"])
             ids.append(str(document["_id"]))
             del document["problem"]
@@ -76,7 +76,7 @@ class TextToVec:
         ids = self.need_to_transfer("math_related", "math_related")
         collection = self.chroma_handler.get_collection("math_related")
         for id in ids:
-            document = self.mongo_handler.find_document("math_related", {"_id":ObjectId(id)})
+            document = self.mongo_handler.find_documents("math_related", {"_id":ObjectId(id)})
             document_list.append(document["content"])
             ids.append(str(document["_id"]))
             metadata.append({"student_id": document["student_id"]})
@@ -94,7 +94,7 @@ class TextToVec:
         ids = self.need_to_transfer("student_persona", "student_persona")
         collection = self.chroma_handler.get_collection("student_persona")
         for id in ids:
-            document = self.mongo_handler.find_document("student_persona", {"_id":ObjectId(id)})
+            document = self.mongo_handler.find_documents("student_persona", {"_id":ObjectId(id)})
             document_list.append(document["content"])
             ids.append(str(document["_id"]))
             metadata.append({"student_id": document["student_id"]})
@@ -112,7 +112,7 @@ class TextToVec:
         ids = self.need_to_transfer("conversation_history", "conversation_history")
         collection = self.chroma_handler.get_collection("conversation_history")
         for id in ids:
-            document = self.mongo_handler.find_document("conversation_history", {"_id":ObjectId(id)})
+            document = self.mongo_handler.find_documents("conversation_history", {"_id":ObjectId(id)})
             document_list.append(document["content"])
             ids.append(str(document["_id"]))
             metadata.append({"student_id": document["student_id"], "role": document["role"]})
@@ -130,7 +130,7 @@ class TextToVec:
         ids = self.need_to_transfer("AMC8_math", "AMC8_math")
         collection = self.chroma_handler.get_collection("AMC8_math")
         for id in ids:
-            document = self.mongo_handler.find_document("AMC8_math", {"_id":ObjectId(id)})
+            document = self.mongo_handler.find_documents("AMC8_math", {"_id":ObjectId(id)})
             document_list.append(document["text"])
             ids.append(str(document["_id"]))
         try:

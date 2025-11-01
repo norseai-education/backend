@@ -32,24 +32,29 @@ class TextToVec:
         self.embedding_model = embedding_model
 
     def need_to_transfer(self, mongo_db_name: str, chroma_db_name: str):
-        ids = []
-        documents = self.mongo_handler.find_documents(mongo_db_name)
+        # Get ChromaDB IDs once
         collection = self.chroma_handler.get_collection(chroma_db_name)
-        for document in documents:
-            if str(document["_id"]) not in collection.get()["ids"]:
-                ids.append(str(document["_id"]))
-        return ids
+        chroma_ids = set(collection.get()["ids"])
+        
+        # Fetch only _id field from MongoDB
+        documents = self.mongo_handler.find_documents(
+            mongo_db_name, 
+            projection=["_id"]  # Only fetch _id
+        )
+        
+        # Use set difference
+        return [doc["_id"] for doc in documents 
+                if str(doc["_id"]) not in chroma_ids]
 
     def problem_to_vec(self):
-        document_list = []
-        ids = []
         metadata = []
-        ids = self.need_to_transfer("problems", "AMC8_problems")
+        transfer_ids = self.need_to_transfer("problems", "AMC8_problems")
         collection = self.chroma_handler.get_collection("AMC8_problems")
-        for id in ids:
-            document = self.mongo_handler.find_documents("problems", {"_id":ObjectId(id)})[0]
-            document_list.append(document["problem"])
-            ids.append(str(document["_id"]))
+        ids = [str(id) for id in transfer_ids]
+
+        documents = self.mongo_handler.find_documents("problems", {"_id": {"$in": transfer_ids}})
+        temp = documents.copy()
+        for document in temp:
             del document["problem"]
             del document["_id"]
             change_concepts = ''
@@ -64,21 +69,20 @@ class TextToVec:
 
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
-            collection.add_documents(collection_name="problems", documents=document_list, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
+            collection.add_documents(collection_name="problems", documents=documents, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
             logging.log("Successfully added all documents to chromadb...", logger, 2)
         except Exception as e:
             logging.log(f"Error adding documents to chromadb: {e}", logger, 0)
 
     def math_related_to_vec(self):
-        document_list = []
-        ids = []
         metadata = []
-        ids = self.need_to_transfer("math_related", "math_related")
+        document_list = []
+        transfer_ids = self.need_to_transfer("math_related", "math_related")
+        ids = [str(id) for id in transfer_ids]
         collection = self.chroma_handler.get_collection("math_related")
-        for id in ids:
-            document = self.mongo_handler.find_documents("math_related", {"_id":ObjectId(id)})[0]
+        documents = self.mongo_handler.find_documents("math_related", {"_id": {"$in": transfer_ids}})
+        for document in documents:
             document_list.append(document["content"])
-            ids.append(str(document["_id"]))
             metadata.append({"student_id": document["student_id"]})
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
@@ -89,14 +93,13 @@ class TextToVec:
 
     def student_persona_to_vec(self):
         document_list = []
-        ids = []
         metadata = []
-        ids = self.need_to_transfer("student_persona", "student_persona")
+        transfer_ids = self.need_to_transfer("student_persona", "student_persona")
+        ids = [str(id) for id in transfer_ids]
         collection = self.chroma_handler.get_collection("student_persona")
-        for id in ids:
-            document = self.mongo_handler.find_documents("student_persona", {"_id":ObjectId(id)})[0]
+        documents = self.mongo_handler.find_documents("student_persona", {"_id": {"$in": transfer_ids}})
+        for document in documents:
             document_list.append(document["content"])
-            ids.append(str(document["_id"]))
             metadata.append({"student_id": document["student_id"]})
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
@@ -107,14 +110,13 @@ class TextToVec:
 
     def conversation_history_to_vec(self):
         document_list = []
-        ids = []
         metadata = []
-        ids = self.need_to_transfer("conversation_history", "conversation_history")
+        transfer_ids = self.need_to_transfer("conversation_history", "conversation_history")
+        ids = [str(id) for id in transfer_ids]
         collection = self.chroma_handler.get_collection("conversation_history")
-        for id in ids:
-            document = self.mongo_handler.find_documents("conversation_history", {"_id":ObjectId(id)})[0]
+        documents = self.mongo_handler.find_documents("conversation_history", {"_id": {"$in": transfer_ids}})
+        for document in documents:
             document_list.append(document["content"])
-            ids.append(str(document["_id"]))
             metadata.append({"student_id": document["student_id"], "role": document["role"]})
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
@@ -125,14 +127,14 @@ class TextToVec:
 
     def amc8_math_to_vec(self):
         document_list = []
-        ids = []
-        metadata = []
-        ids = self.need_to_transfer("AMC8_math", "AMC8_math")
+        # metadata = []
+        transfer_ids = self.need_to_transfer("AMC8_math", "AMC8_math")
+        ids = [str(id) for id in transfer_ids]
         collection = self.chroma_handler.get_collection("AMC8_math")
-        for id in ids:
-            document = self.mongo_handler.find_documents("AMC8_math", {"_id":ObjectId(id)})[0]
+        documents = self.mongo_handler.find_documents("AMC8_math", {"_id": {"$in": transfer_ids}})
+        for document in documents:
             document_list.append(document["text"])
-            ids.append(str(document["_id"]))
+            # metadata.append({"student_id": document["student_id"]})
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
             collection.add_documents(collection_name="AMC8_math", documents=document_list, ids=ids, embedding_model=self.embedding_model)

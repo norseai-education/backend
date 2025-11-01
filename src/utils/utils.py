@@ -1,4 +1,5 @@
 import asyncio
+import concurrent.futures
 import threading
 import json
 import re
@@ -41,11 +42,24 @@ def parse_problem(response):
 
 
 
-def transfer_to_chroma():
-    text_to_vec = TextToVec()
-    text_to_vec.math_related_to_vec()
-    text_to_vec.student_persona_to_vec()
-    text_to_vec.conversation_history_to_vec()
+async def transfer_to_chroma():
+    """Transfer MongoDB documents to ChromaDB in parallel for all collections."""
+    loop = asyncio.get_event_loop()
+    
+    def _transfer_sync():
+        text_to_vec = TextToVec()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+            futures = [
+                executor.submit(text_to_vec.math_related_to_vec),
+                executor.submit(text_to_vec.student_persona_to_vec),
+                executor.submit(text_to_vec.conversation_history_to_vec)
+            ]
+            concurrent.futures.wait(futures, return_when=concurrent.futures.ALL_COMPLETED)
+            # Check for exceptions and propagate them
+            for future in futures:
+                future.result()  # Raises exception if one occurred
+    
+    await loop.run_in_executor(None, _transfer_sync)
 
 def convert_messages_to_dict(messages, student_id):
     """

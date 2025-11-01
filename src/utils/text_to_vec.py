@@ -69,7 +69,7 @@ class TextToVec:
 
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
-            collection.add_documents(collection_name="problems", documents=documents, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
+            self.chroma_handler.add_documents(collection_name="problems", documents=documents, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
             logging.log("Successfully added all documents to chromadb...", logger, 2)
         except Exception as e:
             logging.log(f"Error adding documents to chromadb: {e}", logger, 0)
@@ -86,7 +86,7 @@ class TextToVec:
             metadata.append({"student_id": document["student_id"]})
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
-            collection.add_documents(collection_name="math_related", documents=document_list, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
+            self.chroma_handler.add_documents(collection_name="math_related", documents=document_list, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
             logging.log("Successfully added all documents to chromadb...", logger, 2)
         except Exception as e:
             logging.log(f"Error adding documents to chromadb: {e}", logger, 0)
@@ -103,7 +103,7 @@ class TextToVec:
             metadata.append({"student_id": document["student_id"]})
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
-            collection.add_documents(collection_name="student_persona", documents=document_list, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
+            self.chroma_handler.add_documents(collection_name="student_persona", documents=document_list, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
             logging.log("Successfully added all documents to chromadb...", logger, 2)
         except Exception as e:
             logging.log(f"Error adding documents to chromadb: {e}", logger, 0)
@@ -120,7 +120,7 @@ class TextToVec:
             metadata.append({"student_id": document["student_id"], "role": document["role"]})
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
-            collection.add_documents(collection_name="conversation_history", documents=document_list, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
+            self.chroma_handler.add_documents(collection_name="conversation_history", documents=document_list, ids=ids, metadatas=metadata, embedding_model=self.embedding_model)
             logging.log("Successfully added all documents to chromadb...", logger, 2)
         except Exception as e:
             logging.log(f"Error adding documents to chromadb: {e}", logger, 0)
@@ -137,7 +137,7 @@ class TextToVec:
             # metadata.append({"student_id": document["student_id"]})
         try:
             logging.log("adding all documents to chromadb...", logger, 2)
-            collection.add_documents(collection_name="AMC8_math", documents=document_list, ids=ids, embedding_model=self.embedding_model)
+            self.chroma_handler.add_documents(collection_name="AMC8_math", documents=document_list, ids=ids, embedding_model=self.embedding_model)
             logging.log("Successfully added all documents to chromadb...", logger, 2)
         except Exception as e:
             logging.log(f"Error adding documents to chromadb: {e}", logger, 0)

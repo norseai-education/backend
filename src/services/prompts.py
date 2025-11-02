@@ -389,25 +389,34 @@ class MathTeacherPrompt:
                                           - You must use the get_problem tool to give the student a problem
                                           - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
                                           - Do not include the problem text in your teacher response
-                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them through the problem, but do not give the full solution''',
+                                          - Do not give the full solution to the problem
+                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them interactively through the problem
+                                          - Do not give another problem until the student has fully understood the current problem.
+                                          ''',
                  "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) using the get_problem tool based on the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "MEDIUM PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
                                           - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
                                           - Do not include the problem text in your teacher response
-                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them through the problem, but do not give the full solution''',
-                 "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
-                                                      - The student understands the solution if they weren't able to solve the problem correctly''',
+                                          - Do not give the full solution to the problem
+                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them interactively through the problem
+                                          - Do not give another problem until the student has fully understood the current problem.''',
+                 "PROBLEM WALKTHROUGH COMPLETION": '''- If the student has an incorrect answer, ask them for their solution first to better understand their thinking. 
+                                                      - If the student has a correct answer, ask them to explain their thinking.
+                                                      - If the student is lost or confused, guide them through the problem interactively''',
                  "PROBLEM WALKTHROUGH RULES": '''- If the student has a solution, ask them for their solution instead of giving your own even if their answer is incorrect. Let them explain their own thinking and encourage them if they are on the right track or correct them if they are on the wrong track.
-                                                 - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
+                                                 - Break down each step clearly and logically, making it easy for the student to follow along, but assume the student is smart and does not need to be babied.
+                                                 - Ask the student questions to engage them and to test their understanding at each step.''',
                  "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) using the get_problem tool based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
                                           - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
                                           - Do not include the problem text in your teacher response
-                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them through the problem, but do not give the full solution''',
+                                          - Do not give the full solution to the problem
+                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them interactively through the problem
+                                          - Do not give another problem until the student has fully understood the current problem.''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on using the get_problem tool''',
                  "DEFAULT RULES": '''- Teach interactively
@@ -944,25 +953,33 @@ class TeacherPrompt:
                                           - You must use the get_problem tool to give the student a problem
                                           - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
                                           - Do not include the problem text in your teacher response
-                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them through the problem, but do not give the full solution''',
+                                          - Do not give the full solution to the problem
+                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them interactively through the problem
+                                          - Do not give another problem until the student has fully understood the current problem.''',
                  "MEDIUM PROBLEM COMPLETION": '''- Give the student a medium problem (around difficulty 3-4) using the get_problem tool based on the concept you are covering.
                                                - Give the student time to solve the problem''',
                  "MEDIUM PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
                                           - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
                                           - Do not include the problem text in your teacher response
-                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them through the problem, but do not give the full solution''',
-                 "PROBLEM WALKTHROUGH COMPLETION": '''- Reach the correct solution, either the student's or your own. 
-                                                      - The student understands the solution if they weren't able to solve the problem correctly''',
+                                          - Do not give the full solution to the problem
+                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them interactively through the problem
+                                          - Do not give another problem until the student has fully understood the current problem.''',
+                 "PROBLEM WALKTHROUGH COMPLETION": '''- If the student has an incorrect answer, ask them for their solution first to better understand their thinking. 
+                                                      - If the student has a correct answer, ask them to explain their thinking.
+                                                      - If the student is lost or confused, guide them through the problem interactively''',
                  "PROBLEM WALKTHROUGH RULES": '''- If the student has a solution, ask them for their solution instead of giving your own even if their answer is incorrect. Let them explain their own thinking and encourage them if they are on the right track or correct them if they are on the wrong track.
-                                                 - If the student doesn't know how to solve the problem, walk them through step-by-step the solution to the problem. ''',
+                                                 - Break down each step clearly and logically, making it easy for the student to follow along, but assume the student is smart and does not need to be babied.
+                                                 - Ask the student questions to engage them and to test their understanding at each step.''',
                  "HARD PROBLEM COMPLETION": '''- Give the student a hard problem (around difficulty 4-5) using the get_problem tool based on the concept you covered to further their understanding.
                                                - Give the student time to solve the problem''',
                  "HARD PROBLEM RULES": '''- Do not give the student the solution to the problem
                                           - You must use the get_problem tool to give the student a problem
                                           - Display the problem in ONLY this format in your Final Answer: {{"problem_id": "<id>"}}
                                           - Do not include the problem text in your teacher response
-                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them through the problem, but do not give the full solution''',
+                                          - Do not give the full solution to the problem
+                                          - If they are stuck, move on to the next state in the lesson state and begin guiding them interactively through the problem
+                                          - Do not give another problem until the student has fully understood the current problem.''',
                  "DEFAULT COMPLETION": '''- The student understands the concept you are explaining
                                           - Give a Problem for the student to work on using the get_problem tool''',
                  "DEFAULT RULES": '''- Teach interactively

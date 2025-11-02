@@ -68,6 +68,9 @@ class ChatService:
                 logging.log("State from Redis applied!", self.logger, 1)
         else:
             user_state['bkt_graph'] = user_graph
+            user_state["init_learning_objective"] = utils.get_learning_obj(user_graph)
+            user_state["cur_learning_objective"] = user_state["init_learning_objective"]
+            user_state['cur_mastery'] = [knowledge_info.amc8_concepts[:knowledge_info.amc8_concepts.index(user_state["cur_learning_objective"])]]
             logging.log("User graph from assessment applied!", self.logger, 1)
         
         # Store session

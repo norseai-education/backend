@@ -73,8 +73,12 @@ class StateManager:
                      "lesson_state": {'START_LESSON': 'In Progress', 'GIVE_FIRST_PROBLEM': 'Not Done','FIRST_PROBLEM_WALKTHROUGH': 'Not Done','GIVE_SECOND_PROBLEM': 'Not Done', 'SECOND_PROBLEM_WALKTHROUGH': 'Not Done','GIVE_THIRD_PROBLEM': 'Not Done', 'THIRD_PROBLEM_WALKTHROUGH': 'Not Done','END_LESSON': 'Not Done'}, 
                      "messages": [], 
                      "evaluator_grade": None, 
-                     "evaluator_solution": None, 
+                     "evaluation": None, 
+                     "solution": None,
                      "bkt_graph": knowledge_info.amc8_knowledge_graph, 
                      "math_context": None, 
-                     "personality_context": None}
+                     "personality_context": None,
+                     "cur_mastery": [],
+                     "display_response": None,
+                     "cur_problem": None}
         return def_state

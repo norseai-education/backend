@@ -11,7 +11,7 @@ class ProblemHandler:
 
     def get_problem(self, problem_id: str):
         try:
-            problem = self.db_handler.find_documents("problems", {"_id": ObjectId(problem_id)}, ["display_problem", "problem"])
+            problem = self.db_handler.find_documents("problems", {"_id": ObjectId(problem_id)}, ["display_problem", "problem", "solution"])
             display_problem = problem[0].get("display_problem", "")
             problem_text = problem[0].get("problem", "")
             solution = problem[0].get("solution", "")

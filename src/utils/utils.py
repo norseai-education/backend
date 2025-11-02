@@ -248,6 +248,7 @@ def parse_response(text):
                 lesson_state = {}
     
     lesson_state = check_lesson_state(lesson_state)
+    logging.log(f"Using Solution: {solution}\nUsing Raw Problem: {problem}", logger, 2)
     # Error handling logic
     if lesson_state:  # state_dict exists
         if teaching_response:

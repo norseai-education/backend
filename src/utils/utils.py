@@ -403,6 +403,7 @@ def convert_redis_messages(messages: List[Any]) -> List[BaseMessage]:
     # If already BaseMessage instances, return as-is
     try:
         if all(isinstance(m, BaseMessage) for m in messages):
+            logging.log(f"Messages already converted to BaseMessage instances, using as is.", logger, 2)
             return messages  # type: ignore[return-value]
     except Exception:
         pass

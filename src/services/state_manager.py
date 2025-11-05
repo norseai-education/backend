@@ -53,7 +53,7 @@ class StateManager:
         logging.log("Retrieving redis state...", logger, 1)
         with RedisSaver.from_conn_string(self.REDIS_URI) as checkpointer:
             logging.log("Redis state retrieved!", logger, 1)
-            if list(checkpointer.list(self.read_config))[-1].checkpoint.get("channel_values"):
+            if list(checkpointer.list(self.read_config)):
                 return list(checkpointer.list(self.read_config))[-1].checkpoint.get("channel_values")
             else:
                 return None

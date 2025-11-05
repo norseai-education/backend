@@ -53,7 +53,10 @@ class StateManager:
         logging.log("Retrieving redis state...", logger, 1)
         with RedisSaver.from_conn_string(self.REDIS_URI) as checkpointer:
             logging.log("Redis state retrieved!", logger, 1)
-            return list(checkpointer.list(self.read_config))[-1].checkpoint.get("channel_values")
+            if list(checkpointer.list(self.read_config))[-1].checkpoint.get("channel_values"):
+                return list(checkpointer.list(self.read_config))[-1].checkpoint.get("channel_values")
+            else:
+                return None
 
     def clear_redis_memory(self):
         try:

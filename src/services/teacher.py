@@ -72,15 +72,15 @@ class Teacher:
 
         logging.log(f"Raw response: \n{raw_response}", logger, 2)
 
-        new_lesson_state, display_response, context_response, raw_problem, solution = utils.parse_response(raw_response)
+        new_lesson_state, display_response, context_response, raw_problem, problem_solution = utils.parse_response(raw_response)
 
         # final_response = utils.parse_problem(final_response)
-        if solution and raw_problem:
+        if problem_solution and raw_problem:
             return {"messages": [{"role": "assistant", "content": context_response}],
                     "lesson_state": new_lesson_state,
                     "display_response": display_response,
                     "cur_problem": raw_problem,
-                    "solution": solution
+                    "solution": problem_solution
                     }
         else:
             return {"messages": [{"role": "assistant", "content": context_response}],

@@ -35,7 +35,7 @@ class StateManager:
         logging.log("Retrieving state from MongoDB...", logger, 1)
         with MongoDBSaver.from_conn_string(self.MONGODB_URI, self.DB_NAME) as checkpointer:
             # logging.log("State successfully retrieved from MongoDB!", logger, 1)
-            return list(checkpointer.list(self.read_config))[-1]
+            return list(checkpointer.list(self.read_config))[-1].checkpoint
 
     def build_graph_redis(self, graph_builder):
         logging.log("Building Graph...", logger, 1)
@@ -53,7 +53,7 @@ class StateManager:
         logging.log("Retrieving redis state...", logger, 1)
         with RedisSaver.from_conn_string(self.REDIS_URI) as checkpointer:
             logging.log("Redis state retrieved!", logger, 1)
-            return list(checkpointer.list(self.read_config))[-1]
+            return list(checkpointer.list(self.read_config))[-1].checkpoint
 
     def clear_redis_memory(self):
         try:

@@ -159,6 +159,8 @@ class ChatService:
             user_state["messages"] = user_state.get("messages", []) + [
                 {"role": "user", "content": message}
             ]
+
+            user_state["messages"] = utils.convert_redis_messages(user_state["messages"])
             
             # Send user message
             # yield f"data: {json.dumps({'type': 'user_message', 'content': message})}\n\n"
@@ -189,6 +191,7 @@ class ChatService:
             # grab final graph state
             logging.log("Grabbing final graph state...", self.logger, 1)
             user_state = state_manager.get_redis_state()
+            user_state["messages"] = utils.convert_redis_messages(user_state["messages"])
             
             # Update session state
             session['user_state'] = user_state

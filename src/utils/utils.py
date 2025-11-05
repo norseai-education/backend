@@ -8,6 +8,11 @@ from src.utils import logging
 from src.utils import knowledge_info
 from src.utils.text_to_vec import TextToVec
 from src.services.problem_service import ProblemHandler
+from typing import List, Dict, Any
+
+# LangChain message types/deserialization helpers
+
+from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, messages_from_dict 
 
 # Configure logging
 logger = logging.set_logger(__name__)
@@ -379,3 +384,42 @@ def extract_json_value(buffer: str, key: str) -> tuple[str, int]:
             return match.group(1), len(buffer)
     
     return "", 0
+
+
+def convert_redis_messages(messages: List[Dict[str, Any]]) -> List[BaseMessage]:
+    """
+    Convert a LangChain-serialized messages list (e.g., items with keys 'lc', 'type', 'id', 'kwargs')
+    into a list of BaseMessage instances compatible with LangGraph add_messages.
+
+    Examples of accepted input items:
+      { 'lc': 1, 'type': 'constructor', 'id': ['langchain','schema','messages','HumanMessage'], 'kwargs': {...} }
+      { 'lc': 1, 'type': 'constructor', 'id': ['langchain','schema','messages','AIMessage'], 'kwargs': {...} }
+      { 'role': 'user'|'assistant', 'content': '...'}
+    """
+    if not isinstance(messages, list):
+        return []
+
+    # First try native deserialization (best fidelity for tool_calls, ids, etc.)
+    try:
+        if messages and isinstance(messages[0], dict) and (
+            'lc' in messages[0] or messages[0].get('type') == 'constructor'
+        ):
+            return messages_from_dict(messages)  # type: ignore[return-value]
+    except Exception:
+        # Fall through to role/content mapping
+        pass
+
+    # Fallback: map simple role/content dicts to BaseMessage
+    converted: List[BaseMessage] = []
+    for item in messages:
+        if isinstance(item, dict) and 'content' in item:
+            role = (item.get('role') or '').lower()
+            content = item.get('content', '')
+            if role in ('user', 'human', 'student'):
+                converted.append(HumanMessage(content=content))  # type: ignore[arg-type]
+            elif role in ('assistant', 'ai', 'teacher'):
+                converted.append(AIMessage(content=content))  # type: ignore[arg-type]
+            else:
+                # Default to human when role is unknown
+                converted.append(HumanMessage(content=content))  # type: ignore[arg-type]
+    return converted

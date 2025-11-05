@@ -160,7 +160,7 @@ class ChatService:
                 {"role": "user", "content": message}
             ]
 
-            # user_state["messages"] = utils.convert_redis_messages(user_state["messages"])
+            user_state["messages"] = utils.convert_redis_messages(user_state["messages"])
             
             # Send user message
             # yield f"data: {json.dumps({'type': 'user_message', 'content': message})}\n\n"

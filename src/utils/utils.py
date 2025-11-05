@@ -386,7 +386,7 @@ def extract_json_value(buffer: str, key: str) -> tuple[str, int]:
     return "", 0
 
 
-def convert_redis_messages(messages: List[Dict[str, Any]]) -> List[BaseMessage]:
+def convert_redis_messages(messages: List[Any]) -> List[BaseMessage]:
     """
     Convert a LangChain-serialized messages list (e.g., items with keys 'lc', 'type', 'id', 'kwargs')
     into a list of BaseMessage instances compatible with LangGraph add_messages.
@@ -396,13 +396,22 @@ def convert_redis_messages(messages: List[Dict[str, Any]]) -> List[BaseMessage]:
       { 'lc': 1, 'type': 'constructor', 'id': ['langchain','schema','messages','AIMessage'], 'kwargs': {...} }
       { 'role': 'user'|'assistant', 'content': '...'}
     """
-    if not isinstance(messages, list):
+    # Empty or invalid list
+    if not isinstance(messages, list) or len(messages) == 0:
         return []
+
+    # If already BaseMessage instances, return as-is
+    try:
+        if all(isinstance(m, BaseMessage) for m in messages):
+            return messages  # type: ignore[return-value]
+    except Exception:
+        pass
 
     # First try native deserialization (best fidelity for tool_calls, ids, etc.)
     try:
-        if messages and isinstance(messages[0], dict) and (
-            'lc' in messages[0] or messages[0].get('type') == 'constructor'
+        first = messages[0]
+        if isinstance(first, dict) and (
+            'lc' in first or first.get('type') == 'constructor'
         ):
             return messages_from_dict(messages)  # type: ignore[return-value]
     except Exception:

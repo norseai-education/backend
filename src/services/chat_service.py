@@ -181,7 +181,7 @@ class ChatService:
             ):
                 if metadata["langgraph_node"] == "teacher" or metadata["langgraph_node"] == "math_teacher":
                     buffer += message_chunk.content
-                    logging.log(f"Buffer: {buffer}", self.logger, 2)
+                    # logging.log(f"Buffer: {buffer}", self.logger, 2)
                     value, used_length = utils.extract_json_value(buffer, "teacher_response")
                     if value:
                         new_content = value[last_streamed_length:]

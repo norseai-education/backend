@@ -2,7 +2,7 @@ import asyncio
 import json
 from typing import Dict, Any, AsyncGenerator
 from fastapi import HTTPException
-
+import traceback
 from src.services.graph import BuildNorseAIGraph
 from src.services.state_manager import StateManager
 from src.services.MongoDBHandler import MongoDBHandler
@@ -187,6 +187,7 @@ class ChatService:
                             last_streamed_length = len(value)
 
             # grab final graph state
+            logging.log("Grabbing final graph state...", self.logger, 1)
             user_state = state_manager.get_redis_state()
             
             # Update session state
@@ -209,8 +210,10 @@ class ChatService:
             yield f"data: {json.dumps({'type': 'ai_response', 'content': last_message, 'evaluation': eval_response, 'grade': eval_grade})}\n\n"
             
         except Exception as e:
-            logging.log(f"Error processing message for student {student_id}: {str(e)}", self.logger, 1)
-            yield f"data: {json.dumps({'type': 'error', 'message': f'An error occurred: {str(e)}'})}\n\n"
+            err = f"Error processing message for student {student_id}: {repr(e)}"
+            tb = traceback.format_exc()
+            logging.log(err + "\n" + tb, self.logger, 1)
+            yield f"data: {json.dumps({'type': 'error', 'message': f'{err}'})}\n\n"
     
     def get_session_status(self, student_id: int) -> Dict[str, Any]:
         """Get current student status"""

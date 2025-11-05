@@ -172,7 +172,7 @@ class ChatService:
             # Stream tokens using LangGraph's built-in streaming with ChatOllama
             buffer = ""
             last_streamed_length = 0
-            async for message_chunk, metadata in norseai.astream(
+            for message_chunk, metadata in norseai.stream(
                 user_state,
                 stream_mode="messages",
                 config={"configurable": {"thread_id": str(student_id)}}

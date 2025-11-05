@@ -35,6 +35,7 @@ class Teacher:
         learning_status = state.get("learning_status")
         cur_mastery = state.get("cur_mastery")
         bkt_graph = state.get("bkt_graph")
+        context = state["messages"]
 
         logging.log("Getting teacher prompt", logger, 2)
         teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status, bkt_graph.get(learning_objective))
@@ -59,7 +60,7 @@ class Teacher:
             "student_input": student_input,
             "learning_objective": learning_objective,
             "personality_context": personality_context,
-            "context": utils.format_conversation_context(state["messages"]),
+            "context": context,
             "solution": solution,
             "evaluation": evaluation,
             "lesson_state": lesson_state,

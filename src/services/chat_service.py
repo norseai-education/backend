@@ -169,11 +169,25 @@ class ChatService:
             logging.log("Running the graph now...", self.logger, 1)
             logging.log(f"State before: \n{user_state}", self.logger, 1)
             
-            # Run the graph in executor to avoid blocking
-            user_state = await asyncio.get_event_loop().run_in_executor(
-                None,
-                lambda: norseai.invoke(user_state, {"configurable": {"thread_id": str(student_id)}})
-            )
+            # Stream tokens using LangGraph's built-in streaming with ChatOllama
+            buffer = ""
+            last_streamed_length = 0
+            async for message_chunk, metadata in norseai.astream(
+                user_state,
+                stream_mode="messages",
+                config={"configurable": {"thread_id": str(student_id)}}
+            ):
+                if metadata["langgraph_node"] == "teacher" or metadata["langgraph_node"] == "math_teacher":
+                    buffer += message_chunk.content
+                    value, used_length = utils.extract_json_value(buffer, "teacher_response")
+                    if value:
+                        new_content = value[last_streamed_length:]
+                        if new_content:
+                            yield f"data: {json.dumps({'type': 'ai_response_stream', 'content': new_content})}\n\n"
+                            last_streamed_length = len(value)
+
+            # grab final graph state
+            user_state = state_manager.get_redis_state()
             
             # Update session state
             session['user_state'] = user_state

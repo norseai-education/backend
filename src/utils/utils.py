@@ -348,3 +348,34 @@ def format_eval_output(eval_result):
 
 
     
+    # Helper function to extract and stream only the value from JSON
+def extract_json_value(buffer: str, key: str) -> tuple[str, int]:
+    """
+    Try to parse JSON from buffer and extract value for given key.
+    Returns (value_string, length_used) where length_used is how many chars of buffer
+    have been successfully parsed into the value.
+    """
+    try:
+        # Try to parse the buffer as JSON
+        parsed = json.loads(buffer)
+        if key in parsed:
+            value = str(parsed[key])
+            return value, len(buffer)
+    except (json.JSONDecodeError, KeyError):
+        # JSON might be incomplete, try to extract value using string matching
+        # Look for pattern like "key": "value..."
+        # Pattern to match: "key": "value" or "key": "value...
+        pattern = rf'"{re.escape(key)}"\s*:\s*"([^"]*)"'
+        match = re.search(pattern, buffer)
+        if match:
+            # Found complete value in quotes
+            return match.group(1), match.end()
+        
+        # Pattern for incomplete value: "key": "value...
+        pattern_incomplete = rf'"{re.escape(key)}"\s*:\s*"([^"]*)'
+        match = re.search(pattern_incomplete, buffer)
+        if match:
+            # Found partial value (not yet closed)
+            return match.group(1), len(buffer)
+    
+    return "", 0

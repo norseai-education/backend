@@ -17,7 +17,7 @@ class MathTeacher:
     def build_node(self, state: State):
         logging.log(f"Current state: \n{state}", logger, 2)
         logging.log(f"Going through math teacher node...", logger, 2)
-        student_input = state["messages"][-1]
+        student_input = state["messages"][-1].content
         learning_objective = state.get("cur_learning_objective", "triangles")
         solution = state.get("solution", "no solution provided")
         evaluation = state.get("evaluation", "no evaluation provided")
@@ -25,7 +25,7 @@ class MathTeacher:
         student_id = state.get("student_id", "1")
         lesson_state = state.get("lesson_state")
         learning_status = state.get("learning_status")
-        context = utils.format_conversation_context(state["messages"])
+        context = state["messages"]
         cur_mastery = state.get("cur_mastery")
         bkt_graph = state.get("bkt_graph")
 

@@ -187,7 +187,7 @@ class ChatService:
                     if value:
                         new_content = value[last_streamed_length:]
                         if new_content:
-                            yield f"data: {json.dumps({'type': 'ai_response_stream', 'content': new_content})}\n\n"
+                            # yield f"data: {json.dumps({'type': 'ai_response_stream', 'content': new_content})}\n\n"
                             last_streamed_length = len(value)
 
             # grab final graph state

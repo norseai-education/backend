@@ -156,12 +156,13 @@ class ChatService:
                 await self.cleanup_session(student_id)
                 return
             
+            user_state["messages"] = utils.convert_redis_messages(user_state["messages"])
             # Add user message to state
             user_state["messages"] = user_state.get("messages", []) + [
-                HumanMessage(content=message)
+                {"role": "user", "content": message}
             ]
 
-            user_state["messages"] = utils.convert_redis_messages(user_state["messages"])
+            
             
             # Send user message
             # yield f"data: {json.dumps({'type': 'user_message', 'content': message})}\n\n"

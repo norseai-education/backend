@@ -9,7 +9,7 @@ class PersonalityRAG:
         self.persona_db = persona_db
 
     def build_node(self, state: State):
-        logging.log(f"Current State {state}", logger, 2)
+        # logging.log(f"Current State {state}", logger, 2)
         logging.log("Going through personality_rag node...", logger, 2)
         student_input = state["messages"][-1].content
         # Retrieve context from the persona database

@@ -17,7 +17,7 @@ class EvaluatorModel:
         self.tools = list_of_tools
 
     def build_node(self, state: State): 
-        logging.log(f"Current state: {state}", logger, 2)
+        # logging.log(f"Current state: {state}", logger, 2)
         logging.log(f"Going through evaluator node...", logger, 2)
         student_input = state["messages"][-1].content
         learning_objective = state.get("cur_learning_objective", "DEFAULT")

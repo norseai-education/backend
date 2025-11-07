@@ -15,7 +15,7 @@ class MathTeacher:
         self.tools = list_of_tools
 
     def build_node(self, state: State):
-        logging.log(f"Current state: \n{state}", logger, 2)
+        # logging.log(f"Current state: \n{state}", logger, 2)
         logging.log(f"Going through math teacher node...", logger, 2)
         student_input = state["messages"][-1].content
         learning_objective = state.get("cur_learning_objective", "triangles")
@@ -30,6 +30,7 @@ class MathTeacher:
         bkt_graph = state.get("bkt_graph")
 
         teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status, bkt_graph.get(learning_objective))
+        logging.log(f"Math teacher prompt: \n{teacher_prompt}", logger, 2)
         
 
         agent = create_react_agent(

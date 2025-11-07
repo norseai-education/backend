@@ -12,7 +12,7 @@ class MathRAG:
         return self.math_rag.retrieve(student_input, n_results=1)
     
     def build_node(self, state: State):
-        logging.log(f"Current state: \n{state}", logger, 2)
+        # logging.log(f"Current state: \n{state}", logger, 2)
         logging.log(f"Going through math_rag node...", logger, 2)
         student_input = state["messages"][-1].content
         # logging.log(f"Student input: {student_input}", logger, 2)

@@ -17,7 +17,7 @@ class Teacher:
         self.tools = list_of_tools
 
     def build_node(self, state: State):
-        logging.log(f"Current state: \n{state}", logger, 2)
+        # logging.log(f"Current state: \n{state}", logger, 2)
         logging.log(f"Going through teacher node...", logger, 2)
         # Get the last message content, handling both AIMessage objects and dictionaries
         student_input = state["messages"][-1].content
@@ -37,8 +37,8 @@ class Teacher:
         bkt_graph = state.get("bkt_graph")
         context = state["messages"]
 
-        logging.log("Getting teacher prompt", logger, 2)
         teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status, bkt_graph.get(learning_objective))
+        logging.log(f"Teacher prompt: \n{teacher_prompt}", logger, 2)
 
         agent = create_react_agent(
             llm=self.model,

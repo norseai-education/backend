@@ -245,7 +245,7 @@ class BayesianKnowledgeTracing():
 
 
     def build_node(self, state: State):
-        logging.log(f"Current state: \n{state}", logger, 2)
+        # logging.log(f"Current state: \n{state}", logger, 2)
         logging.log("Going through BKT node...", logger, 2)
         grade = state.get("evaluator_grade", {})
         cur_learning_obj = state.get("cur_learning_objective")

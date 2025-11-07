@@ -185,6 +185,7 @@ def parse_response(text):
     teaching_response = ""
     lesson_state = {}
     context_response = ""
+    solution = ""
     
     try:
         # Try to parse as JSON first

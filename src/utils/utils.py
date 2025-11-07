@@ -408,28 +408,19 @@ def convert_redis_messages(messages: List[Any]) -> List[BaseMessage]:
     except Exception:
         pass
 
-    # First try native deserialization (best fidelity for tool_calls, ids, etc.)
-    try:
-        first = messages[0]
-        if isinstance(first, dict) and (
-            'lc' in first or first.get('type') == 'constructor'
-        ):
-            return messages_from_dict(messages)  # type: ignore[return-value]
-    except Exception:
-        # Fall through to role/content mapping
-        pass
-
-    # Fallback: map simple role/content dicts to BaseMessage
     converted: List[BaseMessage] = []
-    for item in messages:
-        if isinstance(item, dict) and 'content' in item:
-            role = (item.get('role') or '').lower()
-            content = item.get('content', '')
-            if role in ('user', 'human', 'student'):
-                converted.append(HumanMessage(content=content))  # type: ignore[arg-type]
-            elif role in ('assistant', 'ai', 'teacher'):
-                converted.append(AIMessage(content=content))  # type: ignore[arg-type]
+    try:
+        for m in messages:
+            if "HumanMessage" in m.get("id"):
+                converted.append(HumanMessage(content=m.get("kwargs").get("content")))
+            elif "AIMessage" in m.get("id"):
+                converted.append(AIMessage(content=m.get("kwargs").get("content")))
             else:
-                # Default to human when role is unknown
-                converted.append(HumanMessage(content=content))  # type: ignore[arg-type]
-    return converted
+                logging.log(f"Unknown message type: {m.get('id')}", logger, 0)
+                converted.append(HumanMessage(content=m.get("kwargs").get("content")))
+
+        return converted
+
+    except Exception as e:
+        logging.log(f"Error converting messages to BaseMessage instances: {e}", logger, 0)
+        return []

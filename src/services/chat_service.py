@@ -8,6 +8,7 @@ from src.services.state_manager import StateManager
 from src.services.MongoDBHandler import MongoDBHandler
 from src.services.assessment_service import AssessmentService
 from src.config.settings import settings
+from langchain_core.messages import HumanMessage
 from src.utils import logging
 from src.utils import utils
 from src.utils import knowledge_info
@@ -157,7 +158,7 @@ class ChatService:
             
             # Add user message to state
             user_state["messages"] = user_state.get("messages", []) + [
-                {"role": "user", "content": message}
+                HumanMessage(content=message)
             ]
 
             user_state["messages"] = utils.convert_redis_messages(user_state["messages"])
@@ -193,7 +194,7 @@ class ChatService:
             logging.log("Grabbing final graph state...", self.logger, 1)
             user_state = state_manager.get_redis_state()
             logging.log(f"Retrieved state from redis: \n{user_state}", self.logger, 1)
-            
+
             user_state["messages"] = utils.convert_redis_messages(user_state["messages"])
             
             # Update session state

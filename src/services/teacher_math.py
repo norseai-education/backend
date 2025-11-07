@@ -30,7 +30,47 @@ class MathTeacher:
         bkt_graph = state.get("bkt_graph")
 
         teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status, bkt_graph.get(learning_objective))
-        logging.log(f"Math teacher prompt: \n{teacher_prompt}", logger, 2)
+        
+        try:
+            # Get tool names for formatting
+            tool_names = [tool.name for tool in self.tools] if self.tools else []
+            tools_description = str([tool.name for tool in self.tools]) if self.tools else "[]"
+            
+            # Format the prompt with available variables
+            formatted_messages = teacher_prompt.format_messages(
+                student_input=student_input,
+                learning_objective=learning_objective,
+                math_context=math_context,
+                context=context,
+                solution=solution,
+                evaluation=evaluation,
+                lesson_state=lesson_state,
+                student_id=student_id,
+                cur_mastery=cur_mastery,
+                tools=tools_description,
+                tool_names=", ".join(tool_names) if tool_names else "",
+                agent_scratchpad=""  # This will be empty initially, filled by agent executor
+            )
+            
+            # Convert formatted messages to readable string
+            formatted_prompt_parts = []
+            for i, msg in enumerate(formatted_messages):
+                msg_type = getattr(msg, 'type', 'unknown')
+                if hasattr(msg, 'content'):
+                    content = msg.content
+                elif hasattr(msg, 'get_content'):
+                    content = msg.get_content()
+                else:
+                    content = str(msg)
+                
+                formatted_prompt_parts.append(f"{'='*80}\nMESSAGE {i+1} - {msg_type.upper()}:\n{'-'*80}\n{content}")
+            
+            formatted_prompt_str = "\n\n" + "\n".join(formatted_prompt_parts) + "\n\n" + "="*80
+            logging.log(f"Teacher prompt (formatted with variables): \n{formatted_prompt_str}", logger, 2)
+        except Exception as e:
+            # Fallback to logging the template if formatting fails
+            logging.log(f"Teacher prompt (template): \n{teacher_prompt}", logger, 2)
+            logging.log(f"Error formatting prompt: {e}", logger, 2)
         
 
         agent = create_react_agent(

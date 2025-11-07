@@ -193,7 +193,7 @@ class ChatService:
             # grab final graph state
             logging.log("Grabbing final graph state...", self.logger, 1)
             user_state = state_manager.get_redis_state()
-            logging.log(f"Retrieved state from redis: \n{user_state}", self.logger, 1)
+            # logging.log(f"Retrieved state from redis: \n{user_state}", self.logger, 1)
 
             user_state["messages"] = utils.convert_redis_messages(user_state["messages"])
             

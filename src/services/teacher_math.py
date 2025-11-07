@@ -29,6 +29,8 @@ class MathTeacher:
         cur_mastery = state.get("cur_mastery")
         bkt_graph = state.get("bkt_graph")
 
+        logging.log(f"Context messages: \n{context}", logger, 2)
+
         teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status, bkt_graph.get(learning_objective))
         
         try:

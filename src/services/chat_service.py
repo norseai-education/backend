@@ -210,7 +210,7 @@ class ChatService:
             ):
                 if metadata["langgraph_node"] == "teacher" or metadata["langgraph_node"] == "math_teacher":
                     buffer += message_chunk.content
-                    logging.log(f"Buffer: {buffer}", self.logger, 2)
+                    # logging.log(f"Buffer: {buffer}", self.logger, 2)
                     
                     # Extract incremental value from buffer
                     value, used_length = utils.extract_json_value(buffer, "teacher_response")

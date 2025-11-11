@@ -222,12 +222,17 @@ class ChatService:
                         
                         # Initialize TTS connection on first token
                         if tts_task is None and new_tokens.strip():
-                            tts_task = asyncio.create_task(tts_processor())
-                        
-                        # Send new tokens to TTS queue immediately
-                        if new_tokens.strip():
+                            # Put first token in queue BEFORE starting task to ensure it's available
+                            # when stream_tts_audio waits for the first token
                             await tts_token_queue.put(new_tokens)
+                            # Now start TTS processor - it will find the token ready
+                            tts_task = asyncio.create_task(tts_processor())
                             last_extracted_length = len(value)
+                        else:
+                            # Send subsequent tokens to TTS queue immediately
+                            if new_tokens.strip():
+                                await tts_token_queue.put(new_tokens)
+                                last_extracted_length = len(value)
                         
                         # Stream any available audio chunks while processing (non-blocking)
                         try:

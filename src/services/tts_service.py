@@ -16,6 +16,27 @@ async def stream_tts_audio(text_tokens):
     Yields:
         bytes: Audio data chunks as they're generated (Float32 PCM)
     """
+    # Wait for first token before connecting to ensure we have data to send
+    # This prevents connection refused errors when server expects immediate data
+    # Since token is already in queue (from chat_service), this wait is near-instant
+    first_token = None
+    if hasattr(text_tokens, '__aiter__'):
+        # Async generator - get first token (already in queue, so instant)
+        try:
+            first_token = await text_tokens.__anext__()
+        except StopAsyncIteration:
+            # No tokens available, return early
+            return
+    else:
+        # Regular iterable - get first token
+        try:
+            first_token = next(iter(text_tokens))
+        except StopIteration:
+            # No tokens available, return early
+            return
+    
+    # Now connect with first token ready (connection takes ~10-50ms, but necessary)
+    # This is the only latency cost, and it's minimal and required for connection stability
     async with websockets.connect(COSYVOICE_WS, max_size=2**26) as ws:
         # 1) Send start message
         start_msg = {"type": "start"}
@@ -38,15 +59,26 @@ async def stream_tts_audio(text_tokens):
         async def send_tokens():
             """Send tokens to TTS server"""
             try:
-                # Check if text_tokens is async generator or regular iterable
+                # Send first token immediately (we already have it)
+                if first_token and first_token.strip():
+                    await ws.send(json.dumps({"type": "token", "token": first_token}))
+                
+                # Then continue with remaining tokens in real-time
                 if hasattr(text_tokens, '__aiter__'):
-                    # Async generator
+                    # Async generator - continue from where we left off
                     async for token in text_tokens:
                         if token and token.strip():
                             await ws.send(json.dumps({"type": "token", "token": token}))
                 else:
-                    # Regular iterable
-                    for token in text_tokens:
+                    # Regular iterable - continue from where we left off
+                    iterator = iter(text_tokens)
+                    # Skip first token since we already sent it
+                    try:
+                        next(iterator)
+                    except StopIteration:
+                        pass
+                    # Send remaining tokens
+                    for token in iterator:
                         if token and token.strip():
                             await ws.send(json.dumps({"type": "token", "token": token}))
                             await asyncio.sleep(0.01)  # Small delay to avoid overwhelming
@@ -55,12 +87,15 @@ async def stream_tts_audio(text_tokens):
                 await ws.send(json.dumps({"type": "end"}))
             except Exception as e:
                 print(f"Error sending tokens: {e}")
-                await ws.send(json.dumps({"type": "cancel"}))
+                try:
+                    await ws.send(json.dumps({"type": "cancel"}))
+                except:
+                    pass
 
         # Start sending tokens in background
         send_task = asyncio.create_task(send_tokens())
 
-        # 4) Stream audio chunks as they arrive
+        # 4) Stream audio chunks as they arrive in real-time
         try:
             while True:
                 msg = await ws.recv()
@@ -80,7 +115,7 @@ async def stream_tts_audio(text_tokens):
                         break
                     continue
 
-                # Binary audio data - yield directly
+                # Binary audio data - yield directly (real-time streaming)
                 yield msg
                 
         except websockets.exceptions.ConnectionClosed:

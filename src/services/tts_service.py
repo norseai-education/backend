@@ -4,7 +4,7 @@ import numpy as np
 import websockets
 import base64
 
-COSYVOICE_WS = "ws://172.16.0.154:8765"
+COSYVOICE_WS = "ws://hoster.docker.internal:8765"
 
 async def stream_tts_audio(text_tokens):
     """

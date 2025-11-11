@@ -1,5 +1,6 @@
 import asyncio
 import json
+import base64
 from typing import Dict, Any, AsyncGenerator
 from fastapi import HTTPException
 import traceback
@@ -12,6 +13,7 @@ from langchain_core.messages import HumanMessage
 from src.utils import logging
 from src.utils import utils
 from src.utils import knowledge_info
+from src.services.tts_service import stream_tts_audio
 
 
 class ChatService:
@@ -175,7 +177,32 @@ class ChatService:
             
             # Stream tokens using LangGraph's built-in streaming with ChatOllama
             buffer = ""
-            last_streamed_length = 0
+            last_extracted_length = 0
+            tts_token_queue = asyncio.Queue()
+            tts_audio_queue = asyncio.Queue()
+            tts_done = False
+            
+            async def token_generator():
+                """Async generator that yields tokens from queue for TTS"""
+                while True:
+                    token = await tts_token_queue.get()
+                    if token is None:  # Sentinel value
+                        break
+                    yield token
+            
+            async def tts_processor():
+                """Process TTS streaming in background and put audio in queue"""
+                try:
+                    async for audio_data in stream_tts_audio(token_generator()):
+                        await tts_audio_queue.put(audio_data)
+                    await tts_audio_queue.put(None)  # Signal completion
+                except Exception as e:
+                    logging.log(f"TTS processor error: {e}", self.logger, 1)
+                    await tts_audio_queue.put(None)
+            
+            # Start TTS processor task
+            tts_task = None
+            
             for message_chunk, metadata in norseai.stream(
                 user_state,
                 stream_mode="messages",
@@ -183,13 +210,76 @@ class ChatService:
             ):
                 if metadata["langgraph_node"] == "teacher" or metadata["langgraph_node"] == "math_teacher":
                     buffer += message_chunk.content
-                    # logging.log(f"Buffer: {buffer}", self.logger, 2)
+                    logging.log(f"Buffer: {buffer}", self.logger, 2)
+                    
+                    # Extract incremental value from buffer
                     value, used_length = utils.extract_json_value(buffer, "teacher_response")
-                    if value:
-                        new_content = value[last_streamed_length:]
-                        if new_content:
-                            # yield f"data: {json.dumps({'type': 'ai_response_stream', 'content': new_content})}\n\n"
-                            last_streamed_length = len(value)
+                    
+                    # Get only the new tokens since last extraction
+                    if value and len(value) > last_extracted_length:
+                        new_tokens = value[last_extracted_length:]
+                        logging.log(f"New LLM tokens: {new_tokens}", self.logger, 1)
+                        
+                        # Initialize TTS connection on first token
+                        if tts_task is None and new_tokens.strip():
+                            tts_task = asyncio.create_task(tts_processor())
+                        
+                        # Send new tokens to TTS queue immediately
+                        if new_tokens.strip():
+                            await tts_token_queue.put(new_tokens)
+                            last_extracted_length = len(value)
+                        
+                        # Stream any available audio chunks while processing (non-blocking)
+                        try:
+                            while True:
+                                audio_data = tts_audio_queue.get_nowait()
+                                if audio_data is None:
+                                    tts_done = True
+                                    break
+                                
+                                # Encode and yield audio chunk
+                                if isinstance(audio_data, bytes):
+                                    audio_b64 = base64.b64encode(audio_data).decode('utf-8')
+                                    yield f"data: {json.dumps({'type': 'audio_stream', 'audio_chunk': audio_b64})}\n\n"
+                                elif isinstance(audio_data, str):
+                                    try:
+                                        meta = json.loads(audio_data)
+                                        yield f"data: {json.dumps({'type': 'audio_metadata', **meta})}\n\n"
+                                    except:
+                                        pass
+                        except asyncio.QueueEmpty:
+                            pass  # No audio ready yet, continue
+            
+            # Signal end of tokens to TTS
+            await tts_token_queue.put(None)
+            
+            # Collect remaining audio chunks
+            if tts_task:
+                while not tts_done:
+                    try:
+                        audio_data = await asyncio.wait_for(tts_audio_queue.get(), timeout=0.1)
+                        if audio_data is None:
+                            break
+                        
+                        if isinstance(audio_data, bytes):
+                            audio_b64 = base64.b64encode(audio_data).decode('utf-8')
+                            yield f"data: {json.dumps({'type': 'audio_stream', 'audio_chunk': audio_b64})}\n\n"
+                        elif isinstance(audio_data, str):
+                            try:
+                                meta = json.loads(audio_data)
+                                yield f"data: {json.dumps({'type': 'audio_metadata', **meta})}\n\n"
+                            except:
+                                pass
+                    except asyncio.TimeoutError:
+                        # Check if task is done
+                        if tts_task.done():
+                            break
+                
+                # Wait for TTS task to complete
+                try:
+                    await tts_task
+                except Exception as e:
+                    logging.log(f"TTS task error: {e}", self.logger, 1)
 
             # grab final graph state
             logging.log("Grabbing final graph state...", self.logger, 1)

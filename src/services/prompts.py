@@ -1199,6 +1199,7 @@ class TeacherPrompt:
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+                Your current objective to complete: {current_obj}
 
 
                 DECISION FRAMEWORK:
@@ -1283,6 +1284,7 @@ class TeacherPrompt:
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+                Your current objective to complete: {current_obj}
 
                 DECISION FRAMEWORK:
                 - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1357,6 +1359,7 @@ class TeacherPrompt:
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+                Your current objective to complete: {current_obj}
 
                 DECISION FRAMEWORK:
                 - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1432,6 +1435,7 @@ class TeacherPrompt:
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+                Your current objective to complete: {current_obj}
 
                 DECISION FRAMEWORK:
                 - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1504,6 +1508,7 @@ class TeacherPrompt:
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+                Your current objective to complete: {current_obj}
 
                 DECISION FRAMEWORK:
                 - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1579,6 +1584,7 @@ class TeacherPrompt:
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+                Your current objective to complete: {current_obj}
 
                 DECISION FRAMEWORK:
                 - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1650,6 +1656,7 @@ class TeacherPrompt:
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+                Your current objective to complete: {current_obj}
 
                 DECISION FRAMEWORK:
                 - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1728,6 +1735,7 @@ class TeacherPrompt:
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+                Your current objective to complete: {current_obj}
 
                 DECISION FRAMEWORK:
                 - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1805,6 +1813,7 @@ class TeacherPrompt:
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+                Your current objective to complete: {current_obj}
 
                 DECISION FRAMEWORK:
                 - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer

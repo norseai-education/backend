@@ -60,9 +60,9 @@ class BuildNorseAIGraph:
         # graph_builder.add_edge("personality_rag", "teacher")
 
         graph_builder.add_edge("bkt", "lesson_tracker")
-        graph_builder.add_edge("lesson_tracker", "math_teacher")
+        # graph_builder.add_edge("lesson_tracker", "math_teacher")
         graph_builder.add_edge("lesson_tracker", "teacher")
-        graph_builder.add_edge("math_teacher", END)
+        # graph_builder.add_edge("math_teacher", END)
         graph_builder.add_edge("teacher", END)
     
         return graph_builder

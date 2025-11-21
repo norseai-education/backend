@@ -37,6 +37,7 @@ class Teacher:
         cur_mastery = state.get("cur_mastery")
         bkt_graph = state.get("bkt_graph")
         context = state["messages"]
+        logging.log(f"Context messages: \n{context}", logger, 2)
         current_obj = state.get("current_obj")
         current_state = utils.get_current_state(lesson_state)
         # logging.log(f"Context messages: \n{context}", logger, 2)

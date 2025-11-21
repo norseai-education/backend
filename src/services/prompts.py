@@ -332,26 +332,28 @@ lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system",
         The current lesson state is marked by "In Progress"
 
         
-        Here is a list of objectives for the current lesson state:
-        {list_of_obj}
+        Here is a list of objectives for the current lesson state
+        Objectives List: {list_of_obj}
+
         Current objective the teacher is working on: {current_obj}
 
-        Use the student input and conversation context to update the lesson state and objectives. 
+        Your job is to use the student input and conversation context to update the lesson state and objectives. 
 
-        Guidelines:
-        - If the current objective is "none", assume the current objective is the first objective on the objectiveslist
+        Objectives Guidelines:
+        - If the current objective is "none", assume the current objective is the first objective on the Objectives List
         - Each objective may take multiple student-teacher interactions to complete
-        - Use context to determine what objective the teacher should work on
-        - If the teacher is still working on the current objective, keep the lesson state and objective the same, don't rush objectives
-        - If the teacher has completed the current objective, update the current objective to the next objective in the list
-        - If all objectives in the objectives list are complete, transition the current lesson state to the next lesson state. 
-        - The objectives should be progressed through naturally based on student responses and understanding
+        - Use context to determine if the teacher can move on to the next objective from the Objectives List
+        - If the teacher has not completed the current objective, keep the current objective the same, don't rush objectives
+        - If the teacher has completed the current objective, update the current objective to the next objective in the Objectives List
+        - The updated objective MUST be from the Objectives List
 
 
-        Lesson State Transition:
+        Lesson State Guidelines:
         **Only change the current lesson state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress” when**:
-        - The teacher has completed ALL listed objectives (across multiple interactions)
-        - The student demonstrates understanding of the current state's objectives"""), 
+        - The teacher has completed ALL listed current objectives (across multiple interactions)
+        - The student demonstrates understanding of the current state's objectives
+        - If the current objective does not change or the teacher has not completed all of the objectives on the Objectives List, keep the lesson state the same
+        """), 
         MessagesPlaceholder("context"), 
         ("human", 
         """Student said: {student_input}

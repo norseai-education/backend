@@ -22,6 +22,7 @@ class MathTeacher:
         solution = state.get("solution", "no solution provided")
         evaluation = state.get("evaluation", "no evaluation provided")
         current_obj = state.get("current_obj")
+        current_problem = state.get("cur_problem", "no problem currently")
         # math_context = state.get("math_context", "no math context")
         student_id = state.get("student_id", "1")
         lesson_state = state.get("lesson_state")
@@ -46,6 +47,7 @@ class MathTeacher:
                 learning_objective=learning_objective,
                 current_obj = current_obj,
                 current_state = current_state,
+                cur_problem = current_problem,
                 # math_context=math_context,
                 context=context,
                 solution=solution,
@@ -103,6 +105,7 @@ class MathTeacher:
             "evaluation": evaluation,
             "current_obj": current_obj,
             "current_state": current_state,
+            "cur_problem": current_problem,
             # "math_context": math_context,
             "context": context,
             # "lesson_state": lesson_state,

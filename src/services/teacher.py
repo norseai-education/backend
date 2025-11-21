@@ -30,6 +30,7 @@ class Teacher:
         learning_objective = state.get("cur_learning_objective", "DEFAULT")
         # personality_context = state.get("personality_context", "DEFAULT")
         solution = state.get("solution", "no solution provided")
+        current_problem = state.get("cur_problem", "no problem currently")
         evaluation = state.get("evaluation", "no evaluation provided")
         lesson_state = state.get("lesson_state")
         learning_status = state.get("learning_status")
@@ -57,6 +58,7 @@ class Teacher:
                 current_state = current_state,
                 context=context,
                 solution=solution,
+                cur_problem=current_problem,
                 evaluation=evaluation,
                 # lesson_state=lesson_state,
                 student_id=student_id,
@@ -110,6 +112,7 @@ class Teacher:
             "current_state": current_state,
             "context": context,
             "solution": solution,
+            "cur_problem": current_problem,
             "evaluation": evaluation,
             # "lesson_state": lesson_state,
             "student_id": student_id,

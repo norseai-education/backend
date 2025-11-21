@@ -346,6 +346,7 @@ lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system",
         - If the teacher has not completed the current objective, keep the current objective the same, don't rush objectives
         - If the teacher has completed the current objective, update the current objective to the next objective in the Objectives List
         - The updated objective MUST be from the Objectives List
+        - DO NOT skip objectives on the Objectives List, go in order
 
 
         Lesson State Guidelines:
@@ -360,9 +361,13 @@ lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system",
         Student ID: {student_id}
         Evaluation of student: {evaluation}
         Available tools: {tools}
-        
+        Current Lesson State: {lesson_state}
+        Objectives List: {list_of_obj}
+        Current objective the teacher is working on: {current_obj}
 
         DECISION FRAMEWORK:
+        - Did the teacher complete the current objective? If YES: Update the current objective to the next objective in the Objectives List. if NO: Keep the current objective the same
+        - Are all the objectives on the Objectives List complete? If YES: Update the lesson state to the next lesson state. if NO: Keep the lesson state the same
         - Can I update the lesson state and current objective with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool
         - After tool use: Do I have enough to help? If YES: Provide Final Answer

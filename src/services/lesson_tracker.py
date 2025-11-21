@@ -18,15 +18,14 @@ class LessonTracker:
         student_input = state["messages"][-1].content
         learning_objective = state.get("cur_learning_objective", "triangles")
         evaluation = state.get("evaluation", "no evaluation provided")
-        # math_context = state.get("math_context", "no math context")
         bkt_graph = state.get("bkt_graph")
         student_id = state.get("student_id", "1")
         lesson_state = state.get("lesson_state")
         list_of_obj = utils.get_list_of_obj(lesson_state, bkt_graph.get(learning_objective))
         current_obj = state.get('current_obj', "none")
-        
-        # learning_status = state.get("learning_status")
         context = state["messages"]
+        logging.log(f"Objectives List: {list_of_obj}", logger, 2)
+        logging.log(f"Context messages: {context}", logger, 2)
         
 
         agent = create_react_agent(

@@ -420,7 +420,7 @@ def get_list_of_obj(lesson_state, mastery):
         if value.lower() == 'in progress':
             if key.lower() == "start_lesson":
                 return """1. Greet the student
-                          2. Make some small talk while briefly mentioning the lesson topic
+                          2. Introduce the lesson topic
                           3. Ask them if they are ready to begin"""
             if key.lower() in ["give_first_problem", "give_second_problem", "give_third_problem"]:
                 if mastery < 0.3:

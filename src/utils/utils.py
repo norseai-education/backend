@@ -420,23 +420,17 @@ def get_list_of_obj(lesson_state, mastery):
         if value.lower() == 'in progress':
             if key.lower() == "start_lesson":
                 return """1. Greet the student
-                          2. Make some small talk
-                          3. Briefly mention the lesson topic
-                          4. Ask them if they are ready to begin"""
+                          2. Make some small talk while briefly mentioning the lesson topic
+                          3. Ask them if they are ready to begin"""
             if key.lower() in ["give_first_problem", "give_second_problem", "give_third_problem"]:
                 if mastery < 0.3:
-                    return """1. Give the student a easier problem (around difficulty 1-2) using the get_problem tool to introduce them to the concept you are covering.
-                              2. Give the student time to solve the problem"""
+                    return """1. Give the student a easier problem (around difficulty 1-2) using the get_problem tool to introduce them to the concept you are covering."""
                 elif mastery < 0.6:
-                    return """1. Give the student a medium problem (around difficulty 3-4) using the get_problem tool to introduce them to the concept you are covering.
-                              2. Give the student time to solve the problem"""
+                    return """1. Give the student a medium problem (around difficulty 3-4) using the get_problem tool to introduce them to the concept you are covering."""
                 else:
-                    return """1. Give the student a harder problem (around difficulty 4-5) using the get_problem tool to introduce them to the concept you are covering.
-                          2. Give the student time to solve the problem"""
+                    return """1. Give the student a harder problem (around difficulty 4-5) using the get_problem tool to introduce them to the concept you are covering."""
             if key.lower() in ["first_problem_walkthrough", "second_problem_walkthrough", "third_problem_walkthrough"]:
-                return """1. If the student has an incorrect answer, ask them for their solution first to better understand their thinking. 
-                          2. If the student has a correct answer, ask them to explain their thinking.
-                          3. If the student is lost or confused, guide them through the problem interactively"""
+                return """1. Interactively go through the problem with the student"""
             if key.lower() == "end_lesson":
                 return """1. Wrap up the lesson: briefly summarize what you covered in the lesson 
                           2. Ask if they have any further questions
@@ -444,12 +438,11 @@ def get_list_of_obj(lesson_state, mastery):
             if key.lower() == "check":
                 return """1. Give the student a difficult problem (difficulty 4-5) using the get_problem tool to ensure their understanding before they can move on to the next learning objective"""
             if key.lower() == "behind":
-                return """1. The student is lacking in this learning objective, find the student's gaps in this topic
-                          2. Address those gaps with the student
-                          3.. Give the student a problem using the get_problem tool for them to solve to overcome this gap"""
+                return """1. The student is lacking in this learning objective, address those gaps with the student
+                          2. Give the student a problem using the get_problem tool for them to solve to overcome this gap in their understanding"""
 
 def parse_lesson_tracker_response(response):
-    default_lesson_state = {
+    lesson_state = {
         'START_LESSON': 'Done', 
         'GIVE_FIRST_PROBLEM': 'Done',
         'FIRST_PROBLEM_WALKTHROUGH': 'Done',
@@ -459,7 +452,7 @@ def parse_lesson_tracker_response(response):
         'THIRD_PROBLEM_WALKTHROUGH': 'Not Done',
         'END_LESSON': 'Not Done'
     }
-    default_current_obj = "none"
+    current_obj = "none"
     
     try:
         # Try to parse as JSON first

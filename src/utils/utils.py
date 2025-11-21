@@ -298,15 +298,35 @@ def get_learning_obj(graph):
     return None
 
 
-def format_eval_output(eval_result):
-    """Format the evaluation result to extract grade and solution"""
-    eval_grade = {}  # Initialize with default value
-    student_analysis = ""     # Initialize with default value
+def format_eval(eval_result):
+    """Format the evaluation result to extract Student Analysis"""
+    student_analysis = ""  # Initialize with default value
     
     if isinstance(eval_result, dict):
-        if "Evaluation of Concepts" and "Student Analysis" in eval_result.keys():
-            student_analysis = eval_result.get("Student Analysis","")
-            eval_grade = eval_result.get("Evaluation of Concepts",{})
+        if "Student Analysis" in eval_result.keys():
+            student_analysis = eval_result.get("Student Analysis", "")
+    else:
+        try:
+            parsed_response = json.loads(eval_result)
+            if isinstance(parsed_response, dict):
+                student_analysis = parsed_response.get("Student Analysis", "")
+        except:
+            analysis_match = re.search(r'"Student Analysis":\s*"([^"]*(?:\\.[^"]*)*)"', eval_result, re.DOTALL)
+            if analysis_match:
+                student_analysis = analysis_match.group(1).strip()
+            else:
+                logging.log("No analysis match found in regex search", logger, 0)
+    
+    return student_analysis
+
+
+def format_grade(eval_result):
+    """Format the evaluation result to extract Evaluation of Concepts"""
+    eval_grade = {}  # Initialize with default value
+    
+    if isinstance(eval_result, dict):
+        if "Evaluation of Concepts" in eval_result.keys():
+            eval_grade = eval_result.get("Evaluation of Concepts", {})
             if not isinstance(eval_grade, dict):
                 try:
                     eval_grade = json.loads(eval_grade)
@@ -316,8 +336,7 @@ def format_eval_output(eval_result):
         try:
             parsed_response = json.loads(eval_result)
             if isinstance(parsed_response, dict):
-                student_analysis = parsed_response.get("Student Analysis","")
-                eval_grade = parsed_response.get("Evaluation of Concepts",{})
+                eval_grade = parsed_response.get("Evaluation of Concepts", {})
                 if not isinstance(eval_grade, dict):
                     try:
                         eval_grade = json.loads(eval_grade)
@@ -325,14 +344,6 @@ def format_eval_output(eval_result):
                         logging.log("Failed to parse eval grade JSON", logger, 0)
         except:
             grade_match = re.search(r'"Evaluation of Concepts":\s*(\{(?:[^{}]|{[^{}]*})*\})', eval_result, re.DOTALL)
-            analysis_match = re.search(r'"Student Analysis":\s*"([^"]*(?:\\.[^"]*)*)"', eval_result, re.DOTALL)
-
-            if analysis_match:
-                student_analysis = analysis_match.group(1).strip()
-            else:
-                logging.log("No analysis match found in regex search", logger, 0)
-
-            
             if grade_match:
                 if not isinstance(grade_match.group(1), dict):
                     try:
@@ -345,12 +356,13 @@ def format_eval_output(eval_result):
                 # No grade match found, keep default empty dict
                 logging.log("No grade match found in regex search", logger, 0)
     
+    # Filter out keys not in amc8_concepts
     eval = eval_grade.copy()
     for key in eval.keys():
         if key not in knowledge_info.amc8_concepts:
             del eval_grade[key]
 
-    return eval_grade, student_analysis
+    return eval_grade
 
 
     
@@ -425,3 +437,80 @@ def convert_redis_messages(messages: List[Any]) -> List[BaseMessage]:
     except Exception as e:
         logging.log(f"Error converting messages to BaseMessage instances: {e}", logger, 0)
         return []
+
+
+
+def get_list_of_obj(lesson_state, mastery):
+    for key,value in lesson_state.items():
+        if value.lower() == 'in progress':
+            if key.lower() == "start_lesson":
+                return """1. Greet the student
+                          2. Make some small talk
+                          3. Briefly mention the lesson topic
+                          4. Ask them if they are ready to begin"""
+            if key.lower() in ["give_first_problem", "give_second_problem", "give_third_problem"]:
+                if mastery < 0.3:
+                    return """1. Give the student a easier problem (around difficulty 1-2) using the get_problem tool to introduce them to the concept you are covering.
+                              2. Give the student time to solve the problem"""
+                elif mastery < 0.6:
+                    return """1. Give the student a medium problem (around difficulty 3-4) using the get_problem tool to introduce them to the concept you are covering.
+                              2. Give the student time to solve the problem"""
+                else:
+                    return """1. Give the student a harder problem (around difficulty 4-5) using the get_problem tool to introduce them to the concept you are covering.
+                          2. Give the student time to solve the problem"""
+            if key.lower() in ["first_problem_walkthrough", "second_problem_walkthrough", "third_problem_walkthrough"]:
+                return """1. If the student has an incorrect answer, ask them for their solution first to better understand their thinking. 
+                          2. If the student has a correct answer, ask them to explain their thinking.
+                          3. If the student is lost or confused, guide them through the problem interactively"""
+            if key.lower() == "end_lesson":
+                return """1. Wrap up the lesson: briefly summarize what you covered in the lesson 
+                          2. Ask if they have any further questions
+                          3. Say goodbye to the student"""
+            if key.lower() == "check":
+                return """1. Give the student a difficult problem (difficulty 4-5) using the get_problem tool to ensure their understanding before they can move on to the next learning objective"""
+            if key.lower() == "behind":
+                return """1. The student is lacking in this learning objective, find the student's gaps in this topic
+                          2. Address those gaps with the student
+                          3.. Give the student a problem using the get_problem tool for them to solve to overcome this gap"""
+
+def parse_lesson_tracker_response(response):
+    default_lesson_state = {
+        'START_LESSON': 'Done', 
+        'GIVE_FIRST_PROBLEM': 'Done',
+        'FIRST_PROBLEM_WALKTHROUGH': 'Done',
+        'GIVE_SECOND_PROBLEM': 'In Progress',
+        'SECOND_PROBLEM_WALKTHROUGH': 'Not Done',
+        'GIVE_THIRD_PROBLEM': 'Not Done',
+        'THIRD_PROBLEM_WALKTHROUGH': 'Not Done',
+        'END_LESSON': 'Not Done'
+    }
+    default_current_obj = "none"
+    
+    try:
+        # Try to parse as JSON first
+        parsed_data = json.loads(response)
+        if isinstance(parsed_data, dict):
+            # logging.log("Parsed response as json!", logger, 2)
+            lesson_state = parsed_data.get("lesson_state", "")
+            current_obj = parsed_data.get("current_obj", "")
+            logging.log(f"\nExtracted lesson_state: {lesson_state}\nExtracted current_obj: {current_obj}\n", logger, 2)
+
+    except json.JSONDecodeError:
+        # Fallback: Try to extract from structured text format
+        lesson_state_match = re.search(r'lesson_state":\s*(.*?)(?=,\s*"current_obj|$)', response, re.DOTALL)
+        current_obj_match = re.search(r'current_obj":\s*(\{.*?\})', response, re.DOTALL)
+        logging.log(f"Found regex match!\nExtracted lesson_state: {lesson_state_match}\nExtracted current_obj: {current_obj_match}\n", logger, 2)
+        if current_obj_match:
+            current_obj = current_obj_match.group(1).strip()  
+        if lesson_state_match:
+            lesson_state = lesson_state_match.group(1).strip()
+
+    lesson_state = check_lesson_state(lesson_state)
+    # Error handling logic
+    return lesson_state, current_obj
+
+def get_current_state(lesson_state):
+    for key,value in lesson_state.items():
+        if value.lower() == 'in progress':
+            return key
+    return None

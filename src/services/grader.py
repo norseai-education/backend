@@ -10,7 +10,7 @@ import re
 # Configure logging
 logger = logging.set_logger(__name__)
 
-class EvaluatorModel:
+class GraderModel:
     def __init__(self, model, prompt, list_of_tools):
         self.model = model
         self.prompt = prompt
@@ -18,14 +18,13 @@ class EvaluatorModel:
 
     def build_node(self, state: State): 
         # logging.log(f"Current state: {state}", logger, 2)
-        logging.log(f"Going through evaluator node...", logger, 2)
+        logging.log(f"Going through grader node...", logger, 2)
         student_input = state["messages"][-1].content
         learning_objective = state.get("cur_learning_objective", "DEFAULT")
         solution = state.get("solution", "no solution provided")
         context = utils.format_conversation_context(state["messages"][-4:])
         cur_problem = state.get("cur_problem", "no problem provided")
-        # logging.log(f"Inputs of Evaluator: \ninput: {student_input}\ncur_problem: {cur_problem}\nsolution: {solution}", logger, 2)
-
+        # logging.log(f"Inputs of Grader: \ninput: {student_input}\ncur_problem: {cur_problem}\nsolution: {solution}", logger, 2)
         # Create and run agent
         agent = create_react_agent(
             llm=self.model,
@@ -50,13 +49,13 @@ class EvaluatorModel:
         })
         
         raw_response = response["output"]
-        logging.log(f"Raw response: {raw_response}", logger, 2)
-        evaluation = utils.format_eval(raw_response)
+        logging.log(f"Raw Grader response: {raw_response}", logger, 2)
+        grade = utils.format_grade(raw_response)
 
-        logging.log(f"Formatted evaluation: {evaluation}", logger, 2)
+        logging.log(f"Formatted grade: {grade}", logger, 2)
 
         return {
-            "evaluation": evaluation
+            "grade": grade
         }
 
         

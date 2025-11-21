@@ -10,6 +10,8 @@ if not LOCAL:
     classifier_model = OllamaLLM(model="qwen3:30b-a3b-instruct-2507-q4_K_M", base_url=OLLAMA_BASE_URL)
     teacher_model = ChatOllama(model="qwen3:30b-a3b-instruct-2507-q4_K_M", base_url=OLLAMA_BASE_URL, streaming=True)
     evaluator_model = OllamaLLM(model="qwen3:30b-a3b-instruct-2507-q4_K_M", base_url=OLLAMA_BASE_URL)
+    lesson_tracker_model = ChatOllama(model="qwen3:30b-a3b-instruct-2507-q4_K_M", base_url=OLLAMA_BASE_URL)
+    grader_model = OllamaLLM(model="qwen3:30b-a3b-instruct-2507-q4_K_M", base_url=OLLAMA_BASE_URL)
     
 else:
     classifier_model = OllamaLLM(model="qwen3:4b", base_url=OLLAMA_BASE_URL)

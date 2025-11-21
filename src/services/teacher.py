@@ -7,10 +7,10 @@ from src.utils import utils
 logger = logging.set_logger(__name__)
 
 class Teacher:
-    def __init__(self, model, prompt, store, list_of_tools):
+    def __init__(self, model, prompt, list_of_tools):
         #initialize storing to mongodb for personality
-        self.store=store
-        self.store.connect("amc8_database")
+        # self.store=store
+        # self.store.connect("amc8_database")
 
         self.model = model
         self.prompt = prompt
@@ -25,10 +25,10 @@ class Teacher:
         student_id = state.get("student_id")
 
         # add student input to persona db
-        utils.store_input(self.store, 'student_persona',student_id, student_input)
+        # utils.store_input(self.store, 'student_persona',student_id, student_input)
 
         learning_objective = state.get("cur_learning_objective", "DEFAULT")
-        personality_context = state.get("personality_context", "DEFAULT")
+        # personality_context = state.get("personality_context", "DEFAULT")
         solution = state.get("solution", "no solution provided")
         evaluation = state.get("evaluation", "no evaluation provided")
         lesson_state = state.get("lesson_state")
@@ -36,7 +36,9 @@ class Teacher:
         cur_mastery = state.get("cur_mastery")
         bkt_graph = state.get("bkt_graph")
         context = state["messages"]
-        logging.log(f"Context messages: \n{context}", logger, 2)
+        current_obj = state.get("current_obj")
+        current_state = utils.get_current_state(lesson_state)
+        # logging.log(f"Context messages: \n{context}", logger, 2)
 
         teacher_prompt = self.prompt.get_prompt(lesson_state, learning_status, bkt_graph.get(learning_objective))
         
@@ -50,11 +52,13 @@ class Teacher:
             formatted_messages = teacher_prompt.format_messages(
                 student_input=student_input,
                 learning_objective=learning_objective,
-                personality_context=personality_context,
+                # personality_context=personality_context,
+                current_obj = current_obj,
+                current_state = current_state,
                 context=context,
                 solution=solution,
                 evaluation=evaluation,
-                lesson_state=lesson_state,
+                # lesson_state=lesson_state,
                 student_id=student_id,
                 cur_mastery=cur_mastery,
                 tools=tools_description,
@@ -62,7 +66,7 @@ class Teacher:
                 agent_scratchpad=""  # This will be empty initially, filled by agent executor
             )
             
-            # Convert formatted messages to readable string
+            # Convert formatted messages to readable string for logging
             formatted_prompt_parts = []
             for i, msg in enumerate(formatted_messages):
                 msg_type = getattr(msg, 'type', 'unknown')
@@ -101,11 +105,13 @@ class Teacher:
         response = agent_executor.invoke({                                            # Inputs: student_input, learning_objective, solution, math_context | Outputs: response
             "student_input": student_input,
             "learning_objective": learning_objective,
-            "personality_context": personality_context,
+            # "personality_context": personality_context,
+            "current_obj": current_obj,
+            "current_state": current_state,
             "context": context,
             "solution": solution,
             "evaluation": evaluation,
-            "lesson_state": lesson_state,
+            # "lesson_state": lesson_state,
             "student_id": student_id,
             "cur_mastery": cur_mastery
             }

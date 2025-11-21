@@ -10,13 +10,14 @@ class State(TypedDict):
     student_id: int
     lesson_state: dict[str, str]
     messages: Annotated[list, add_messages]
-    evaluator_grade: dict[str, str]
+    grade: dict[str, str]
     evaluation: str
     solution: str
     bkt_graph: dict[str, list]  #bkt_graph: dict[str, dict[str, float]] | None for multiple topics i.e. alg, geo, number theory etc.
-    math_context: str
-    personality_context: str
+    # math_context: str
+    # personality_context: str
     cur_mastery: list[str]
     display_response: str
     cur_problem: str
+    current_obj: str
 

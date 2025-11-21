@@ -10,6 +10,8 @@ from src.services.bkt import BayesianKnowledgeTracing
 from src.utils import knowledge_info
 from src.services.personality_rag import PersonalityRAG
 from src.services.math_rag import MathRAG
+from src.services.grader import GraderModel
+from src.services.lesson_tracker import LessonTracker
 from src.services.teacher_math import MathTeacher
 from src.services.teacher import Teacher
 
@@ -24,27 +26,37 @@ class Nodes:
         self.evaluator = EvaluatorModel(
         models.evaluator_model,
         prompts.evaluator_prompt,
-        [tools.get_math_context, tools.math_engine, tools.check_concepts])
+        [tools.math_engine])
+
+        self.grader = GraderModel(
+        models.grader_model,
+        prompts.grader_prompt,
+        [tools.check_concepts])
 
         self.bkt = BayesianKnowledgeTracing(knowledge_info.amc8_concepts)
 
-        self.math_rag = MathRAG(
-        rag_service.MathRagDB())
+        # self.math_rag = MathRAG(
+        # rag_service.MathRagDB())
 
-        self.personality_rag = PersonalityRAG(
-        rag_service.PersonaDB())
+        # self.personality_rag = PersonalityRAG(
+        # rag_service.PersonaDB())
+
+        self.lesson_tracker = LessonTracker(
+        models.lesson_tracker_model,
+        prompts.lesson_tracker_prompt,
+        )
 
         self.math_teacher = MathTeacher(
         models.teacher_model,
         prompts.MathTeacherPrompt(),
-        MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
+        # MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
         [tools.get_archived, tools.get_problem]
         )
 
         self.teacher = Teacher(
         models.teacher_model,
         prompts.TeacherPrompt(),
-        MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
+        # MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
         [tools.get_archived, tools.get_problem]
         )
 
@@ -55,14 +67,20 @@ class Nodes:
     def evaluator_node(self, state):
         return self.evaluator.build_node(state)
 
+    def grader_node(self, state):
+        return self.grader.build_node(state)
+
     def bkt_node(self, state):
         return self.bkt.build_node(state)
 
-    def math_rag_node(self, state):
-        return self.math_rag.build_node(state)
+    def lesson_tracker_node(self, state):
+        return self.lesson_tracker.build_node(state)
 
-    def personality_rag_node(self, state):
-        return self.personality_rag.build_node(state)
+    # def math_rag_node(self, state):
+    #     return self.math_rag.build_node(state)
+
+    # def personality_rag_node(self, state):
+    #     return self.personality_rag.build_node(state)
 
     def math_teacher_node(self, state):
         return self.math_teacher.build_node(state)

@@ -13,6 +13,7 @@ class BuildNorseAIGraph:
         graph_builder.add_node("classifier", self.nodes.classifier_node)
         # Pass-through node to enable parallel execution of evaluator and grader
         graph_builder.add_node("math_router", lambda state: state)
+        graph_builder.add_node("bkt_router", lambda state: state)
         graph_builder.add_node("evaluator", self.nodes.evaluator_node)
         graph_builder.add_node("bkt", self.nodes.bkt_node)
         # graph_builder.add_node("math_rag", self.nodes.math_rag_node)
@@ -35,9 +36,10 @@ class BuildNorseAIGraph:
         graph_builder.add_edge("math_router", "evaluator")
         graph_builder.add_edge("math_router", "grader")
         # Grader updates state and then ends its path
-        graph_builder.add_edge("grader", END)
+        graph_builder.add_edge("grader", "bkt_router")
+        graph_builder.add_edge("evaluator", "bkt_router")
         graph_builder.add_conditional_edges(
-            "evaluator",
+            "bkt_router",
             lambda state: (
                 "no-bkt" if (
                     isinstance(state.get("lesson_state"), dict) and (

@@ -1194,10 +1194,12 @@ class TeacherPrompt:
         self.prompt = ("human", 
                 """Student ID: {student_id}
                 Student has already mastered: {cur_mastery}
-                Solution: {solution}
+                Current problem student is working on: {cur_problem}
+                Solution to current problem: {solution}
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
+
 
                 DECISION FRAMEWORK:
                 - Can I respond to the student input with current knowledge/context? If YES: Skip tools, go to Final Answer
@@ -1276,7 +1278,8 @@ class TeacherPrompt:
         self.prompt = ("human", 
                 """Student ID: {student_id}
                 Student has already mastered: {cur_mastery}
-                Solution: {solution}
+                Current problem student is working on: {cur_problem}
+                Solution to current problem: {solution}
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
@@ -1349,7 +1352,8 @@ class TeacherPrompt:
         self.prompt = ("human", 
                 """Student ID: {student_id}
                 Student has already mastered: {cur_mastery}
-                Solution: {solution}
+                Current problem student is working on: {cur_problem}
+                Solution to current problem: {solution}
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
@@ -1423,7 +1427,8 @@ class TeacherPrompt:
         self.prompt = ("human", 
                 """Student ID: {student_id}
                 Student has already mastered: {cur_mastery}
-                Solution: {solution}
+                Current problem student is working on: {cur_problem}
+                Solution to current problem: {solution}
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
@@ -1494,7 +1499,8 @@ class TeacherPrompt:
         self.prompt = ("human", 
                 """Student ID: {student_id}
                 Student has already mastered: {cur_mastery}
-                Solution: {solution}
+                Current problem student is working on: {cur_problem}
+                Solution to current problem: {solution}
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
@@ -1568,8 +1574,8 @@ class TeacherPrompt:
         self.prompt = ("human", 
                 """Student ID: {student_id}
                 Student has already mastered: {cur_mastery}
-                Student Personality context: {personality_context}
-                Solution: {solution}
+                Current problem student is working on: {cur_problem}
+                Solution to current problem: {solution}
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
@@ -1639,7 +1645,8 @@ class TeacherPrompt:
         self.prompt = ("human", 
                 """Student ID: {student_id}
                 Student has already mastered: {cur_mastery}
-                Solution: {solution}
+                Current problem student is working on: {cur_problem}
+                Solution to current problem: {solution}
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
@@ -1716,7 +1723,8 @@ class TeacherPrompt:
         self.prompt = ("human", 
                 """Student ID: {student_id}
                 Student has already mastered: {cur_mastery}
-                Solution: {solution}
+                Current problem student is working on: {cur_problem}
+                Solution to current problem: {solution}
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}
@@ -1792,7 +1800,8 @@ class TeacherPrompt:
         self.prompt = ("human", 
                 """Student ID: {student_id}
                 Student has already mastered: {cur_mastery}
-                Solution: {solution}
+                Current problem student is working on: {cur_problem}
+                Solution to current problem: {solution}
                 Evaluation of student: {evaluation}
                 Available tools: {tools}
                 Student said: {student_input}

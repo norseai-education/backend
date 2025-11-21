@@ -44,6 +44,7 @@ class Nodes:
         self.lesson_tracker = LessonTracker(
         models.lesson_tracker_model,
         prompts.lesson_tracker_prompt,
+        [tools.get_archived]
         )
 
         self.math_teacher = MathTeacher(

@@ -170,20 +170,9 @@ def check_lesson_state(lesson_state):
 def parse_response(text):
     problem_handler = ProblemHandler()
     default_response = "I'm sorry, can you repeat that?"
-    default_lesson_state = {
-        'START_LESSON': 'Done', 
-        'GIVE_FIRST_PROBLEM': 'Done',
-        'FIRST_PROBLEM_WALKTHROUGH': 'Done',
-        'GIVE_SECOND_PROBLEM': 'In Progress',
-        'SECOND_PROBLEM_WALKTHROUGH': 'Not Done',
-        'GIVE_THIRD_PROBLEM': 'Not Done',
-        'THIRD_PROBLEM_WALKTHROUGH': 'Not Done',
-        'END_LESSON': 'Not Done'
-    }
     
     # Find the Final Answer section     
     teaching_response = ""
-    lesson_state = {}
     context_response = ""
     solution = ""
     
@@ -193,9 +182,8 @@ def parse_response(text):
         if isinstance(parsed_data, dict):
             logging.log("Parsed response as json!", logger, 2)
             teaching_response = parsed_data.get("teacher_response", "")
-            lesson_state = parsed_data.get("lesson_state", {})
             problem_id = parsed_data.get("problem_id", "")
-            logging.log(f"\nExtracted teacher_response: {teaching_response}\nExtracted lesson_match: {lesson_state}\nExtracted problem_id_match: {problem_id}\n", logger, 2)
+            logging.log(f"\nExtracted teacher_response: {teaching_response}\nExtracted problem_id_match: {problem_id}\n", logger, 2)
             
             # Only try to get problem if problem_id is not empty
             if problem_id and problem_id.strip():
@@ -218,10 +206,9 @@ def parse_response(text):
 
     except json.JSONDecodeError:
         # Fallback: Try to extract from structured text format
-        teaching_match = re.search(r'teacher_response":\s*(.*?)(?=,\s*"lesson_state|$)', text, re.DOTALL)
-        lesson_match = re.search(r'lesson_state":\s*(\{.*?\})', text, re.DOTALL)
+        teaching_match = re.search(r'teacher_response":\s*(.*?)(?=,\s*"problem_id|$)', text, re.DOTALL)
         problem_id_match = re.search(r'problem_id":\s*"([^"]+)"', text, re.DOTALL)
-        logging.log(f"Found regex match!\nExtracted teacher_response: {teaching_match}\nExtracted lesson_match: {lesson_match}\nExtracted problem_id_match: {problem_id_match}\n", logger, 2)
+        logging.log(f"Found regex match!\nExtracted teacher_response: {teaching_match}\nExtracted problem_id_match: {problem_id_match}\n", logger, 2)
         if problem_id_match:
             problem_id = problem_id_match.group(1).strip()  
             
@@ -245,27 +232,15 @@ def parse_response(text):
             teaching_response = str(teaching_response) + str(display_problem)
             logging.log(f"Teaching response with problem: {teaching_response}", logger, 2)
 
+    if problem:
+        logging.log(f"Using Solution: {solution}\nUsing Raw Problem: {problem}", logger, 2)
 
-        if lesson_match:
-            try:
-                lesson_state = json.loads(lesson_match.group(1))
-            except json.JSONDecodeError:
-                logging.log("Failed to parse lesson state JSON", logger, 0)
-                lesson_state = {}
-    
-    lesson_state = check_lesson_state(lesson_state)
-    logging.log(f"Using Solution: {solution}\nUsing Raw Problem: {problem}", logger, 2)
     # Error handling logic
-    if lesson_state:  # state_dict exists
-        if teaching_response:
-            return lesson_state, teaching_response, context_response, problem, solution
-        else:
-            logging.log("Teacher response not found, using default", logger, 2)
-            return lesson_state, default_response, default_response, problem, solution
+    if teaching_response:
+        return teaching_response, context_response, problem, solution
     else:
-        # return default lesson state
-        logging.log("Lesson state not found, using default", logger, 2)
-        return default_lesson_state, default_response, context_response, problem, solution
+        logging.log("Teacher response not found, using default", logger, 2)
+        return default_response, default_response, problem, solution
     
 
 def format_conversation_context(messages):

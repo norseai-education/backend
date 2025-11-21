@@ -1,7 +1,7 @@
 from langgraph.checkpoint.redis import RedisSaver
 from langgraph.checkpoint.mongodb import MongoDBSaver
-from langchain_core.runnables.graph_mermaid import draw_mermaid_png
-from IPython.display import Image, display
+# from langchain_core.runnables.graph_mermaid import draw_mermaid_png
+# from IPython.display import Image, display
 from src.utils import logging
 from src.utils import knowledge_info
 
@@ -43,8 +43,8 @@ class StateManager:
         with RedisSaver.from_conn_string(self.REDIS_URI) as checkpointer:
             checkpointer.setup()
             graph = graph_builder.compile(checkpointer=checkpointer)
-        graph_img = display(Image(graph.get_graph().draw_mermaid_png(output_file_path="./src/testing/updated_graph.png")))
-        logging.log(graph_img, logger, 2)
+        # graph_img = display(Image(graph.get_graph().draw_mermaid_png(output_file_path="./src/testing/updated_graph.png")))
+        # logging.log(graph_img, logger, 2)
 
         logging.log("Graph successfully built!", logger, 1)
 

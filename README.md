@@ -14,7 +14,6 @@ A production-grade AI-powered mathematics tutoring system built with FastAPI, La
 - [Key Algorithms](#key-algorithms)
 - [Database Architecture](#database-architecture)
 - [Configuration](#configuration)
-- [Development Guidelines](#development-guidelines)
 
 ## Overview
 
@@ -542,7 +541,7 @@ Problems are selected based on current mastery:
 
 ### PostgreSQL Schema
 
-**Users Table** (implied):
+**Users Table**:
 ```sql
 CREATE TABLE users (
     student_id SERIAL PRIMARY KEY,
@@ -706,14 +705,7 @@ src/testing/
 - Return user-friendly error messages
 - Implement retry logic for external services
 
-## License
-
-[Specify your license here]
-
 ## Contributors
 
-[Add contributor information]
+Andrew Su
 
-## Support
-
-For issues, questions, or contributions, please [specify contact method or issue tracker].

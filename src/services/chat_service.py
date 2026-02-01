@@ -39,6 +39,8 @@ class ChatService:
         await asyncio.get_event_loop().run_in_executor(
             None, convo_db.connect, settings.mongodb_database
         )
+
+        user_state = state_manager.default_state()
         
         if not user_graph:  
                 # Load states
@@ -48,7 +50,7 @@ class ChatService:
             redis_state = await asyncio.get_event_loop().run_in_executor(
                 None, state_manager.get_redis_state
             )
-            user_state = state_manager.default_state()
+
             
             logging.log(f"Mongo DB state: \n{persisted_state}\n", self.logger, 2)
             logging.log(f"Redis state : \n{redis_state}\n", self.logger, 2)

@@ -175,18 +175,11 @@ class AssessmentService:
             incorrect_damping = 0.75 if difficulty == 1 else 0.65 if difficulty == 2 else 0.6 if difficulty == 3 else 0.45 if difficulty == 4 else 0.35
             print(f"Grade used for BKT: {grade}\n")
             print(f"Using graph: {user_graph}")
-            if student_answer == correct_answer:
-                try:
-                    user_graph = self.bkt.bkt_algorithm(grade, user_graph, correct_damping)
-                except Exception as e:
-                    logging.log(f"Failed to update knowledge graph for assessment {assessment_id}: {e}", self.logger, 0)
-                    continue
-            else:
-                try:    
-                    user_graph = self.bkt.bkt_algorithm(grade, user_graph, incorrect_damping)
-                except Exception as e:
-                    logging.log(f"Failed to update knowledge graph for assessment {assessment_id}: {e}", self.logger, 0)
-                    continue
+            try:    
+                user_graph = self.bkt.bkt_algorithm(grade, user_graph, correct_damping, incorrect_damping)
+            except Exception as e:
+                logging.log(f"Failed to update knowledge graph for assessment {assessment_id}: {e}", self.logger, 0)
+                continue
         # self.db.insert_document('user_graphs', {"student_id": student_id, "assessment_id": assessment_id, "user_graph": user_graph})
         logging.log(f"Updated knowledge graph for assessment {assessment_id}", self.logger, 1)
         

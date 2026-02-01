@@ -40,19 +40,18 @@ class ChatService:
             None, convo_db.connect, settings.mongodb_database
         )
         
-        # Load states
-        persisted_state = await asyncio.get_event_loop().run_in_executor(
-            None, state_manager.retrieve
-        )
-        redis_state = await asyncio.get_event_loop().run_in_executor(
-            None, state_manager.get_redis_state
-        )
-        user_state = state_manager.default_state()
-        
-        logging.log(f"Mongo DB state: \n{persisted_state}\n", self.logger, 2)
-        logging.log(f"Redis state : \n{redis_state}\n", self.logger, 2)
-        
-        if not user_graph:
+        if not user_graph:  
+                # Load states
+            persisted_state = await asyncio.get_event_loop().run_in_executor(
+                None, state_manager.retrieve
+            )
+            redis_state = await asyncio.get_event_loop().run_in_executor(
+                None, state_manager.get_redis_state
+            )
+            user_state = state_manager.default_state()
+            
+            logging.log(f"Mongo DB state: \n{persisted_state}\n", self.logger, 2)
+            logging.log(f"Redis state : \n{redis_state}\n", self.logger, 2)
             # Apply persisted state
             if persisted_state:
                 logging.log("State found from MongoDB! Applying...", self.logger, 1)

@@ -47,12 +47,12 @@ class Nodes:
         [tools.get_archived]
         )
 
-        self.math_teacher = MathTeacher(
-        models.teacher_model,
-        prompts.MathTeacherPrompt(),
-        # MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
-        [tools.get_archived, tools.get_problem]
-        )
+        # self.math_teacher = MathTeacher(
+        # models.teacher_model,
+        # prompts.MathTeacherPrompt(),
+        # # MongoDBHandler.MongoDBHandler("mongodb://172.16.0.177:27019"),
+        # [tools.get_archived, tools.get_problem]
+        # )
 
         self.teacher = Teacher(
         models.teacher_model,
@@ -83,8 +83,8 @@ class Nodes:
     # def personality_rag_node(self, state):
     #     return self.personality_rag.build_node(state)
 
-    def math_teacher_node(self, state):
-        return self.math_teacher.build_node(state)
+    # def math_teacher_node(self, state):
+    #     return self.math_teacher.build_node(state)
 
     def teacher_node(self, state):
         return self.teacher.build_node(state)

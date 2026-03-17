@@ -21,7 +21,7 @@ class BuildNorseAIGraph:
         graph_builder.add_node("grader", self.nodes.grader_node)
         graph_builder.add_node("lesson_tracker", self.nodes.lesson_tracker_node)
         # graph_builder.add_node("personality_rag", self.nodes.personality_rag_node)
-        graph_builder.add_node("math_teacher", self.nodes.math_teacher_node)
+        # graph_builder.add_node("math_teacher", self.nodes.math_teacher_node)
         graph_builder.add_node("teacher", self.nodes.teacher_node)
 
         # add edges

@@ -329,27 +329,28 @@ lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system",
         Your job is to use the student input and conversation context to update the lesson state and objectives. 
 
         LESSON STATE: {lesson_state}
-        The current lesson state is marked by "In Progress"
+        The current state is marked by "In Progress"
 
-        Lesson State Guidelines:
-        **Only change the current lesson state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress” when**:
-        - The teacher has completed ALL listed current objectives (across multiple interactions)
+        Lesson State Rules:
+        **Only change the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress” when**:
+        - The teacher has completed ALL listed current objectives for that state (across multiple interactions) 
         - The student demonstrates understanding of the current state's objectives
-        - If the current objective does not change or the teacher has not completed all of the objectives on the Objectives List, keep the lesson state the same
+        
+        **Otherwise, keep the Lesson State the same**
 
-        Here is a list of objectives for the current lesson state
+        Here is a list of objectives for the current state
         Objectives List: {list_of_obj}
 
         Current objective the teacher is working on: {current_obj}
 
         Objectives Guidelines:
-        - If the current objective is "none", return the current objective as the first objective in the Objectives List
+        - If the current objective is "none", return the current objective as the FIRST objective in the Objectives List
         - Each objective may take multiple student-teacher interactions to complete
         - Use context to determine if the teacher can move on to the next objective from the Objectives List
         - If the teacher has not completed the current objective, keep the current objective the same, don't rush objectives
-        - If the teacher has completed the current objective, update the current objective to the next objective in the Objectives List
-        - The updated objective MUST be from the Objectives List
+        - If the teacher has completed the current objective, return the current objective as the next objective in the Objectives List
         - DO NOT skip objectives in the Objectives List, go in numerical order
+        - There can only be one current objective at a time
         """), 
         MessagesPlaceholder("context"), 
         ("human", 
@@ -362,7 +363,7 @@ lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system",
         Current objective the teacher is working on: {current_obj}
 
         DECISION FRAMEWORK:
-        - Did the teacher complete the current objective? If YES: change the current_obj to the next objective in the Objectives List in your Final Answer. if NO: Keep the current_obj the same inyour Final Answer.
+        - Did the teacher complete the current objective? If YES: change the current_obj to the next objective in the Objectives List in your Final Answer. if NO: Keep the current_obj the same in your Final Answer.
         - Are all the objectives on the Objectives List complete? If YES: Update the lesson_state in your Final Answer. if NO: Keep the lesson state the same in your Final Answer.
         - Can I update the lesson state and current objective with current knowledge/context? If YES: Skip tools, go to Final Answer
         - Do I need specific past conversation details not provided in Conversation History? If YES: Use get_archived tool

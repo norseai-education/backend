@@ -25,7 +25,7 @@ class LessonTracker:
         current_obj = state.get('current_obj', "none")
         context = state["messages"]
         logging.log(f"Objectives List: {list_of_obj}", logger, 2)
-        logging.log(f"Context messages: {context}", logger, 2)
+        logging.log(f"Current Objective: {current_obj}", logger, 2)
         
 
         agent = create_react_agent(

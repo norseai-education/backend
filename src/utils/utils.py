@@ -49,14 +49,15 @@ def parse_problem(response):
 
 async def transfer_to_chroma():
     """Transfer MongoDB documents to ChromaDB in parallel for all collections."""
+    logging.log("Transferring convo history to ChromaDB...", logger, 1)
     loop = asyncio.get_event_loop()
     
     def _transfer_sync():
         text_to_vec = TextToVec()
         with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
             futures = [
-                executor.submit(text_to_vec.math_related_to_vec),
-                executor.submit(text_to_vec.student_persona_to_vec),
+                # executor.submit(text_to_vec.math_related_to_vec),
+                # executor.submit(text_to_vec.student_persona_to_vec),
                 executor.submit(text_to_vec.conversation_history_to_vec)
             ]
             concurrent.futures.wait(futures, return_when=concurrent.futures.ALL_COMPLETED)

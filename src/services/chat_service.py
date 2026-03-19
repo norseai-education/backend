@@ -346,7 +346,7 @@ class ChatService:
                 True
             )
             logging.log("Stored conversation history into database!", self.logger, 1)
-            logging.log(f"Sample insert: \n{utils.convert_messages_to_dict(user_state["messages"])[:3]}\n", self.logger, 1)
+            logging.log(f"Sample insert: \n{utils.convert_messages_to_dict(user_state["messages"])[:4], student_id}\n", self.logger, 1)
             
             # Store final state in mongoDB
             await asyncio.get_event_loop().run_in_executor(None, state_manager.store, user_state)

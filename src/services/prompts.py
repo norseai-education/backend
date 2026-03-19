@@ -326,30 +326,32 @@ grader_prompt = PromptTemplate(
 lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system", 
         """You are an experienced AMC 8 math competition coach and you are overseeing a lesson on {learning_objective}.
 
-        Your job is to use the student input and conversation context to return the updated lesson state and objectives. 
+        Your job is to use the student input and conversation context to return the updated lesson state and objectives.
 
         LESSON STATE: {lesson_state}
         The current state is marked by "In Progress"
 
-        Lesson State Rules:
-        **Only change the current state from "In Progress" to "Done” and the next state from “Not Done” to “In Progress” when**:
-        - The teacher has completed ALL listed current objectives for that state (across multiple interactions) 
-        - The student demonstrates understanding of the current state's objectives
+        For the current state, there are a list of objectives to complete in order to complete that state.
+        OBJECTIVES LIST: {list_of_obj}
         
-        **Otherwise, keep the Lesson State the same in your Final Answer**
+        The teacher is currently working on this objective: {current_obj}
+        
+        **First, go over the objectives guidelines**
+        If the current objective is "none", return the first objective in the objectives list
+        If the current objective is not "none", check if the teacher has completed the current objective. If they have, return the current objective as the next objective in the Objectives List in your Final Answer.
+        If the teacher has not completed the current objective, return the same current objective in your Final Answer.
+        If you determined that the last objective has been completed in the objectives list, return "none" as the current objective in your Final Answer.
+        
+        **Second, go over the lesson state guidelines**
+        If the teacher has completed the last objective in the objectives list, turn the current "In Progress" to "Done" and the next state from "Not Done" to "In Progress" in your Final Answer.
+        If they have not, return the same lesson state in your Final Answer.
 
-        Here is a list of objectives for the current state
-        Objectives List: {list_of_obj}
-
-        Current objective the teacher is working on: {current_obj}
-
-        Objectives Guidelines:
-        - Each objective may take multiple student-teacher interactions to complete
-        - Use context to determine if the teacher can move on to the next objective from the Objectives List
-        - If the teacher has not completed the current objective, return the same current objective in your Final Answer, don't rush objectives
-        - If the teacher has completed the current objective, return the current objective as the next objective in the Objectives List in your Final Answer.
-        - DO NOT skip objectives in the Objectives List, go in numerical order
-        - There can only be one current objective at a time
+        Using these guidelines and the conversation context, update the current objective and the lesson state in your Final Answer.
+        
+        Rules:
+        - Move on to the next objective in the objectives list in chronological order
+        - Some objectives may take multiple interactions to complete. Do not rush objectives.
+        - Follow the guidelines exactly, your Final Answer should have the updated lesson state and current objective.
         """), 
         MessagesPlaceholder("context"), 
         ("human", 

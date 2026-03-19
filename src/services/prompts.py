@@ -336,15 +336,15 @@ lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system",
         
         The teacher is currently working on this objective: {current_obj}
         
-        **First, go over the objectives guidelines**
-        If the current objective is "none", return the first objective in the objectives list
-        If the current objective is not "none", check if the teacher has completed the current objective. If they have, return the current objective as the next objective in the Objectives List in your Final Answer.
-        If the teacher has not completed the current objective, return the same current objective in your Final Answer.
-        If you determined that the last objective has been completed in the objectives list, return "none" as the current objective in your Final Answer.
+        **OBJECTIVE UPDATE GUIDELINES**
+        - If the current objective is "none", return the first objective in the objectives list
+        - If the current objective is not "none", check if the teacher has completed the current objective. If they have, return the current objective as the next objective in the Objectives List in your Final Answer.
+        - If the teacher has not completed the current objective, return the same current objective in your Final Answer.
+        - If you determined that the last objective has been completed in the objectives list, return "none" as the current objective in your Final Answer.
         
-        **Second, go over the lesson state guidelines**
-        If the teacher has completed the last objective in the objectives list, turn the current "In Progress" to "Done" and the next state from "Not Done" to "In Progress" in your Final Answer.
-        If they have not, return the same lesson state in your Final Answer.
+        **LESSON STATE UPDATE GUIDELINES**
+        - If the teacher has completed the last objective in the objectives list, turn the current "In Progress" to "Done" and the next state from "Not Done" to "In Progress" in your Final Answer.
+        - If they have not, return the same lesson state in your Final Answer.
 
         Using these guidelines and the conversation context, update the current objective and the lesson state in your Final Answer.
         
@@ -380,7 +380,7 @@ lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system",
         Observation: [result]
 
         [MANDATORY - ALWAYS END HERE:]
-        Thought: I have sufficient information to help the student (even if not perfect)
+        Thought: I have sufficient information to update the lesson state and current objective
         Final Answer: {{
             "lesson_state": [Updated lesson state in same format as {lesson_state}],
             "current_obj": [The current objective the teacher should work on]

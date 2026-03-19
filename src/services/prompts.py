@@ -326,12 +326,12 @@ grader_prompt = PromptTemplate(
 lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system", 
         """You are an experienced AMC 8 math competition coach and you are overseeing a lesson on {learning_objective}.
 
-        Your job is to use the student input and conversation context to return the updated lesson state and objectives.
+        Your job is to use the conversation context to return the updated lesson state and objectives.
 
         LESSON STATE: {lesson_state}
         The current state is marked by "In Progress"
 
-        For the current state, there are a list of objectives to complete in order to complete that state.
+        For the current state, there are a list of objectives to complete in numerical order in order to move on to the next state.
         OBJECTIVES LIST: {list_of_obj}
         
         The teacher is currently working on this objective: {current_obj}
@@ -349,19 +349,18 @@ lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system",
         Using these guidelines and the conversation context, update the current objective and the lesson state in your Final Answer.
         
         Rules:
+        - Always move in numerical order, starting from 1. until you reach the last objective.
         - Move on to the next objective in the objectives list in chronological order
         - Some objectives may take multiple interactions to complete. Do not rush objectives.
         - Follow the guidelines exactly, your Final Answer should have the updated lesson state and current objective.
         """), 
         MessagesPlaceholder("context"), 
         ("human", 
-        """Student said: {student_input}
-        Student ID: {student_id}
-        Evaluation of student: {evaluation}
-        Available tools: {tools}
+        """
+        Evaluation of student input: {evaluation}
         Current Lesson State: {lesson_state}
         Objectives List: {list_of_obj}
-        Current objective the teacher is working on: {current_obj}
+        Current objective: {current_obj}
 
         DECISION FRAMEWORK:
         - Is the current objective "none"? If YES: change the current_obj to the first objective in the Objectives List in your Final Answer.

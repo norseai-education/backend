@@ -45,9 +45,6 @@ class LessonTracker:
         logging.log("Getting lesson tracker response...", logger, 2)
 
         response = agent_executor.invoke({                                            # Inputs: student_input, learning_objective, solution, math_context | Outputs: response
-            "student_input": student_input,
-            "student_id": student_id,
-            "learning_objective": learning_objective,
             "evaluation": evaluation,
             "context": context,
             "lesson_state": lesson_state,

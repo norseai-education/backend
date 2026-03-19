@@ -361,6 +361,7 @@ lesson_tracker_prompt = ChatPromptTemplate.from_messages([("system",
         Current Lesson State: {lesson_state}
         Objectives List: {list_of_obj}
         Current objective: {current_obj}
+        Tools: {tools}
 
         DECISION FRAMEWORK:
         - Is the current objective "none"? If YES: change the current_obj to the first objective in the Objectives List in your Final Answer.

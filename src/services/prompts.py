@@ -1179,6 +1179,7 @@ class TeacherPrompt:
 
         OBJECTIVE RULES:
         - Keep your responses short and interactive
+        - You MUST use the get_problem tool to give the student a problem. Do not come up with your own problem.
 
         OPERATING PROCEDURES:
         1. PRIMARY GOAL: Respond to the student input thoroughly and helpfully. Assume the student is smart and does not need to be babied. 
